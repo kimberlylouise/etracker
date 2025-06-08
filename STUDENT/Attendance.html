@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eTRACKER Attendance</title>
+  <link rel="stylesheet" href="Attendance.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="eTRACKER Logo" />
+        <span>eTRACKER</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-item ">Dashboard</a>
+        <a href="Programs.html" class="nav-item">Programs</a>
+        <a href="Attendance.html" class="nav-item active">Attendance</a>
+        <a href="Feedback.html" class="nav-item">Feedback</a>
+        <a href="Reports.html" class="nav-item">Reports</a>
+        <a href="Profile.html" class="nav-item">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>CVSU IMUS - EXTENSION SERVICES</h1>
+      </header>
+
+      <section class="content">
+        <h2>Attendance Tracking</h2>
+        <p>Monitor and manage attendance for all registered extension programs and services.</p>
+
+        <div class="attendance-section">
+          <div class="qr-box">
+            <h3>Scan QR Code to Mark Attendance</h3>
+            <button class="qr-btn" id="open-qr-modal">Show QR Code</button>
+          </div>
+
+          <div class="manual-box">
+            <h3>Manual Attendance Entry</h3>
+            <button class="manual-btn" id="open-manual-modal">Mark Attendance Manually</button>
+          </div>
+        </div>
+
+        <div class="records-section">
+          <h3>My Attendance Records</h3>
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Attendance records will be injected here -->
+            </tbody>
+          </table>
+          <div class="no-records-message" style="display:none; text-align:center; color:#888; padding:20px;">
+            No attendance records found.
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <h3>Attendance Summary</h3>
+          <p><strong>Total Sessions:</strong> <span id="total-sessions">0</span></p>
+          <p><strong>Sessions Attended:</strong> <span id="sessions-attended">0</span></p>
+          <p><strong>Attendance Rate:</strong> <span id="attendance-rate">0%</span></p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Manual Attendance Modal -->
+  <div id="manual-modal" class="manual-modal" style="display:none;">
+    <div class="manual-modal-content">
+      <span class="close-modal" id="close-manual-modal">&times;</span>
+      <h3 style="margin-bottom:18px; color:#2e6e1e;">Manual Attendance Entry</h3>
+      <form id="manual-attendance-form" style="display:flex; flex-direction:column; gap:18px;">
+        <div>
+          <label for="program-select" style="font-weight:600; color:#2e6e1e;">Select Program:</label>
+          <select id="program-select" name="program_id" required style="width:100%; padding:10px; border-radius:8px; border:1.5px solid #b6b6b6; margin-top:6px;">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+        <div>
+          <label for="manual-time-in" style="font-weight:600; color:#2e6e1e;">Time In:</label>
+          <input type="time" id="manual-time-in" name="time_in" required style="width:100%; padding:10px; border-radius:8px; border:1.5px solid #b6b6b6; margin-top:6px;">
+        </div>
+        <button type="submit" class="manual-submit-btn" style="margin-top:10px;">Submit Attendance</button>
+      </form>
+      <div id="manual-attendance-message" style="margin-top:14px; text-align:center;"></div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="manual-modal" style="display:none;">
+    <div class="manual-modal-content">
+      <span class="close-modal" id="close-qr-modal">&times;</span>
+      <h3 style="margin-bottom:18px; color:#2e6e1e;">Select Program to Get QR</h3>
+      <form id="qr-program-form" style="display:flex; flex-direction:column; gap:18px;">
+        <div>
+          <label for="qr-program-select" style="font-weight:600; color:#2e6e1e;">Select Program:</label>
+          <select id="qr-program-select" required style="width:100%; padding:10px; border-radius:8px; border:1.5px solid #b6b6b6; margin-top:6px;">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+        <button type="submit" class="manual-submit-btn" style="margin-top:10px;">Show QR</button>
+      </form>
+      <div id="qr-image-container" style="display:none; flex-direction:column; align-items:center; margin-top:18px;">
+        <img id="qr-image" src="" alt="QR Code" style="width:160px; border-radius:12px; box-shadow:0 2px 8px rgba(46,110,30,0.08); background:#fff; padding:10px;">
+        <p style="margin-top:10px; color:#2e6e1e;" id="qr-program-label"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Attendance records and summary (existing code)
+  fetch('get_attendance.php')
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelector('.attendance-table tbody');
+      const table = document.querySelector('.attendance-table');
+      const noRecords = document.querySelector('.no-records-message');
+      const totalSessionsEl = document.getElementById('total-sessions');
+      const sessionsAttendedEl = document.getElementById('sessions-attended');
+      const attendanceRateEl = document.getElementById('attendance-rate');
+
+      if (data.status === 'success' && data.records.length > 0) {
+        table.style.display = '';
+        noRecords.style.display = 'none';
+        tbody.innerHTML = '';
+        let attended = 0;
+        data.records.forEach(rec => {
+          if (rec.status === 'Present' || rec.status === 'Late') attended++;
+          tbody.innerHTML += `
+            <tr>
+              <td>${rec.program_name}</td>
+              <td>${rec.date}</td>
+              <td>${rec.time_in ? rec.time_in : '-'}</td>
+              <td>${rec.status}</td>
+            </tr>
+          `;
+        });
+        // Attendance summary
+        totalSessionsEl.textContent = data.records.length;
+        sessionsAttendedEl.textContent = attended;
+        attendanceRateEl.textContent = data.records.length > 0 ? Math.round((attended / data.records.length) * 100) + '%' : '0%';
+      } else {
+        tbody.innerHTML = '';
+        table.style.display = 'none';
+        noRecords.style.display = 'block';
+        totalSessionsEl.textContent = '0';
+        sessionsAttendedEl.textContent = '0';
+        attendanceRateEl.textContent = '0%';
+      }
+    })
+    .catch(() => {
+      const tbody = document.querySelector('.attendance-table tbody');
+      const table = document.querySelector('.attendance-table');
+      const noRecords = document.querySelector('.no-records-message');
+      const totalSessionsEl = document.getElementById('total-sessions');
+      const sessionsAttendedEl = document.getElementById('sessions-attended');
+      const attendanceRateEl = document.getElementById('attendance-rate');
+      tbody.innerHTML = '';
+      table.style.display = 'none';
+      noRecords.style.display = 'block';
+      totalSessionsEl.textContent = '0';
+      sessionsAttendedEl.textContent = '0';
+      attendanceRateEl.textContent = '0%';
+    });
+
+  // Manual Attendance Modal logic
+  const modal = document.getElementById('manual-modal');
+  const openBtn = document.getElementById('open-manual-modal');
+  const closeBtn = document.getElementById('close-manual-modal');
+  const programSelect = document.getElementById('program-select');
+  const manualForm = document.getElementById('manual-attendance-form');
+  const manualMsg = document.getElementById('manual-attendance-message');
+  const timeInInput = document.getElementById('manual-time-in');
+
+  openBtn.onclick = function() {
+    modal.style.display = 'block';
+    manualMsg.textContent = '';
+    // Set default time-in to current time
+    const now = new Date();
+    timeInInput.value = now.toTimeString().slice(0,5);
+    // Fetch approved programs for the user
+    fetch('get_my_programs.php')
+      .then(res => res.json())
+      .then(data => {
+        programSelect.innerHTML = '';
+        if (data.status === 'success' && data.programs.length > 0) {
+          let hasApproved = false;
+          data.programs.forEach(p => {
+            if (p.status === 'approved') {
+              hasApproved = true;
+              const opt = document.createElement('option');
+              opt.value = p.program_name; // You may want to use program_id if available
+              opt.textContent = p.program_name;
+              programSelect.appendChild(opt);
+            }
+          });
+          if (!hasApproved) {
+            programSelect.innerHTML = '<option value="">No approved programs</option>';
+          }
+        } else {
+          programSelect.innerHTML = '<option value="">No approved programs</option>';
+        }
+      });
+  };
+  closeBtn.onclick = function() {
+    modal.style.display = 'none';
+  };
+  window.onclick = function(event) {
+    if (event.target === modal) modal.style.display = 'none';
+  };
+
+  manualForm.onsubmit = function(e) {
+    e.preventDefault();
+    manualMsg.textContent = 'Submitting...';
+    manualMsg.style.color = '#2e6e1e';
+    fetch('mark_attendance.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        program_name: programSelect.value,
+        time_in: timeInInput.value
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        manualMsg.style.color = 'green';
+        manualMsg.textContent = 'Attendance marked successfully!';
+        setTimeout(() => { modal.style.display = 'none'; location.reload(); }, 1000);
+      } else {
+        manualMsg.style.color = 'red';
+        manualMsg.textContent = data.message || 'Failed to mark attendance.';
+      }
+    })
+    .catch(() => {
+      manualMsg.style.color = 'red';
+      manualMsg.textContent = 'Failed to mark attendance.';
+    });
+  };
+
+  // QR Modal logic
+  const qrModal = document.getElementById('qr-modal');
+  const openQrBtn = document.getElementById('open-qr-modal');
+  const closeQrBtn = document.getElementById('close-qr-modal');
+  const qrProgramSelect = document.getElementById('qr-program-select');
+  const qrProgramForm = document.getElementById('qr-program-form');
+  const qrImageContainer = document.getElementById('qr-image-container');
+  const qrImage = document.getElementById('qr-image');
+  const qrProgramLabel = document.getElementById('qr-program-label');
+
+  openQrBtn.onclick = function() {
+    qrModal.style.display = 'block';
+    qrImageContainer.style.display = 'none';
+    // Fetch approved programs for the user
+    fetch('get_my_programs.php')
+      .then(res => res.json())
+      .then(data => {
+        qrProgramSelect.innerHTML = '';
+        if (data.status === 'success' && data.programs.length > 0) {
+          let hasApproved = false;
+          data.programs.forEach(p => {
+            if (p.status === 'approved') {
+              hasApproved = true;
+              const opt = document.createElement('option');
+              opt.value = p.program_name; // or use program_id if you generate QR per id
+              opt.textContent = p.program_name;
+              qrProgramSelect.appendChild(opt);
+            }
+          });
+          if (!hasApproved) {
+            qrProgramSelect.innerHTML = '<option value="">No approved programs</option>';
+          }
+        } else {
+          qrProgramSelect.innerHTML = '<option value="">No approved programs</option>';
+        }
+      });
+  };
+  closeQrBtn.onclick = function() {
+    qrModal.style.display = 'none';
+  };
+  window.addEventListener('click', function(event) {
+    if (event.target === qrModal) qrModal.style.display = 'none';
+  });
+
+  // Show QR after selecting program
+  qrProgramForm.onsubmit = function(e) {
+    e.preventDefault();
+    const program = qrProgramSelect.value;
+    if (!program) return;
+    // You can generate QR dynamically or use a static image per program
+    // Example: Use a QR code API (like Google Chart API or QRServer)
+    // Here, we'll use QRServer for demonstration:
+    const qrData = encodeURIComponent(program); // or program_id
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}`;
+    qrProgramLabel.textContent = program;
+    qrImageContainer.style.display = 'flex';
+  };
+});
+</script>
+<style>
+/* Simple modal styles */
+.manual-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.3);
+}
+.manual-modal-content {
+  background: #fff;
+  margin: 10vh auto;
+  padding: 30px 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.close-modal {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 1.6em;
+  cursor: pointer;
+  color: #888;
+}
+.manual-submit-btn {
+  background: #2e6e1e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.manual-submit-btn:hover {
+  background: #218c21;
+}
+</style>
+</body>
+</html>

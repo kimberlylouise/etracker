@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Attendance.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+  <div class="main">
+   
+    <h1>Attendance Tracker</h1>
+
+    <div class="attendance-controls">
+<!-- Manual Entry Button -->
+<button class="btn" onclick="openModal()">
+    <i class="fas fa-plus-square"></i> Manual Entry
+  </button>
+  
+  <!-- Manual Entry Modal -->
+  <div id="manualEntryModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Manual Attendance Entry</h2>
+      <form id="manualEntryForm">
+        <label for="participantRole">Role</label>
+        <select id="participantRole" name="participantRole" required>
+          <option value="">Select Role</option>
+          <option value="Student">Student</option>
+          <option value="Faculty">Faculty</option>
+          <option value="Partner">Partner</option>
+          <option value="Stakeholder">Stakeholder</option>
+        </select>
+  
+        <label for="studentId">ID Number</label>
+        <input type="text" id="studentId" name="studentId" required />
+  
+        <label for="studentName">Full Name</label>
+        <input type="text" id="studentName" name="studentName" required />
+  
+        <label for="programName">Program</label>
+        <select id="programName" name="programName">
+          <option value="">Select a Program</option>
+          <option value="Community Health Seminar">Community Health Seminar</option>
+          <option value="Environmental Awareness Drive">Environmental Awareness Drive</option>
+        </select>
+  
+        <label for="attendanceDate">Date</label>
+        <input type="date" id="attendanceDate" name="attendanceDate" required />
+  
+        <label for="status">Attendance Status</label>
+        <select id="status" name="status" required>
+          <option value="Present">Present</option>
+          <option value="Late">Late</option>
+          <option value="Absent">Absent</option>
+        </select>
+  
+        <div class="modal-buttons">
+          <button type="submit" class="btn">Save Entry</button>
+          <button type="button" class="btn cancel" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+        <button class="btn"><i class="fas fa-file-download"></i> Export Report</button>
+    </div>
+    
+    <div class="attendance-summary">
+      <h2>Program Attendance Overview</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Program Name</th>
+            <th>Date</th>
+            <th>Registered Students</th>
+            <th>Present</th>
+            <th>Absent</th>
+            <th>Attendance %</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Community Health Seminar</td>
+            <td>May 15, 2025</td>
+            <td>50</td>
+            <td>46</td>
+            <td>4</td>
+            <td>92%</td>
+            <td><button class="btn-sm">View Logs</button></td>
+          </tr>
+          <tr>
+            <td>Environmental Awareness Drive</td>
+            <td>May 10, 2025</td>
+            <td>60</td>
+            <td>58</td>
+            <td>2</td>
+            <td>97%</td>
+            <td><button class="btn-sm">View Logs</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="attendance-logs">
+      <h2>Detailed Attendance Logs</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>ID Number</th>
+            <th>Program</th>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ana Dela Cruz</td>
+            <td>2021-04123</td>
+            <td>Community Health Seminar</td>
+            <td>May 15, 2025</td>
+            <td>09:00 AM</td>
+            <td><span class="status present">Present</span></td>
+          </tr>
+          <tr>
+            <td>Juan Santos</td>
+            <td>2021-04256</td>
+            <td>Community Health Seminar</td>
+            <td>May 15, 2025</td>
+            <td>09:15 AM</td>
+            <td><span class="status late">Late</span></td>
+          </tr>
+          <tr>
+            <td>Maria Reyes</td>
+            <td>2021-04110</td>
+            <td>Environmental Awareness Drive</td>
+            <td>May 10, 2025</td>
+            <td>08:50 AM</td>
+            <td><span class="status present">Present</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="role-insights">
+        <h2>Role-Based Attendance Insights</h2>
+        <div class="insight-cards">
+          <div class="card">
+            <h3>👩‍🎓 Students</h3>
+            <p>Total Students: <span id="studentTotal">0</span></p>
+            <p>Avg Attendance: <span id="studentAvg">0%</span></p>
+            <p>Sessions Tracked: <span id="studentSessions">0</span></p>
+          </div>
+      
+          <div class="card">
+            <h3>🧑‍🏫 Faculty</h3>
+            <p>Total Faculty: <span id="facultyTotal">0</span></p>
+            <p>Avg Attendance: <span id="facultyAvg">0%</span></p>
+            <p>Sessions Tracked: <span id="facultySessions">0</span></p>
+          </div>
+        </div>
+      </div>
+      
+</div>
+
+    
+    <script>
+        function openModal() {
+          document.getElementById('manualEntryModal').style.display = 'block';
+        }
+      
+        function closeModal() {
+          document.getElementById('manualEntryModal').style.display = 'none';
+          document.getElementById('manualEntryForm').reset();
+        }
+      
+        document.getElementById('manualEntryForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+      
+          const role = document.getElementById('participantRole').value;
+          const id = document.getElementById('studentId').value;
+          const name = document.getElementById('studentName').value;
+          const program = document.getElementById('programName').value;
+          const date = document.getElementById('attendanceDate').value;
+          const status = document.getElementById('status').value;
+      
+          // For now, just log to console or alert
+          alert(`Saved Attendance:\n${role} - ${name} (${id})\nProgram: ${program}\nDate: ${date}\nStatus: ${status}`);
+      
+          // Here you can send this data to your server via fetch/AJAX
+          closeModal();
+        });
+
+     
+  // Simulated attendance data (replace with backend data fetch later)
+  const attendanceLogs = [
+    { role: 'Student', status: 'Present' },
+    { role: 'Student', status: 'Late' },
+    { role: 'Student', status: 'Absent' },
+    { role: 'Student', status: 'Present' },
+    { role: 'Faculty', status: 'Present' },
+    { role: 'Faculty', status: 'Present' },
+    { role: 'Faculty', status: 'Absent' },
+  ];
+
+  function calculateRoleInsights(logs) {
+    const roles = {
+      Student: { total: 0, present: 0, sessions: 0 },
+      Faculty: { total: 0, present: 0, sessions: 0 }
+    };
+
+    logs.forEach(log => {
+      const role = log.role;
+      if (roles[role]) {
+        roles[role].sessions++;
+        if (log.status !== 'Absent') {
+          roles[role].present++;
+        }
+      }
+    });
+
+    // Simulated total participant counts (unique people)
+    roles.Student.total = 30; // Example only
+    roles.Faculty.total = 5;
+
+    // Update DOM
+    document.getElementById('studentTotal').innerText = roles.Student.total;
+    document.getElementById('studentSessions').innerText = roles.Student.sessions;
+    document.getElementById('studentAvg').innerText =
+      roles.Student.sessions > 0 ? Math.round((roles.Student.present / roles.Student.sessions) * 100) + '%' : '0%';
+
+    document.getElementById('facultyTotal').innerText = roles.Faculty.total;
+    document.getElementById('facultySessions').innerText = roles.Faculty.sessions;
+    document.getElementById('facultyAvg').innerText =
+      roles.Faculty.sessions > 0 ? Math.round((roles.Faculty.present / roles.Faculty.sessions) * 100) + '%' : '0%';
+  }
+
+        // Run on page load
+        calculateRoleInsights(attendanceLogs);
+
+
+        
+      </script>
+      
+      
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eTRACKER Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="logo.png" alt="eTRACKER Logo" />
+            <span>eTRACKER</span>
+          </div>
+                <nav class="nav">
+        <a href="index.html" class="nav-item active">Dashboard</a>
+        <a href="Programs.html" class="nav-item">Programs</a>
+        <a href="Attendance.html" class="nav-item">Attendance</a>
+        <a href="Feedback.html" class="nav-item">Feedback</a>
+        <a href="Reports.html" class="nav-item">Reports</a>
+        <a href="Profile" class="nav-item">Profile</a>
+
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>CVSU IMUS - EXTENSION SERVICES</h1>
+      </header>
+
+      <section class="summary-cards">
+        <div class="card"><h2>99</h2><p>Total Students</p></div>
+        <div class="card"><h2>10</h2><p>Total Coordinators</p></div>
+        <div class="card"><h2>12</h2><p>Extension Projects</p></div>
+        <div class="card"><h2>8</h2><p>Active Projects</p></div>
+      </section>
+
+      <section class="registration-chart">
+        <div class="registration">
+          <h3>Registration Form</h3>
+          <div class="role-select">
+            <label>Select User Role:</label>
+            <label><input type="checkbox" checked> Student</label>
+            <label><input type="checkbox"> Coordinator</label>
+          </div>
+
+          <form class="form">
+            <div class="input-row">
+              <input type="text" placeholder="LASTNAME">
+              <input type="text" placeholder="FIRSTNAME">
+              <input type="text" placeholder="M.I">
+            </div>
+            <div class="input-row">
+              <input type="text" placeholder="STUDENT ID">
+              <select>
+                <option selected>YEAR LEVEL</option>
+              </select>
+            </div>
+            <div class="input-row">
+              <select>
+                <option selected>DEPARTMENT</option>
+              </select>
+            </div>
+            <div class="input-row">
+              <input type="email" placeholder="CVSU EMAIL">
+            </div>
+            <div class="input-row">
+              <input type="password" placeholder="PASSWORD">
+              <input type="password" placeholder="CONFIRM PASSWORD">
+            </div>
+            <div class="button-row">
+              <button type="submit" class="btn register">REGISTER</button>
+              <button type="reset" class="btn cancel">CANCEL</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="chart">
+            <div class="chart">
+                <canvas id="myPieChart" width="300" height="300"></canvas>
+              </div>
+                    
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('myPieChart').getContext('2d');
+    const myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Active Projects', 'Students', 'Coordinators', 'Extension Projects'],
+        datasets: [{
+          data: [8, 99, 10, 12],
+          backgroundColor: ['#fce373', '#b2e3b2', '#3ab6c6', '#578d86'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+          title: {
+            display: false
+          }
+        }
+      }
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,237 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4fdf5;
+    height: 100vh;
+  }
+  
+  /* Container Layout */
+  .container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* SIDEBAR */
+  .sidebar {
+    width: 230px;
+    height: 95vh;
+    background-color: #d2eac8;
+    border-radius: 25px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 20px;
+  }
+  
+  .sidebar .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #247a37;
+    margin-bottom: 30px;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    width: 100%;
+  }
+  
+  .sidebar nav ul li {
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #1e3927;
+    transition: all 0.2s ease;
+  }
+  
+  .sidebar nav ul li.active,
+  .sidebar nav ul li:hover {
+    background-color: #247a37;
+    color: #ffffff;
+    border-radius: 15px 0 0 15px;
+  }
+  
+  .sidebar nav ul li i {
+    font-style: normal;
+    font-size: 18px;
+  }
+  
+  .sign-out {
+    margin-top: auto;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    color: red;
+    cursor: pointer;
+  }
+  
+  /* MAIN GRID switched to flex layout */
+  .main-grid {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    gap: 20px;
+  }
+  
+  /* Main content wrapper to expand form area */
+  .main-content {
+    flex: 1;
+  }
+  
+  /* Topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+  
+  .last-login {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* RIGHT PANEL */
+  .right-panel {
+    width: 270px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Top Actions (Search + User Info) */
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .search-input {
+    padding: 6px 15px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    width: 200px;
+  }
+  
+  /* USER INFO */
+  .user-info .name {
+    font-weight: bold;
+  }
+  
+  .user-info .email {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  /* NOTIFICATIONS */
+  .notifications {
+    background-color: #d9f8dc;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height:85vh;
+  }
+  
+  .notifications h3 {
+    margin-bottom: 10px;
+  }
+  
+  .note {
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 5px solid #59a96a;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #247a37;
+    margin-bottom: 30px;
+  }
+  
+  .logo-img {
+    width: 80px;
+    height: 50px;
+    object-fit: contain;
+  }
+  
+  .logo-text {
+    font-size: 20px;
+  }
+  
+  /* FORM CONTAINER */
+  .form-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #b3e2c5;
+    border-radius: 10px;
+    max-width: 100%;
+    background-color: #f2fff4;
+  }
+  
+  .program-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .program-form input,
+  .program-form select,
+  .program-form textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #c2e5c8;
+    background-color: #d9f8dc;
+    font-size: 14px;
+  }
+  
+  .program-form textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .cancel,
+  .submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .cancel {
+    background-color: #c2f2ce;
+    color: #1e3927;
+  }
+  
+  .submit {
+    background-color: #7db97d;
+    color: white;
+  }
+  

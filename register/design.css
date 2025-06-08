@@ -1,0 +1,203 @@
+ body {
+      background: linear-gradient(135deg, #89a87f 40%, #f5edcb 60%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Georgia', serif;
+    }
+
+    .card-container {
+      display: flex;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      max-width: 900px;
+      width: 100%;
+      min-height: 500px;
+    }
+
+    .left-card,
+    .right-card {
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .left-card {
+      background-color: rgba(255, 255, 255, 0.3);
+      width: 50%;
+    }
+
+    .right-card {
+      background-color: #fdfdf5;
+      width: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-content {
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .panel-content.exit {
+      opacity: 0;
+      transform: translateX(-20px);
+      filter: blur(5px);
+    }
+
+    .panel-content.enter {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      filter: blur(0);
+    }
+
+    .panel-content.enter-start {
+      opacity: 0;
+      transform: translateX(50px) scale(0.95);
+      filter: blur(5px);
+    }
+
+    .logo {
+      width: 350px;
+      height: 50%;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2E7D32;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      font-size: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    .button {
+      background-color: #2E7D32;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 9999px;
+      width: 100%;
+      max-width: 250px;
+      font-size: 18px;
+      font-weight: bold;
+      font-style: italic;
+      margin-top: 16px;
+      position: relative;
+      transition: background-color 0.3s, transform 0.2s;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .button:hover {
+      background-color: #1b5e20;
+      transform: scale(1.05);
+    }
+
+    /* Styles for the registration form */
+    .form-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2E7D32;
+      margin-bottom: 20px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #2E7D32;
+      box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+    }
+
+    .name-row {
+      display: flex;
+      width: 100%;
+      gap: 2%; /* Space between Lastname and M.I. */
+    }
+
+    .form-input.lastname {
+      width: 80%; /* 80% width for Lastname */
+    }
+
+    .form-input.mi {
+      width: 18%; /* 20% width for M.I. (adjusted to fit with gap) */
+    }
+
+    .radio-group {
+      margin: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .radio-group span {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .radio-options {
+      display: flex;
+      align-items: center;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+
+    .radio-option label {
+      margin-left: 5px;
+      font-size: 16px;
+      color: #333;
+      transition: color 0.3s;
+    }
+
+    .radio-option input[type="radio"] {
+      accent-color: #2E7D32;
+      transform: scale(1.2);
+      margin-right: 5px;
+    }
+
+    .radio-option label:hover {
+      color: #2E7D32;
+    }
+
+    .submit-arrow {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .submit-arrow:hover {
+      transform: scale(1.1) rotate(10deg);
+    }

@@ -1,0 +1,174 @@
+get_user_info.php called at 2025-06-03 16:12:20
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-04 08:43:59
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-04 08:44:11
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-04 08:44:13
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-04 08:44:15
+Programs fetched: 25
+get_my_programs.php called at 2025-06-04 08:44:22
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-04 08:44:25
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-04 08:44:31
+Programs fetched: 25
+get_user_info.php called at 2025-06-04 08:44:39
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-04 08:48:55
+Programs fetched: 25
+get_user_info.php called at 2025-06-04 08:49:59
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 09:46:03
+Unauthorized: user_id=not set, role=not set
+get_user_info.php called at 2025-06-08 09:46:05
+Unauthorized: user_id=not set, role=not set
+get_my_programs.php called at 2025-06-08 09:46:26
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 09:46:33
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 09:46:34
+Programs fetched: 25
+get_user_info.php called at 2025-06-08 09:46:39
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 09:46:41
+Programs fetched: 25
+get_my_programs.php called at 2025-06-08 09:53:31
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 09:53:37
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 09:53:42
+Programs fetched: 25
+get_my_programs.php called at 2025-06-08 09:57:22
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 09:57:30
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 09:57:31
+Enrolled programs fetched: 0
+get_programs.php called at 2025-06-08 09:57:32
+Programs fetched: 25
+get_my_programs.php called at 2025-06-08 09:57:41
+Enrolled programs fetched: 0
+get_programs.php called at 2025-06-08 09:57:43
+Programs fetched: 25
+get_my_programs.php called at 2025-06-08 09:59:49
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 09:59:58
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 10:00:03
+Programs fetched: 25
+get_user_info.php called at 2025-06-08 10:00:15
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 10:00:16
+Programs fetched: 25
+get_user_info.php called at 2025-06-08 10:00:34
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:02:31
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 10:02:37
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-08 10:03:56
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-08 10:05:31
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:06:06
+Enrolled programs fetched: 0
+get_user_info.php called at 2025-06-08 10:06:07
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 10:06:17
+Programs fetched: 25
+get_user_info.php called at 2025-06-08 10:18:40
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-08 10:19:12
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-08 10:20:30
+Enrollment successful: user_id=1, program_id=7
+get_user_info.php called at 2025-06-08 10:20:31
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:20:35
+Enrolled programs fetched: 1
+get_my_programs.php called at 2025-06-08 10:21:38
+Enrolled programs fetched: 1
+get_user_info.php called at 2025-06-08 10:21:42
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-08 10:21:47
+Enrollment successful: user_id=1, program_id=21
+get_user_info.php called at 2025-06-08 10:21:49
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:21:50
+Enrolled programs fetched: 1
+get_user_info.php called at 2025-06-08 10:21:54
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-08 10:21:57
+Enrollment successful: user_id=1, program_id=25
+get_user_info.php called at 2025-06-08 10:21:59
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:22:01
+Enrolled programs fetched: 1
+get_my_programs.php called at 2025-06-08 10:23:34
+Enrolled programs fetched: 1
+get_my_programs.php called at 2025-06-08 10:24:37
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-08 10:25:00
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:25:01
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-08 10:25:03
+Programs fetched: 25
+get_my_programs.php called at 2025-06-08 10:26:20
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-08 10:26:31
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-08 10:26:35
+Enrollment successful: user_id=1, program_id=11
+get_user_info.php called at 2025-06-08 10:26:37
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:26:38
+Enrolled programs fetched: 4
+get_programs.php called at 2025-06-08 10:26:42
+Programs fetched: 8
+get_my_programs.php called at 2025-06-08 10:27:09
+Enrolled programs fetched: 4
+get_user_info.php called at 2025-06-08 10:27:11
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-08 10:37:30
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 10:38:39
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 10:41:05
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 10:44:50
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 10:46:11
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 10:48:48
+Enrolled programs fetched: 4

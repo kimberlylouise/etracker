@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Auth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #89a87f 40%, #f5edcb 60%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Georgia', serif;
+    }
+
+    .card-container {
+      position: relative;
+      width: 900px;
+      min-height: 550px;
+      display: flex;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.5s ease-in-out;
+    }
+
+    .form-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-color: #fdfdf5;
+      padding: 40px;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .card-container.show-register .form-panel {
+      transform: translateX(-100%);
+    }
+
+    .register-form {
+      position: absolute;
+      top: 0;
+      right: -100%;
+      width: 50%;
+      height: 100%;
+      background-color: #fdfdf5;
+      padding: 40px;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .card-container.show-register .register-form {
+      transform: translateX(-100%);
+    }
+
+    .left-card {
+      background-color: rgba(0, 0, 0, 0.4);
+      width: 50%;
+      padding: 40px 30px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .icon {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      width: 300px;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      background-color: #2E7D32;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 9999px;
+      font-size: 18px;
+      font-weight: bold;
+      font-style: italic;
+      margin-top: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container" id="authPanel">
+    <!-- Left Panel -->
+    <div class="left-card">
+      <img src="logo.png" alt="Logo" class="logo" />
+      <div class="title">eTracker</div>
+      <p class="description">
+        Track projects and connect with the<br />
+        CVSU-Imus community through<br />
+        Extension Services.
+      </p>
+    </div>
+
+    <!-- Login Panel -->
+    <div class="form-panel flex flex-col items-center justify-center">
+      <img src="etracker.png" alt="eTracker Icon" class="w-20 mb-4" />
+      <div class="button w-40" onclick="showRegister()">REGISTER</div>
+      <div class="button w-40" onclick="alert('Login action')">LOG IN</div>
+    </div>
+
+    <!-- Register Form Panel -->
+    <div class="register-form">
+      <h2 class="text-center text-2xl font-bold text-green-700 mb-6">REGISTER</h2>
+      <div class="flex gap-2 mb-3">
+        <input type="text" placeholder="Lastname" class="flex-1 border border-black px-3 py-2 rounded-md outline-none" />
+        <input type="text" placeholder="Firstname" class="flex-1 border border-black px-3 py-2 rounded-md outline-none" />
+        <input type="text" placeholder="M.I." class="w-[60px] border border-black px-3 py-2 rounded-md outline-none" />
+      </div>
+      <input type="email" placeholder="Email" class="w-full border border-black px-3 py-2 mb-3 rounded-md outline-none" />
+      <input type="password" placeholder="Password" class="w-full border border-black px-3 py-2 mb-3 rounded-md outline-none" />
+      <input type="password" placeholder="Confirm Password" class="w-full border border-black px-3 py-2 mb-3 rounded-md outline-none" />
+
+      <div class="mb-4 text-sm text-gray-800">
+        <span class="block mb-1">User Role:</span>
+        <label class="inline-flex items-center mr-6">
+          <input type="radio" class="form-radio text-green-600 mr-2" name="role" value="student" checked />
+          Student
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio text-green-600 mr-2" name="role" value="faculty" />
+          Faculty
+        </label>
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="showLogin()" class="bg-transparent border-2 border-green-700 text-green-700 rounded-full p-2 hover:bg-green-700 hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showRegister() {
+      document.getElementById('authPanel').classList.add('show-register');
+    }
+
+    function showLogin() {
+      document.getElementById('authPanel').classList.remove('show-register');
+    }
+  </script>
+</body>
+</html>

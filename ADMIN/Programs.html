@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Programs.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+  <div class="main">
+
+
+    <h1>Program Schedule Management</h1>
+
+    <section class="calendar-schedule">
+        <h2>Session Calendar</h2>
+        <div id="calendarContainer">
+          <div id="calendarHeader">
+            <button onclick="changeMonth(-1)">‹</button>
+            <h3 id="calendarMonthYear"></h3>
+            <button onclick="changeMonth(1)">›</button>
+          </div>
+          <table id="calendarTable"></table>
+        </div>
+      
+        <div class="daily-agenda">
+          <h3>Upcoming Sessions This Week</h3>
+          <ul id="sessionList">
+            <!-- JS will populate this -->
+          </ul>
+        </div>
+      </section>
+    <section class="program-overview">
+      <h2>Active Programs</h2>
+      <div class="program-card">
+        <h3>Community Literacy Outreach</h3>
+        <p><strong>Description:</strong> A weekend initiative to improve literacy skills among local youth.</p>
+        <p><strong>Schedule:</strong> Every Saturday, Apr 15 – Jun 30, 2025 | 9:00 AM – 12:00 PM</p>
+        <p><strong>Location:</strong> CvSU Imus – Room 204</p>
+        <p><strong>Capacity:</strong> 30 / 50 slots filled</p>
+        <p><strong>Status:</strong> In Progress</p>
+        <button>View Details</button>
+      </div>
+    
+      <div class="program-card">
+        <h3>Nutrition Awareness Program</h3>
+        <p><strong>Description:</strong> Promoting balanced diet and wellness habits in underserved communities.</p>
+        <p><strong>Schedule:</strong> May 10 – Jul 5, 2025 | 1:00 PM – 4:00 PM</p>
+        <p><strong>Location:</strong> Barangay Hall – Malagasang</p>
+        <p><strong>Capacity:</strong> 45 / 45 slots filled</p>
+        <p><strong>Status:</strong> Full</p>
+        <button>View Details</button>
+      </div>
+    </section>
+    
+    <section class="program-create">
+      <h2>Create New Program</h2>
+      <form>
+        <label>Program Name:</label><br/>
+        <input type="text" name="programName" placeholder="e.g., Digital Literacy Training"><br/>
+    
+        <label>Description:</label><br/>
+        <textarea name="description" placeholder="Brief overview of the program"></textarea><br/>
+    
+        <label>Start Date:</label><br/>
+        <input type="date" name="startDate"><br/>
+    
+        <label>End Date:</label><br/>
+        <input type="date" name="endDate"><br/>
+    
+        <label>Time:</label><br/>
+        <input type="time" name="timeStart"> to <input type="time" name="timeEnd"><br/>
+    
+        <label>Capacity:</label><br/>
+        <input type="number" name="capacity" placeholder="e.g., 50"><br/>
+    
+        <label>Location / Link:</label><br/>
+        <input type="text" name="location" placeholder="e.g., Zoom link or venue"><br/>
+    
+        <label>Requirements:</label><br/>
+        <input type="text" name="requirements" placeholder="e.g., None or prerequisite"><br/>
+    
+        <label>Registration Deadline:</label><br/>
+        <input type="date" name="deadline"><br/><br/>
+    
+        <button type="submit">Submit Program</button>
+      </form>
+    </section>
+    
+    <section class="analytics">
+      <h2>Quick Stats</h2>
+      <ul>
+        <li>Total Programs This Semester: <strong>8</strong></li>
+        <li>Active Programs: <strong>3</strong></li>
+        <li>Completed Programs: <strong>5</strong></li>
+        <li>Most Popular Program: <strong>Financial Literacy Workshop</strong></li>
+      </ul>
+    </section>
+    
+ 
+</div>
+  <script>
+  const sessions = [
+    { title: "Community Literacy Outreach", date: "2025-05-24", time: "9:00 AM", location: "Room 204" },
+    { title: "Nutrition Awareness Program", date: "2025-05-25", time: "1:00 PM", location: "Malagasang Hall" },
+    { title: "Financial Literacy Workshop", date: "2025-05-27", time: "10:00 AM", location: "Room 101" }
+  ];
+  
+  let currentDate = new Date();
+  
+  function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const table = document.getElementById("calendarTable");
+    const monthYear = document.getElementById("calendarMonthYear");
+    table.innerHTML = "";
+    monthYear.innerText = currentDate.toLocaleString("default", { month: "long", year: "numeric" });
+  
+    const headerRow = document.createElement("tr");
+    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(d => {
+      const th = document.createElement("th");
+      th.innerText = d;
+      headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+  
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+      const row = document.createElement("tr");
+      for (let j = 0; j < 7; j++) {
+        const cell = document.createElement("td");
+        if (i === 0 && j < firstDay.getDay()) {
+          cell.innerHTML = "";
+        } else if (date > lastDay.getDate()) {
+          break;
+        } else {
+          const currentFullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
+          const hasSession = sessions.find(s => s.date === currentFullDate);
+          cell.innerHTML = date;
+          if (hasSession) {
+            cell.classList.add("session-day");
+            cell.title = hasSession.title;
+          }
+          date++;
+        }
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
+    }
+  }
+  
+  function changeMonth(offset) {
+    currentDate.setMonth(currentDate.getMonth() + offset);
+    renderCalendar();
+  }
+  
+  function renderSessions() {
+    const today = new Date();
+    const list = document.getElementById("sessionList");
+    list.innerHTML = "";
+  
+    const next7Days = new Date(today);
+    next7Days.setDate(today.getDate() + 7);
+  
+    sessions.forEach(s => {
+      const sessionDate = new Date(s.date);
+      if (sessionDate >= today && sessionDate <= next7Days) {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${s.title}</strong> - ${s.date} at ${s.time} (${s.location})`;
+        list.appendChild(li);
+      }
+    });
+  }
+  
+  renderCalendar();
+  renderSessions();
+  </script>
+  
+ 
+  
+</body>
+</html>

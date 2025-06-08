@@ -1,0 +1,182 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  body {
+    background: #ffffff;
+  }
+  
+  .container {
+    display: flex;
+    min-height: 100vh;
+    padding-left: 40px;
+    align-items: flex-start;
+  }
+  
+ /* Sidebar */
+ .sidebar {
+  width: 220px;
+  background: #fff8cc;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+  /* Make it float like a card */
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Full height styling */
+height: 95vh; /* 85% of the viewport height */
+margin-top: auto;
+margin-bottom: auto;
+}
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: green;
+    margin-bottom: 40px;
+  }
+  
+  .logo span {
+    color: #005c00;
+  }
+  
+  .logo img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 18px;
+  }
+  
+  .nav-item {
+    color: #333;
+    text-decoration: none;
+    padding-left: 10px;
+  }
+  
+  .nav-item.active {
+    background: #fff1a5;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  /* Header */
+  .header h1 {
+    text-align: center;
+    background: #fff8cc;
+    padding: 20px;
+    border-radius: 20px;
+    color: #2e6e1e;
+    margin-bottom: 30px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 40px;
+  }
+  
+  /* Reports Container */
+  .reports-container h2 {
+    font-size: 26px;
+    color: #2e6e1e;
+    margin-bottom: 20px;
+  }
+  
+  /* Filters */
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .filters label {
+    font-weight: bold;
+  }
+  
+  .filters select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Summary Cards */
+  .summary-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: #fff8cc;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+  }
+  
+  .card h3 {
+    font-size: 18px;
+    color: #2e6e1e;
+  }
+  
+  .card p {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  /* Table */
+  .report-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+  
+  .report-table th, .report-table td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .report-table th {
+    background: #fff1a5;
+    color: #333;
+  }
+  
+  /* Export Buttons */
+  .export-buttons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .export-buttons button {
+    background: #2e6e1e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .export-buttons button:hover {
+    background-color: #1c4b13;
+  }
+  

@@ -1,0 +1,132 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  height: 100vh;
+  background-color: #f4f6f8;
+  color: #1e293b;
+}
+
+
+.sidebar {
+    width: 240px;
+    background-color: #1B472B; /* deep green */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 4px solid #D7A400; /* subtle yellow accent */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* outer shadow */
+  }
+  
+  .sidebar a {
+    color: #e5e7eb;
+    text-decoration: none;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0); /* default no inset shadow */
+  }
+  
+  .sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15); /* subtle glow on hover */
+  }
+  
+.main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.main h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+
+  
+  .filter-section,
+  .documents-table {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+  }
+  
+  .filter-section h2,
+  .documents-table h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+  }
+  
+  form label {
+    font-weight: 600;
+    color: #1e293b;
+  }
+  
+  form select,
+  form input[type="text"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    min-width: 200px;
+  }
+  
+  form button {
+    background-color: #1B472B;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background-color: #14532d;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th,
+  table td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f1f5f9;
+  }
+  
+  table button {
+    background-color: #1B472B;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  table button.delete {
+    background-color: #dc2626;
+  }
+  
+  table button:hover {
+    opacity: 0.9;
+  }
+  
+

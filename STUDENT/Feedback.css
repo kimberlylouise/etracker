@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  body {
+    background: #ffffff;
+  }
+  
+ 
+
+  .header h1 {
+    text-align: center;
+    background: #fff8cc;
+    padding: 20px;
+    border-radius: 20px;
+    color: #2e6e1e;
+    margin-bottom: 30px;
+  }
+
+  /* Container layout */
+  .container {
+    display: flex;
+    min-height: 100vh;
+    padding-left: 40px;
+    align-items: flex-start;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #fff8cc;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 90vh;
+    margin-top: 20px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: green;
+    margin-bottom: 40px;
+  }
+  
+  .logo span {
+    color: #005c00;
+  }
+  
+  .logo img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 18px;
+  }
+  
+  .nav-item {
+    color: #333;
+    text-decoration: none;
+    padding-left: 10px;
+  }
+  
+  .nav-item.active {
+    background: #fff1a5;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 40px;
+  }
+  
+  /* Feedback Container */
+  .feedback-container {
+    background: #fff8cc;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .feedback-container h2 {
+    color: #2e6e1e;
+    margin-bottom: 20px;
+    font-size: 26px;
+  }
+  
+  /* Form styles */
+  #feedbackForm label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+  
+  #feedbackForm select,
+  #feedbackForm textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 10px;
+    transition: border 0.3s ease;
+  }
+  
+  #feedbackForm select:focus,
+  #feedbackForm textarea:focus {
+    border-color: #2e6e1e;
+    outline: none;
+  }
+  
+  #feedbackForm button {
+    background-color: #2e6e1e;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #feedbackForm button:hover {
+    background-color: #1c4b13;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      padding-left: 0;
+    }
+  
+    .sidebar {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+  
+    .main-content {
+      padding: 20px;
+    }
+  
+    .top-header h1 {
+      padding-left: 20px;
+    }
+  }
+  

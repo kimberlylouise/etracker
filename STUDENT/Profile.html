@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Profile - eTRACKER</title>
+  <link rel="stylesheet" href="Profile.css" />
+  <style>
+    .profile-card {
+      background: #fff8cc;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    .profile-title {
+      text-align: center;
+      color: #2e6e1e;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 10px 20px;
+      font-size: 18px;
+    }
+
+    .profile-info div {
+      padding: 6px 0;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .value {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="eTRACKER Logo" />
+        <span>eTRACKER</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-item">Dashboard</a>
+        <a href="Programs.html" class="nav-item">Programs</a>
+        <a href="Attendance.html" class="nav-item">Attendance</a>
+        <a href="Feedback.html" class="nav-item">Feedback</a>
+        <a href="Reports.html" class="nav-item">Reports</a>
+        <a href="Profile.html" class="nav-item active">Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>CVSU IMUS - EXTENSION SERVICES</h1>
+      </header>
+
+      <section class="profile-card">
+        <div class="profile-title">Student Profile</div>
+        <div class="profile-info">
+          <div class="label">Name:</div>
+          <div class="value">Juan Dela Cruz</div>
+          
+          <div class="label">Student Number:</div>
+          <div class="value">2022-00001</div>
+
+          <div class="label">Program:</div>
+          <div class="value">BS Information Technology</div>
+
+          <div class="label">Email:</div>
+          <div class="value">juan.delacruz@cvsu.edu.ph</div>
+
+          <div class="label">Contact:</div>
+          <div class="value">09123456789</div>
+
+          <div class="label">Year Level:</div>
+          <div class="value">3rd Year</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

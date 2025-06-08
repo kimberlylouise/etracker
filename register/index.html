@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="design.css" />
+</head>
+<body>
+  <div class="card-container">
+    <!-- Left Panel -->
+    <div class="left-card">
+      <img src="logo.png" alt="Logo" class="logo" />
+      <div class="title">eTracker</div>
+      <p class="description">
+        Track projects and connect with the<br />
+        CVSU-Imus community through<br />
+        Extension Services.
+      </p>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-card" id="right-panel">
+      <div class="panel-content" id="panel-content">
+        <img src="etracker.png" alt="eTracker Icon" class="w-42 h-32 mb-4" />
+        <div class="button" onclick="showRegisterForm()">REGISTER</div>
+        <div class="button" onclick="handleLogin()">LOG IN</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let userData = {}; // To store user_id and role after initial registration
+
+    function showRegisterForm() {
+      const rightPanel = document.getElementById('right-panel');
+      const panelContent = document.getElementById('panel-content');
+
+      // Trigger exit animation
+      panelContent.classList.add('exit');
+
+      // Wait for the exit animation to finish, then replace with new content
+      setTimeout(() => {
+        // Replace the entire panel content
+        rightPanel.innerHTML = `
+          <div class="panel-content enter-start">
+            <div class="form-title">REGISTER</div>
+            <input type="text" id="firstname" placeholder="Firstname" class="form-input" />
+            <div class="name-row">
+              <input type="text" id="lastname" placeholder="Lastname" class="form-input lastname" />
+              <input type="text" id="mi" placeholder="M.I." class="form-input mi" />
+            </div>
+            <input type="email" id="email" placeholder="Email" class="form-input" />
+            <input type="password" id="password" placeholder="Password" class="form-input" />
+            <input type="password" id="confirm-password" placeholder="Confirm Password" class="form-input" />
+            <div class="radio-group">
+              <span>User Role:</span>
+              <div class="radio-options">
+                <div class="radio-option">
+                  <input type="radio" id="student" name="role" value="student" checked />
+                  <label for="student">Student</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="faculty" name="role" value="faculty" />
+                  <label for="faculty">Faculty</label>
+                </div>
+              </div>
+            </div>
+            <img src="arrow.png" alt="Submit Arrow" class="submit-arrow" onclick="submitInitialForm()" />
+          </div>
+        `;
+
+        // Find the new panel content and apply the enter animation
+        const newContent = rightPanel.querySelector('.panel-content');
+        setTimeout(() => {
+          newContent.classList.remove('enter-start');
+          newContent.classList.add('enter');
+        }, 10); // Small delay to ensure the animation triggers
+      }, 600); // Match the transition duration (0.6s)
+    }
+
+    function handleLogin() {
+      const rightPanel = document.getElementById('right-panel');
+      const panelContent = document.getElementById('panel-content');
+
+      // Trigger exit animation
+      panelContent.classList.add('exit');
+
+      // Wait for the exit animation to finish, then replace with login form
+      setTimeout(() => {
+        rightPanel.innerHTML = `
+          <div class="panel-content enter-start">
+            <div class="form-title">LOG IN</div>
+            <input type="email" id="login-email" placeholder="Email" class="form-input" />
+            <input type="password" id="login-password" placeholder="Password" class="form-input" />
+            <div class="button" onclick="submitLoginForm()">LOG IN</div>
+          </div>
+        `;
+
+        const newContent = rightPanel.querySelector('.panel-content');
+        setTimeout(() => {
+          newContent.classList.remove('enter-start');
+          newContent.classList.add('enter');
+        }, 10);
+      }, 600);
+    }
+
+    function submitLoginForm() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      // Validate login form
+      if (!email || !password) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      // Send login data to the server
+      fetch('login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          // Redirect to the appropriate page based on role
+          window.location.href = data.redirect_url;
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during login.');
+      });
+    }
+
+    function submitInitialForm() {
+      const firstname = document.getElementById('firstname').value;
+      const lastname = document.getElementById('lastname').value;
+      const mi = document.getElementById('mi').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      // Validate required fields
+      if (!firstname || !lastname || !email || !password || !confirmPassword) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      // Validate password match
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      // Send initial registration data to the server
+      fetch('register.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          mi,
+          email,
+          password,
+          role
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          userData = { user_id: data.user_id, role: data.role };
+          showRoleSpecificForm();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during registration.');
+      });
+    }
+
+    function showRoleSpecificForm() {
+      const rightPanel = document.getElementById('right-panel');
+      const panelContent = rightPanel.querySelector('.panel-content');
+
+      // Trigger exit animation
+      panelContent.classList.add('exit');
+
+      // Wait for the exit animation to finish, then replace with new content
+      setTimeout(() => {
+        let newContentHTML = '';
+        if (userData.role === 'student') {
+          newContentHTML = `
+            <div class="panel-content enter-start">
+              <div class="form-title text-green-800">STUDENT</div>
+              <input type="text" id="student-id" placeholder="Student ID" class="form-input" />
+              <input type="text" id="course" placeholder="Course" class="form-input" />
+              <input type="text" id="contact-no" placeholder="Contact No." class="form-input" />
+              <input type="text" id="emergency-contact" placeholder="Emergency Contact" class="form-input" />
+              <div class="flex items-center my-4">
+                <input type="checkbox" id="terms-student" class="mr-2 accent-green-800 transform scale-125" />
+                <label for="terms-student" class="text-sm text-gray-600">I have read and agree to the Terms and Condition</label>
+              </div>
+              <div class="button" onclick="submitRoleSpecificForm()">REGISTER</div>
+            </div>
+          `;
+        } else if (userData.role === 'faculty') {
+          newContentHTML = `
+            <div class="panel-content enter-start">
+              <div class="form-title text-green-800">FACULTY</div>
+              <input type="text" id="faculty-name" placeholder="Faculty Name" class="form-input" />
+              <input type="text" id="faculty-id" placeholder="Faculty ID" class="form-input" />
+              <select id="department" class="form-input">
+                <option value="" disabled selected>Department</option>
+                <option value="dept1">Department 1</option>
+                <option value="dept2">Department 2</option>
+              </select>
+              <input type="text" id="position" placeholder="Position" class="form-input" />
+              <div class="flex items-center my-4">
+                <input type="checkbox" id="terms-faculty" class="mr-2 accent-green-800 transform scale-125" />
+                <label for="terms-faculty" class="text-sm text-gray-600">I have read and agree to the Terms and Condition</label>
+              </div>
+              <div class="button" onclick="submitRoleSpecificForm()">REGISTER</div>
+            </div>
+          `;
+        }
+
+        // Replace the entire panel content
+        rightPanel.innerHTML = newContentHTML;
+
+        // Find the new panel content and apply the enter animation
+        const newContent = rightPanel.querySelector('.panel-content');
+        setTimeout(() => {
+          newContent.classList.remove('enter-start');
+          newContent.classList.add('enter');
+        }, 10); // Small delay to ensure the animation triggers
+      }, 600); // Match the transition duration (0.6s)
+    }
+
+    function submitRoleSpecificForm() {
+      let data = { user_id: userData.user_id, role: userData.role };
+
+      if (userData.role === 'student') {
+        const studentId = document.getElementById('student-id').value;
+        const course = document.getElementById('course').value;
+        const contactNo = document.getElementById('contact-no').value;
+        const emergencyContact = document.getElementById('emergency-contact').value;
+        const termsChecked = document.getElementById('terms-student').checked;
+
+        // Validate required fields
+        if (!studentId || !course || !contactNo || !emergencyContact) {
+          alert("Please fill out all required fields.");
+          return;
+        }
+
+        if (!termsChecked) {
+          alert("Please agree to the Terms and Conditions.");
+          return;
+        }
+
+        data.student_id = studentId;
+        data.course = course;
+        data.contact_no = contactNo;
+        data.emergency_contact = emergencyContact;
+      } else if (userData.role === 'faculty') {
+        const facultyName = document.getElementById('faculty-name').value;
+        const facultyId = document.getElementById('faculty-id').value;
+        const department = document.getElementById('department').value;
+        const position = document.getElementById('position').value;
+        const termsChecked = document.getElementById('terms-faculty').checked;
+
+        // Validate required fields
+        if (!facultyName || !facultyId || !department || !position) {
+          alert("Please fill out all required fields.");
+          return;
+        }
+
+        if (!termsChecked) {
+          alert("Please agree to the Terms and Conditions.");
+          return;
+        }
+
+        data.faculty_name = facultyName;
+        data.faculty_id = facultyId;
+        data.department = department;
+        data.position = position;
+      }
+
+      // Send role-specific data to the server
+      fetch('register.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert(data.message);
+          // Optionally redirect or reset the form
+          window.location.reload();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during registration.');
+      });
+    }
+  </script>
+</body>
+</html>

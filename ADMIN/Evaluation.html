@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Evaluation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+   
+  <div class="main">
+
+    <div class="evaluation-header">
+        <h1>Evaluation & Feedback Dashboard</h1>
+        <p>Monitor feedback, assess program effectiveness, and generate evaluation reports from students, faculty, stakeholders, and partners.</p>
+      </div>
+      
+      <section class="evaluation-section">
+        <h2>📋 Program Evaluation Forms</h2>
+        <p>View and manage evaluation forms submitted by participants.</p>
+        <button class="btn">View All Forms</button>
+        <table class="evaluation-table">
+          <thead>
+            <tr>
+              <th>Program Name</th>
+              <th>Type</th>
+              <th>Responses</th>
+              <th>Average Rating</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Community Nutrition Seminar</td>
+              <td>Student</td>
+              <td>56</td>
+              <td>4.6 / 5</td>
+              <td>Completed</td>
+              <td><button class="btn-small">View Report</button></td>
+            </tr>
+            <tr>
+              <td>Livelihood Training</td>
+              <td>Stakeholder</td>
+              <td>23</td>
+              <td>4.2 / 5</td>
+              <td>In Progress</td>
+              <td><button class="btn-small">Analyze</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      
+      <section class="evaluation-section">
+        <h2>📊 Faculty Assessment</h2>
+        <p>Review how faculty are assessing student engagement and performance.</p>
+        <button class="btn">Review Faculty Submissions</button>
+        <ul class="evaluation-list">
+          <li>✔ Participation Scores</li>
+          <li>✔ Assignment Reviews</li>
+          <li>✔ Behavior Evaluation</li>
+        </ul>
+      </section>
+      
+      <section class="evaluation-section">
+        <h2>📈 Program Effectiveness Reports</h2>
+        <p>Generate summaries of participant satisfaction and recommendations.</p>
+        <button class="btn">Generate Report</button>
+        <div class="chart-placeholder">
+          <!-- Integrate chart.js, chart component, or static image as needed -->
+          <p>[Feedback Trends Chart Placeholder]</p>
+        </div>
+      </section>
+      
+      <section class="evaluation-section">
+        <h2>📤 Export Evaluation Data</h2>
+        <p>Export detailed feedback reports for offline analysis or archiving.</p>
+        <button class="btn">Download PDF</button>
+        <button class="btn">Export to Excel</button>
+      </section>
+      
+      <section class="evaluation-section">
+        <h2>🔔 Feedback Notifications & Alerts</h2>
+        <p>Configure alerts for low-rated sessions or overdue feedback submissions.</p>
+        <label>
+          <input type="checkbox" checked /> Notify if average rating < 3.0
+        </label><br/>
+        <label>
+          <input type="checkbox" checked /> Alert if no feedback received after 7 days
+        </label>
+      </section>
+</div>      
+</body>
+</html>

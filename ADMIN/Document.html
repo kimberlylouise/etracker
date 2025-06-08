@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Document.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+    <div class="main">
+        <h1>Document Management</h1>
+      
+        <section class="filter-section">
+          <h2>Filter Documents</h2>
+          <form>
+            <label for="docTypeFilter">Document Type</label>
+            <select id="docTypeFilter" name="docTypeFilter">
+              <option value="">-- All Types --</option>
+              <option value="proposal">Extension Activity Proposal</option>
+              <option value="report">Implementation Report</option>
+              <option value="attendance">Attendance Sheet</option>
+              <option value="evaluation">Evaluation Form</option>
+              <option value="photo">Photo Documentation</option>
+              <option value="certificate">Certificate</option>
+              <option value="other">Other Supporting Document</option>
+            </select>
+      
+            <label for="uploaderFilter">Submitted By</label>
+            <input type="text" id="uploaderFilter" name="uploaderFilter" placeholder="e.g., Dr. Santos">
+      
+            <button type="submit">Apply Filters</button>
+          </form>
+        </section>
+      
+        <section class="documents-table">
+          <h2>Submitted Documents</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Date Uploaded</th>
+                <th>Submitted By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Example row -->
+              <tr>
+                <td>Workload Summary - Q1 2025</td>
+                <td>Summary of Workload</td>
+                <td>2025-04-25</td>
+                <td>Prof. Santos</td>
+                <td>
+                  <button>View</button>
+                  <button>Download</button>
+                  <button class="delete">Delete</button>
+                </td>
+              </tr>
+              <!-- Additional rows dynamically populated -->
+            </tbody>
+          </table>
+        </section>
+      </div>
+      
+  
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Reports.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+   
+  <div class="main">
+    <h1>Reports & Analytics</h1>
+    <p class="subtitle">Visualize participation, attendance, feedback, and program performance.</p>
+  
+    <div class="report-layout">
+      <!-- LEFT COLUMN -->
+      <div class="report-left">
+        <section class="filters">
+          <h2>Generate Reports</h2>
+          <form>
+            <label for="reportType">Report Type</label>
+            <select id="reportType" name="reportType">
+              <option value="">-- Select Report Type --</option>
+              <option value="participation">Program Participation</option>
+              <option value="attendance">Attendance Summary</option>
+              <option value="feedback">Evaluation Feedback</option>
+              <option value="completion">Program Completion</option>
+              <option value="faculty">Faculty Performance</option>
+            </select>
+  
+            <label for="startMonth">Date Range</label>
+            <input type="month" id="startMonth" name="startMonth">
+            <span style="margin: 0 5px;">to</span>
+            <input type="month" id="endMonth" name="endMonth">
+  
+            <button type="submit">Generate</button>
+          </form>
+        </section>
+  
+        <section class="report-output">
+          <h2>Sample Report Output</h2>
+          <div class="report-box">
+            <p><strong>Program:</strong> Environmental Awareness Drive</p>
+            <p><strong>Participants:</strong> 152</p>
+            <p><strong>Average Attendance:</strong> 86%</p>
+            <p><strong>Average Feedback Rating:</strong> 4.6 / 5</p>
+            <p><strong>Status:</strong> Completed</p>
+          </div>
+  
+          <div class="actions">
+            <button>Download PDF</button>
+            <button>Export Excel</button>
+          </div>
+        </section>
+      </div>
+  
+      <!-- RIGHT COLUMN -->
+      <div class="report-right">
+        <section class="chart-section">
+          <div class="chart-card">
+            <h3>Top Programs</h3>
+            <canvas id="topProgramsChart" width="300" height="200"></canvas>
+          </div>
+  
+          <div class="chart-card">
+            <h3>Attendance Trend</h3>
+            <canvas id="attendanceTrendChart" width="300" height="200"></canvas>
+          </div>
+  
+          <div class="chart-card">
+            <h3>Feedback Ratings</h3>
+            <canvas id="feedbackRatingsChart" width="300" height="200"></canvas>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Bar Chart: Top Programs
+    const topProgramsChart = new Chart(document.getElementById('topProgramsChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Financial Literacy', 'Urban Gardening', 'Mental Health', 'Digital Literacy', 'Women Empowerment'],
+        datasets: [{
+          label: 'Enrollment',
+          data: [180, 155, 132, 121, 109],
+          backgroundColor: '#1B472B'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  
+    // Line Chart: Monthly Attendance
+    const attendanceTrendChart = new Chart(document.getElementById('attendanceTrendChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Attendance %',
+          data: [65, 72, 81, 86, 78],
+          fill: false,
+          borderColor: '#1B472B',
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        }
+      }
+    });
+  
+    // Doughnut Chart: Feedback Ratings
+    const feedbackRatingsChart = new Chart(document.getElementById('feedbackRatingsChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Excellent', 'Good', 'Average', 'Poor'],
+        datasets: [{
+          data: [60, 30, 8, 2],
+          backgroundColor: ['#1B472B', '#65a30d', '#facc15', '#ef4444']
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '65%'
+      }
+    });
+  </script>
+    
+  
+</body>
+</html>

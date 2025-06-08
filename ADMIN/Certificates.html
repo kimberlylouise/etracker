@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="Certificates.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+    <div class="main">
+        <div class="section">
+            <h2>Generate Certificates</h2>
+            <p>Select a program and participant type to generate certificates.</p>
+            <label>Program:</label>
+            <select>
+              <option value="">-- Select Program --</option>
+              <option value="nutrition">Community Nutrition Seminar</option>
+              <option value="livelihood">Livelihood Training</option>
+            </select>
+            <label>Participant Type:</label>
+            <select>
+              <option value="">-- Select Type --</option>
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+              <option value="stakeholder">Stakeholder</option>
+            </select>
+            <button class="btn">Generate Certificates</button>
+          </div>
+        
+          <div class="section">
+            <h2>Certificate Records</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Participant Name</th>
+                  <th>Program</th>
+                  <th>Issued On</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Juan Dela Cruz</td>
+                  <td>Community Nutrition Seminar</td>
+                  <td>2025-04-21</td>
+                  <td>Issued</td>
+                  <td><button class="btn">Download</button></td>
+                </tr>
+                <tr>
+                  <td>Maria Santos</td>
+                  <td>Livelihood Training</td>
+                  <td>2025-05-02</td>
+                  <td>Pending</td>
+                  <td><button class="btn">Issue Now</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="section">
+            <h2>Certificate Template Management</h2>
+            <p>Upload or edit certificate templates used for issuing.</p>
+            <input type="file" accept=".docx,.pdf" />
+            <button class="btn">Upload Template</button>
+          </div>
+        
+          <div class="section">
+            <h2>Search Certificates</h2>
+            <input type="text" placeholder="Search by name or program..." />
+            <button class="btn">Search</button>
+          </div>
+      </div>
+      
+  
+</body>
+</html>

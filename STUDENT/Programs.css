@@ -1,0 +1,293 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  body {
+    background: #ffffff;
+  }
+
+  /* Stylish Loading Spinner */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #2e6e1e;
+  font-weight: bold;
+  font-size: 1.1rem;
+  gap: 10px;
+}
+
+.loading .spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff8cc;
+  border-top: 3px solid #2e6e1e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+  .container {
+    display: flex;
+    min-height: 100vh;
+    padding-left: 280px; /* 220px sidebar + 60px gap for spacing */
+    align-items: flex-start;
+}
+
+.sidebar {
+    width: 220px;
+    background: #fff8cc;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 95vh;
+    position: fixed;      /* Make sidebar fixed */
+    top: 2%;               /* Stick to top */
+    left: 40px;           /* Match original left padding */
+    margin-top: 0;        /* Remove auto margins */
+    margin-bottom: 0;
+    z-index: 100;         /* Keep above other content */
+}
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: green;
+  }
+  
+  .logo span {
+    font-weight: bold;
+    color: #005c00;
+  }
+  
+  .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 18px;
+  }
+  
+  .nav-item {
+    color: #333;
+    text-decoration: none;
+    padding-left: 10px;
+  }
+  
+  .nav-item.active {
+    background: #fff1a5;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px 40px;
+  }
+  
+  .header h1 {
+    text-align: center;
+    background: #fff8cc;
+    padding: 20px;
+    border-radius: 20px;
+    color: #2e6e1e;
+  }
+
+
+
+  
+ 
+
+  .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.logo img {
+  width: 32px; /* adjust as needed */
+  height: 32px; /* keep it proportional */
+}
+
+/* Programs Section Styling */
+.programs {
+    margin-top: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    background-color: #fff8cc;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .tab.active {
+    background-color: #fff1a5;
+    color: #2e6e1e;
+  }
+  
+  .tab-content .tab-pane {
+    display: none;
+  }
+  
+  .tab-content .tab-pane.active {
+    display: block;
+  }
+  
+  .search-bar {
+    padding: 8px;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  /* Stylish Table */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(46, 110, 30, 0.08);
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+th {
+  background: #fff8cc;
+  color: #2e6e1e;
+  font-weight: bold;
+  border-bottom: 2px solid #e6e6e6;
+}
+
+tr {
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background: #f7ffe6;
+}
+
+td {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+  /* --- Stylish Enrollment Form --- */
+.enroll-form {
+  background: #fff8cc;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(46, 110, 30, 0.10);
+  padding: 32px 28px;
+  max-width: 420px;
+  margin: 32px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 1.5px solid #e6e6e6;
+}
+
+.enroll-form input,
+.enroll-form select,
+.enroll-form textarea {
+  padding: 12px 14px;
+  border: 1.5px solid #b6b6b6;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+  outline: none;
+}
+
+.enroll-form input:focus,
+.enroll-form select:focus,
+.enroll-form textarea:focus {
+  border: 1.5px solid #2e6e1e;
+  background: #f7ffe6;
+}
+
+.enroll-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.enroll-form button {
+  padding: 12px;
+  background: linear-gradient(90deg, #2e6e1e 60%, #5cb85c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(46, 110, 30, 0.08);
+}
+
+.enroll-form button:hover {
+  background: linear-gradient(90deg, #218c21 60%, #7ed957 100%);
+  box-shadow: 0 4px 16px rgba(46, 110, 30, 0.12);
+}
+
+#enroll-message {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #2e6e1e;
+  text-align: center;
+  min-height: 24px;
+}
+
+/* Pagination Styling */
+.pagination {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  margin: 16px 0 0 0;
+}
+.page-btn {
+  background: #fff8cc;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: bold;
+  color: #2e6e1e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.page-btn.active,
+.page-btn:hover {
+  background: #fff1a5;
+  color: #005c00;
+}

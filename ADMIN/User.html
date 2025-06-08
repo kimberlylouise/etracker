@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin Dashboard</title>
+  <link rel="stylesheet" href="User.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head>
+<body>
+
+    
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
+    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  </div>
+
+  <div class="main">
+    <div class="user-management">
+        <h1>User Management</h1>
+      
+        <!-- Student Section -->
+        <section class="user-section">
+          <h2>Students</h2>
+          <div class="user-actions">
+            <button class="btn-primary" onclick="openModal('add-student-modal')">
+                <i class="fas fa-user-plus"></i> Add Student
+              </button>
+                          <button class="btn-secondary"><i class="fas fa-download"></i> Export Students</button>
+          </div>
+      
+          <!-- Add Student -->
+
+ 
+  
+          <div class="user-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>ID Number</th>
+                  <th>Course</th>
+                  <th>Contact</th>
+                  <th>Enrolled Programs</th>
+                  <th>Attendance %</th>
+                  <th>Evaluations</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Anna Lopez</td>
+                  <td>2021-1023</td>
+                  <td>BSIT</td>
+                  <td>anna@example.com</td>
+                  <td>Digital Literacy, Leadership 101</td>
+                  <td>92%</td>
+                  <td>2/3 Submitted</td>
+                  <td>
+                    <button class="btn-view" onclick='openViewProfile({
+                        name: "Anna Lopez",
+                        role: "Student",
+                        id: "2021-1023",
+                        department: "BSIT",
+                        email: "anna@example.com",
+                        phone: "09171234567",
+                        programs: ["Digital Literacy", "Leadership 101"],
+                        attendance: "92%",
+                        evaluations: "2/3 Submitted"
+                      })'>View</button>
+                       
+                <!-- Edit User -->
+                <button class="btn-edit" onclick="openModal('edit-user-modal')">Edit</button>
+                      <button class="btn-delete">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      
+        <!-- Faculty Section -->
+        <section class="user-section">
+          <h2>Faculty</h2>
+          <div class="user-actions">
+            <button class="btn-primary" onclick="openModal('add-faculty-modal')">
+                <i class="fas fa-user-plus"></i> Add Faculty
+              </button>
+                          <button class="btn-secondary"><i class="fas fa-download"></i> Export Faculty</button>
+          </div>
+      
+          <div class="user-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>Department</th>
+                  <th>Email</th>
+                  <th>Programs Handled</th>
+                  <th>Students Enrolled</th>
+                  <th>Evaluations Given</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Prof. Mark Reyes</td>
+                  <td>Computer Science</td>
+                  <td>mark.reyes@cvsu.edu.ph</td>
+                  <td>Digital Literacy, Web Dev Bootcamp</td>
+                  <td>85</td>
+                  <td>65</td>
+                  <td>
+                    <button class="btn-view" onclick='openViewProfile({
+                        name: "Anna Lopez",
+                        role: "Student",
+                        id: "2021-1023",
+                        department: "BSIT",
+                        email: "anna@example.com",
+                        phone: "09171234567",
+                        programs: ["Digital Literacy", "Leadership 101"],
+                        attendance: "92%",
+                        evaluations: "2/3 Submitted"
+                      })'>View</button>
+                                          <button class="btn-edit">Edit</button>
+                    <button class="btn-delete">Remove</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      
+      <!-- Overlay -->
+<div id="modal-overlay" class="modal-overlay hidden"></div>
+
+<!-- Add Student Modal -->
+<div id="add-student-modal" class="modal hidden">
+  <div class="modal-header">
+    <h2>Add Student</h2>
+    <span class="close-modal" onclick="closeModal('add-student-modal')">&times;</span>
+  </div>
+  <form class="modal-form">
+    <input type="text" placeholder="Full Name" required />
+    <input type="text" placeholder="Student ID Number" required />
+    <input type="text" placeholder="Course/Department" required />
+    <input type="email" placeholder="Email" required />
+    <input type="tel" placeholder="Phone Number" />
+    <select>
+      <option disabled selected>Select Preferred Program</option>
+      <option>Digital Literacy</option>
+      <option>Leadership 101</option>
+      <option>Community Engagement</option>
+    </select>
+    <button type="submit" class="btn-primary full">Add Student</button>
+  </form>
+</div>
+
+<!-- Add Faculty Modal -->
+<div id="add-faculty-modal" class="modal hidden">
+    <div class="modal-header">
+      <h2>Add Faculty</h2>
+      <span class="close-modal" onclick="closeModal('add-faculty-modal')">&times;</span>
+    </div>
+    <form class="modal-form">
+      <input type="text" placeholder="Full Name" required />
+      <input type="text" placeholder="Faculty ID or Code" required />
+      <input type="text" placeholder="Department" required />
+      <input type="email" placeholder="Email" required />
+      <input type="tel" placeholder="Phone Number" />
+      <select multiple>
+        <option disabled>Select Programs Handled</option>
+        <option>Digital Literacy</option>
+        <option>Leadership 101</option>
+        <option>Community Engagement</option>
+        <option>Environmental Awareness</option>
+      </select>
+      <button type="submit" class="btn-primary full">Add Faculty</button>
+    </form>
+  </div>
+  
+
+<!-- Edit User Modal -->
+<div id="edit-user-modal" class="modal hidden">
+  <div class="modal-header">
+    <h2>Edit User</h2>
+    <span class="close-modal" onclick="closeModal('edit-user-modal')">&times;</span>
+  </div>
+  <form class="modal-form">
+    <input type="text" placeholder="Full Name" />
+    <input type="text" placeholder="ID Number / Faculty Code" />
+    <input type="text" placeholder="Department / Course" />
+    <input type="email" placeholder="Email" />
+    <input type="tel" placeholder="Phone Number" />
+    <select>
+      <option disabled selected>Update Role</option>
+      <option>Student</option>
+      <option>Faculty</option>
+    </select>
+    <button type="submit" class="btn-edit full">Save Changes</button>
+  </form>
+</div>
+
+<!-- View Profile Modal -->
+<div id="view-profile-modal" class="modal hidden">
+    <div class="modal-header">
+      <h2>User Profile</h2>
+      <span class="close-modal" onclick="closeModal('view-profile-modal')">&times;</span>
+    </div>
+    <div class="modal-profile">
+      <p><strong>Full Name:</strong> <span id="profile-name">Loading...</span></p>
+      <p><strong>Role:</strong> <span id="profile-role">-</span></p>
+      <p><strong>ID/Faculty Code:</strong> <span id="profile-id">-</span></p>
+      <p><strong>Course/Department:</strong> <span id="profile-dept">-</span></p>
+      <p><strong>Email:</strong> <span id="profile-email">-</span></p>
+      <p><strong>Phone:</strong> <span id="profile-phone">-</span></p>
+      <p><strong>Programs:</strong> <span id="profile-programs">-</span></p>
+      <p><strong>Attendance:</strong> <span id="profile-attendance">-</span></p>
+      <p><strong>Evaluations:</strong> <span id="profile-evaluations">-</span></p>
+    </div>
+  </div>
+  
+      
+  
+   
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById('modal-overlay').classList.remove('hidden');
+      document.getElementById(id).classList.remove('hidden');
+    }
+  
+    function closeModal(id) {
+      document.getElementById('modal-overlay').classList.add('hidden');
+      document.getElementById(id).classList.add('hidden');
+    }
+  
+    function openViewProfile(user) {
+    // Set modal content dynamically
+    document.getElementById("profile-name").textContent = user.name;
+    document.getElementById("profile-role").textContent = user.role;
+    document.getElementById("profile-id").textContent = user.id;
+    document.getElementById("profile-dept").textContent = user.department;
+    document.getElementById("profile-email").textContent = user.email;
+    document.getElementById("profile-phone").textContent = user.phone;
+    document.getElementById("profile-programs").textContent = user.programs.join(", ");
+    document.getElementById("profile-attendance").textContent = user.attendance;
+    document.getElementById("profile-evaluations").textContent = user.evaluations;
+
+    openModal('view-profile-modal');
+  }
+  
+
+  document.getElementById('modal-overlay').addEventListener('click', function () {
+  ['add-student-modal', 'edit-user-modal', 'add-faculty-modal', 'view-profile-modal'].forEach(id => closeModal(id));
+});
+
+
+  </script>
+  
+</body>
+</html>
