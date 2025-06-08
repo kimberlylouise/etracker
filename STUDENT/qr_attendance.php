@@ -30,7 +30,16 @@ if ($enroll->get_result()->num_rows === 0) {
 
 // 3. Prevent duplicate attendance
 $check = $conn->prepare("SELECT id FROM attendance WHERE student_name=? AND program_id=? AND date=?");
-$student_name = ...; // build from users table as before
+// Fetch student name from users table
+$user_stmt = $conn->prepare("SELECT name FROM users WHERE id=?");
+$user_stmt->bind_param('i', $user_id);
+$user_stmt->execute();
+$user_result = $user_stmt->get_result();
+if ($user_result->num_rows === 0) {
+    die('User not found.');
+}
+$student_row = $user_result->fetch_assoc();
+$student_name = $student_row['name'];
 $check->bind_param('sis', $student_name, $program_id, $date);
 $check->execute();
 if ($check->get_result()->num_rows > 0) {

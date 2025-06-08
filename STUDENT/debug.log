@@ -172,3 +172,18 @@ get_my_programs.php called at 2025-06-08 10:46:11
 Enrolled programs fetched: 4
 get_my_programs.php called at 2025-06-08 10:48:48
 Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 11:27:50
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 11:27:59
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 11:28:07
+Enrolled programs fetched: 4
+get_user_info.php called at 2025-06-08 11:28:11
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 11:28:13
+Programs fetched: 8
+get_my_programs.php called at 2025-06-08 11:32:21
+Enrolled programs fetched: 4
+get_my_programs.php called at 2025-06-08 11:35:26
+Enrolled programs fetched: 4
