@@ -3,22 +3,34 @@ session_start();
 header('Content-Type: application/json');
 require_once 'db_connect.php';
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+$data = json_decode(file_get_contents('php://input'), true);
+
+$qr_data = $data['qr_data'] ?? null;
+if ($qr_data) {
+    $stmt = $conn->prepare("SELECT user_id, program_id FROM qr_codes WHERE code = ?");
+    $stmt->bind_param('s', $qr_data);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid or expired code']);
+        exit;
+    }
+    $row = $result->fetch_assoc();
+    $user_id = $row['user_id'];
+    $program_id = $row['program_id'];
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'No code entered']);
     exit;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
-$program_name = $data['program_name'] ?? '';
-$time_in = $data['time_in'] ?? date('H:i:s'); // fallback to current time if not provided
+$time_in = $data['time_in'] ?? date('H:i:s');
 
-if (!$program_name) {
-    echo json_encode(['status' => 'error', 'message' => 'No program selected']);
+if (!$program_id || !$user_id) {
+    echo json_encode(['status' => 'error', 'message' => 'Missing user or program info']);
     exit;
 }
 
 // Get user info
-$user_id = $_SESSION['user_id'];
 $user_query = $conn->prepare("SELECT firstname, lastname, mi FROM users WHERE id = ?");
 if (!$user_query) {
     echo json_encode(['status' => 'error', 'message' => 'Prepare failed (users): ' . $conn->error]);
@@ -33,18 +45,6 @@ if ($user_result->num_rows === 0) {
 }
 $user = $user_result->fetch_assoc();
 $student_name = $user['firstname'] . ' ' . ($user['mi'] ? $user['mi'] . ' ' : '') . $user['lastname'];
-
-// Get program_id from program_name
-$prog_query = $conn->prepare("SELECT id FROM programs WHERE program_name = ?");
-$prog_query->bind_param('s', $program_name);
-$prog_query->execute();
-$prog_result = $prog_query->get_result();
-if ($prog_result->num_rows === 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Program not found']);
-    exit;
-}
-$program = $prog_result->fetch_assoc();
-$program_id = $program['id'];
 
 // Prevent duplicate attendance for today
 $today = date('Y-m-d');

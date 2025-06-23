@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Update the program's end_date to today to mark it as ended
-    $stmt = $conn->prepare("UPDATE programs SET end_date = CURDATE() WHERE id = ?");
+    // Update the program's status to 'ended' and end_date to today to mark it as ended
+    $stmt = $conn->prepare("UPDATE programs SET status = 'ended', end_date = CURDATE() WHERE id = ?");
     $stmt->bind_param("i", $program_id);
 
     if ($stmt->execute()) {

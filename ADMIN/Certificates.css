@@ -71,3 +71,15 @@ body {
     margin-top: 10px;
     margin-right: 10px;
   }
+  .section-header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

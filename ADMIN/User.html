@@ -21,8 +21,7 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+
   </div>
 
   <div class="main">
@@ -58,32 +57,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Anna Lopez</td>
-                  <td>2021-1023</td>
-                  <td>BSIT</td>
-                  <td>anna@example.com</td>
-                  <td>Digital Literacy, Leadership 101</td>
-                  <td>92%</td>
-                  <td>2/3 Submitted</td>
-                  <td>
-                    <button class="btn-view" onclick='openViewProfile({
-                        name: "Anna Lopez",
-                        role: "Student",
-                        id: "2021-1023",
-                        department: "BSIT",
-                        email: "anna@example.com",
-                        phone: "09171234567",
-                        programs: ["Digital Literacy", "Leadership 101"],
-                        attendance: "92%",
-                        evaluations: "2/3 Submitted"
-                      })'>View</button>
-                       
-                <!-- Edit User -->
-                <button class="btn-edit" onclick="openModal('edit-user-modal')">Edit</button>
-                      <button class="btn-delete">Delete</button>
-                  </td>
-                </tr>
+                <!-- Leave empty, JS will fill this -->
               </tbody>
             </table>
           </div>
@@ -113,29 +87,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Prof. Mark Reyes</td>
-                  <td>Computer Science</td>
-                  <td>mark.reyes@cvsu.edu.ph</td>
-                  <td>Digital Literacy, Web Dev Bootcamp</td>
-                  <td>85</td>
-                  <td>65</td>
-                  <td>
-                    <button class="btn-view" onclick='openViewProfile({
-                        name: "Anna Lopez",
-                        role: "Student",
-                        id: "2021-1023",
-                        department: "BSIT",
-                        email: "anna@example.com",
-                        phone: "09171234567",
-                        programs: ["Digital Literacy", "Leadership 101"],
-                        attendance: "92%",
-                        evaluations: "2/3 Submitted"
-                      })'>View</button>
-                                          <button class="btn-edit">Edit</button>
-                    <button class="btn-delete">Remove</button>
-                  </td>
-                </tr>
+                <!-- Leave empty, JS will fill this -->
               </tbody>
             </table>
           </div>
@@ -151,17 +103,21 @@
     <h2>Add Student</h2>
     <span class="close-modal" onclick="closeModal('add-student-modal')">&times;</span>
   </div>
-  <form class="modal-form">
-    <input type="text" placeholder="Full Name" required />
-    <input type="text" placeholder="Student ID Number" required />
-    <input type="text" placeholder="Course/Department" required />
-    <input type="email" placeholder="Email" required />
-    <input type="tel" placeholder="Phone Number" />
-    <select>
-      <option disabled selected>Select Preferred Program</option>
-      <option>Digital Literacy</option>
-      <option>Leadership 101</option>
-      <option>Community Engagement</option>
+  <form class="modal-form" id="add-student-form" onsubmit="return submitStudent(event)">
+    <input type="text" name="firstname" placeholder="First Name" required autocomplete="given-name" />
+    <input type="text" name="lastname" placeholder="Last Name" required autocomplete="family-name" />
+    <input type="text" name="mi" placeholder="Middle Initial" autocomplete="additional-name" />
+    <input type="email" name="email" placeholder="Email" required autocomplete="username" />
+    <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+    <input type="text" name="department" placeholder="Course/Department" required />
+    <input type="tel" name="phone" placeholder="Phone Number" />
+    <select name="comm_preference">
+      <option value="" disabled selected>Select Communication Preference</option>
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+    </select>
+    <select name="programs[]" id="add-programs" multiple required>
+      <!-- JS will populate options -->
     </select>
     <button type="submit" class="btn-primary full">Add Student</button>
   </form>
@@ -169,26 +125,40 @@
 
 <!-- Add Faculty Modal -->
 <div id="add-faculty-modal" class="modal hidden">
-    <div class="modal-header">
-      <h2>Add Faculty</h2>
-      <span class="close-modal" onclick="closeModal('add-faculty-modal')">&times;</span>
-    </div>
-    <form class="modal-form">
-      <input type="text" placeholder="Full Name" required />
-      <input type="text" placeholder="Faculty ID or Code" required />
-      <input type="text" placeholder="Department" required />
-      <input type="email" placeholder="Email" required />
-      <input type="tel" placeholder="Phone Number" />
-      <select multiple>
-        <option disabled>Select Programs Handled</option>
-        <option>Digital Literacy</option>
-        <option>Leadership 101</option>
-        <option>Community Engagement</option>
-        <option>Environmental Awareness</option>
-      </select>
-      <button type="submit" class="btn-primary full">Add Faculty</button>
-    </form>
+  <div class="modal-header">
+    <h2>Add Faculty</h2>
+    <span class="close-modal" onclick="closeModal('add-faculty-modal')">&times;</span>
   </div>
+  <form class="modal-form" id="add-faculty-form" onsubmit="return submitFaculty(event)">
+    <input type="text" name="fullname" placeholder="Full Name" required />
+    <input type="text" name="faculty_id" placeholder="Faculty ID" required />
+    <input type="text" name="firstname" placeholder="First Name" required />
+    <input type="text" name="lastname" placeholder="Last Name" required />
+    <input type="text" name="mi" placeholder="Middle Initial" />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+    <select name="department" required>
+      <option value="" disabled selected>Select Department</option>
+      <option>Department of Hospitality Management</option>
+      <option>Department of Language and Mass Communication</option>
+      <option>Department of Physical Education</option>
+      <option>Department of Social Sciences and Humanities</option>
+      <option>Teacher Education Department</option>
+      <option>Department of Administration - ENTREP</option>
+      <option>Department of Administration - BSOA</option>
+      <option>Department of Administration - BM</option>
+      <option>Department of Computer Studies</option>
+    </select>
+    <input type="tel" name="phone" placeholder="Phone Number" />
+    <input type="text" name="position" placeholder="Position" />
+    <p><strong>Communication Preference:</strong></p>
+    <select name="comm_preference">
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+    </select>
+    <button type="submit" class="btn-primary full">Add Faculty</button>
+  </form>
+</div>
   
 
 <!-- Edit User Modal -->
@@ -197,16 +167,24 @@
     <h2>Edit User</h2>
     <span class="close-modal" onclick="closeModal('edit-user-modal')">&times;</span>
   </div>
-  <form class="modal-form">
-    <input type="text" placeholder="Full Name" />
-    <input type="text" placeholder="ID Number / Faculty Code" />
-    <input type="text" placeholder="Department / Course" />
-    <input type="email" placeholder="Email" />
-    <input type="tel" placeholder="Phone Number" />
-    <select>
-      <option disabled selected>Update Role</option>
-      <option>Student</option>
-      <option>Faculty</option>
+  <form class="modal-form" id="edit-user-form" onsubmit="return submitEditUser(event)">
+    <input type="hidden" name="id" id="edit-id" />
+    <input type="text" name="firstname" id="edit-firstname" placeholder="First Name" required />
+    <input type="text" name="lastname" id="edit-lastname" placeholder="Last Name" required />
+    <input type="text" name="mi" id="edit-mi" placeholder="Middle Initial" />
+    <input type="email" name="email" id="edit-email" placeholder="Email" required />
+    <input type="text" name="department" id="edit-department" placeholder="Department/Course" required />
+    <input type="tel" name="phone" id="edit-phone" placeholder="Phone Number" />
+    <select name="comm_preference" id="edit-comm_preference">
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+    </select>
+    <select name="role" id="edit-role" required>
+      <option value="student">Student</option>
+      <option value="faculty">Faculty</option>
+    </select>
+    <select name="programs[]" id="edit-programs" multiple required>
+      <!-- JS will populate options -->
     </select>
     <button type="submit" class="btn-edit full">Save Changes</button>
   </form>
@@ -255,7 +233,7 @@
     document.getElementById("profile-dept").textContent = user.department;
     document.getElementById("profile-email").textContent = user.email;
     document.getElementById("profile-phone").textContent = user.phone;
-    document.getElementById("profile-programs").textContent = user.programs.join(", ");
+    document.getElementById("profile-programs").textContent = user.programs ? user.programs.join(", ") : "-";
     document.getElementById("profile-attendance").textContent = user.attendance;
     document.getElementById("profile-evaluations").textContent = user.evaluations;
 
@@ -268,6 +246,241 @@
 });
 
 
+// Fetch and display students
+function loadStudents() {
+  fetch('api_users.php?role=student')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const tbody = document.querySelector('.user-section:nth-of-type(1) tbody');
+        tbody.innerHTML = '';
+        data.data.forEach(user => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${user.firstname} ${user.lastname}</td>
+              <td>${user.id}</td>
+              <td>${user.department}</td>
+              <td>${user.phone}</td>
+              <td>${user.programs ? user.programs.join(", ") : "-"}</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <button class="btn-view" onclick='openViewProfile({
+                  name: "${user.firstname} ${user.lastname}",
+                  role: "Student",
+                  id: "${user.id}",
+                  department: "${user.department}",
+                  email: "${user.email}",
+                  phone: "${user.phone}",
+                  programs: [],
+                  attendance: "-",
+                  evaluations: "-"
+                })'>View</button>
+                <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
+                <button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    });
+}
+
+// Fetch and display faculty
+function loadFaculty() {
+  fetch('api_users.php?role=faculty')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const tbody = document.querySelector('.user-section:nth-of-type(2) tbody');
+        tbody.innerHTML = '';
+        data.data.forEach(user => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${user.firstname} ${user.lastname}</td>
+              <td>${user.department}</td>
+              <td>${user.email}</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <button class="btn-view" onclick='openViewProfile({
+                  name: "${user.firstname} ${user.lastname}",
+                  role: "Faculty",
+                  id: "${user.id}",
+                  department: "${user.department}",
+                  email: "${user.email}",
+                  phone: "${user.phone}",
+                  programs: [],
+                  attendance: "-",
+                  evaluations: "-"
+                })'>View</button>
+                <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
+                <button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    });
+}
+
+// Call on page load
+window.onload = function() {
+  loadStudents();
+  loadFaculty();
+};
+
+// Add Student
+function submitStudent(e) {
+  e.preventDefault();
+  const form = document.getElementById('add-student-form');
+  const data = new FormData(form);
+  data.append('role', 'student');
+  data.append('action', 'add_user');
+  fetch('api_users.php', { method: 'POST', body: data })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        closeModal('add-student-modal');
+        loadStudents();
+        form.reset();
+      }
+    });
+  return false;
+}
+
+// Add Faculty
+function submitFaculty(e) {
+  e.preventDefault();
+  const form = document.getElementById('add-faculty-form');
+  const data = new FormData(form);
+  data.append('role', 'faculty');
+  data.append('action', 'add_user');
+  fetch('api_users.php', { method: 'POST', body: data })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        closeModal('add-faculty-modal');
+        loadFaculty();
+        form.reset();
+      }
+    });
+  return false;
+}
+
+function editUser(id) {
+  // Fetch user data (including program IDs)
+  fetch('api_users.php?id=' + id)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.data.length > 0) {
+        const user = data.data[0];
+        document.getElementById('edit-id').value = user.id;
+        document.getElementById('edit-firstname').value = user.firstname;
+        document.getElementById('edit-lastname').value = user.lastname;
+        document.getElementById('edit-mi').value = user.mi;
+        document.getElementById('edit-email').value = user.email;
+        document.getElementById('edit-department').value = user.department;
+        document.getElementById('edit-phone').value = user.phone;
+        document.getElementById('edit-comm_preference').value = user.comm_preference;
+        document.getElementById('edit-role').value = user.role;
+
+        // Fetch all active programs and pre-select user's enrolled programs
+        fetch('api_users.php?action=get_programs')
+          .then(res => res.json())
+          .then(programData => {
+            if (programData.success) {
+              const select = document.getElementById('edit-programs');
+              select.innerHTML = '';
+              // user.programs should be an array of program names or IDs
+              // If you store names, you need to map names to IDs
+              // It's better to return IDs from your backend!
+              const userProgramNames = user.programs || [];
+              const userProgramIds = user.program_ids || [];
+              programData.data.forEach(program => {
+                const option = document.createElement('option');
+                option.value = program.id;
+                option.textContent = program.program_name;
+                // If your user.programs is an array of names:
+                if (userProgramNames.includes(program.program_name)) {
+                  option.selected = true;
+                }
+                // If your user.programs is an array of IDs, use:
+                if (userProgramIds.includes(program.id)) {
+                  option.selected = true;
+                }
+                select.appendChild(option);
+              });
+            }
+          });
+
+        openModal('edit-user-modal');
+      }
+    });
+}
+
+function deleteUser(id) {
+  if (confirm('Are you sure you want to delete this user?')) {
+    fetch('api_users.php', {
+      method: 'POST',
+      body: new URLSearchParams({
+        action: 'delete_user',
+        id: id
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        loadStudents();
+        loadFaculty();
+      } else {
+        alert('Failed to delete user.');
+      }
+    });
+  }
+}
+
+function submitEditUser(e) {
+  e.preventDefault();
+  const form = document.getElementById('edit-user-form');
+  const data = new FormData(form);
+  data.append('action', 'update_user');
+  fetch('api_users.php', { method: 'POST', body: data })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        closeModal('edit-user-modal');
+        loadStudents();
+        loadFaculty();
+      } else {
+        alert('Failed to update user.');
+      }
+    });
+  return false;
+}
+
+function populatePrograms(selectId, selected = []) {
+  fetch('api_users.php?action=get_programs')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = '';
+        data.data.forEach(program => {
+          const option = document.createElement('option');
+          option.value = program.id;
+          option.textContent = program.program_name;
+          if (selected.includes(program.id)) option.selected = true;
+          select.appendChild(option);
+        });
+      }
+    });
+}
+
+// Call this when opening Add/Edit modals:
+populatePrograms('add-programs');
+populatePrograms('edit-programs', [/* array of selected program ids */]);
   </script>
   
 </body>

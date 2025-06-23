@@ -1,42 +1,96 @@
 <?php
 require_once 'db.php';
+session_start();
 
-// Fetch all programs for the dropdown
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Fetch user info for display
+$user_id = $_SESSION['user_id'];
+$user_fullname = 'Unknown User';
+$user_email = 'unknown@cvsu.edu.ph';
+
+$user_sql = "SELECT firstname, lastname, email FROM users WHERE id = ?";
+$user_stmt = $conn->prepare($user_sql);
+$user_stmt->bind_param("i", $user_id);
+$user_stmt->execute();
+$user_result = $user_stmt->get_result();
+if ($user_row = $user_result->fetch_assoc()) {
+    $user_fullname = $user_row['firstname'] . ' ' . $user_row['lastname'];
+    $user_email = $user_row['email'];
+}
+$user_stmt->close();
+
+// Fetch faculty_id and department from faculty table
+$faculty_id = '';
+$faculty_department = '';
+$faculty_sql = "SELECT id, department FROM faculty WHERE user_id = ?";
+$faculty_stmt = $conn->prepare($faculty_sql);
+$faculty_stmt->bind_param("i", $user_id);
+$faculty_stmt->execute();
+$faculty_result = $faculty_stmt->get_result();
+if ($faculty_row = $faculty_result->fetch_assoc()) {
+    $faculty_id = $faculty_row['id'];
+    $faculty_department = $faculty_row['department'];
+}
+$faculty_stmt->close();
+
 $program_query = "SELECT id, program_name, start_date 
                   FROM programs 
+                  WHERE faculty_id = ?
                   ORDER BY start_date";
-$program_result = $conn->query($program_query);
+$program_stmt = $conn->prepare($program_query);
+$program_stmt->bind_param("i", $faculty_id);
+$program_stmt->execute();
+$program_result = $program_stmt->get_result();
 $programs = [];
-if ($program_result) {
-    while ($row = $program_result->fetch_assoc()) {
-        $programs[] = $row;
-    }
-    $program_result->free();
+while ($row = $program_result->fetch_assoc()) {
+    $programs[] = $row;
 }
+$program_stmt->close();
 
 // Set default to "all" programs unless a program_id is provided via GET
 $selected_program_id = isset($_GET['program_id']) && $_GET['program_id'] != 'all' ? $_GET['program_id'] : 'all';
 
-// Fetch attendance based on selected program (default to all)
-$attendance_query = "SELECT a.student_name, a.status, a.time_in, a.time_out, a.date, p.program_name 
-                     FROM attendance a 
-                     JOIN programs p ON a.program_id = p.id";
-if ($selected_program_id != 'all') {
-    $attendance_query .= " WHERE a.program_id = ?";
-}
-$attendance_query .= " ORDER BY a.date DESC, a.time_in DESC";
-$attendance_stmt = $conn->prepare($attendance_query);
-if ($selected_program_id != 'all') {
-    $attendance_stmt->bind_param("i", $selected_program_id);
-}
-$attendance_stmt->execute();
-$attendance_result = $attendance_stmt->get_result();
+// Only show attendance if a specific program is selected
 $attendance_records = [];
-if ($attendance_result) {
-    while ($row = $attendance_result->fetch_assoc()) {
-        $attendance_records[] = $row;
+if ($selected_program_id == 'all') {
+    // Show all attendance for all programs under this faculty
+    $attendance_query = "SELECT a.student_name, a.status, a.time_in, a.time_out, a.date, p.program_name 
+                         FROM attendance a 
+                         JOIN programs p ON a.program_id = p.id
+                         WHERE p.faculty_id = ?
+                         ORDER BY a.date DESC, a.time_in DESC";
+    $attendance_stmt = $conn->prepare($attendance_query);
+    $attendance_stmt->bind_param("i", $faculty_id);
+    $attendance_stmt->execute();
+    $attendance_result = $attendance_stmt->get_result();
+    if ($attendance_result) {
+        while ($row = $attendance_result->fetch_assoc()) {
+            $attendance_records[] = $row;
+        }
+        $attendance_result->free();
     }
-    $attendance_result->free();
+} else {
+    // Show attendance for the selected program only
+    $attendance_query = "SELECT a.student_name, a.status, a.time_in, a.time_out, a.date, p.program_name 
+                         FROM attendance a 
+                         JOIN programs p ON a.program_id = p.id
+                         WHERE a.program_id = ?
+                         ORDER BY a.date DESC, a.time_in DESC";
+    $attendance_stmt = $conn->prepare($attendance_query);
+    $attendance_stmt->bind_param("i", $selected_program_id);
+    $attendance_stmt->execute();
+    $attendance_result = $attendance_stmt->get_result();
+    if ($attendance_result) {
+        while ($row = $attendance_result->fetch_assoc()) {
+            $attendance_records[] = $row;
+        }
+        $attendance_result->free();
+    }
 }
 
 // Handle manual attendance submission
@@ -74,6 +128,57 @@ if ($notifications_result) {
     }
     $notifications_result->free();
 }
+
+// Calculate attendance summary for the selected program
+$summary = [];
+if ($selected_program_id != 'all') {
+    $students_query = "SELECT DISTINCT student_name FROM attendance WHERE program_id = ?";
+    $students_stmt = $conn->prepare($students_query);
+    $students_stmt->bind_param("i", $selected_program_id);
+    $students_stmt->execute();
+    $students_result = $students_stmt->get_result();
+    while ($student = $students_result->fetch_assoc()) {
+        $name = $student['student_name'];
+        $total_query = "SELECT COUNT(*) as total FROM attendance WHERE program_id = ? AND student_name = ?";
+        $present_query = "SELECT COUNT(*) as present FROM attendance WHERE program_id = ? AND student_name = ? AND status = 'Present'";
+        $total_stmt = $conn->prepare($total_query);
+        $total_stmt->bind_param("is", $selected_program_id, $name);
+        $total_stmt->execute();
+        $total_result = $total_stmt->get_result()->fetch_assoc();
+        $total = $total_result['total'];
+        $total_stmt->close();
+
+        $present_stmt = $conn->prepare($present_query);
+        $present_stmt->bind_param("is", $selected_program_id, $name);
+        $present_stmt->execute();
+        $present_result = $present_stmt->get_result()->fetch_assoc();
+        $present = $present_result['present'];
+        $present_stmt->close();
+
+        $percentage = $total > 0 ? round(($present / $total) * 100) : 0;
+        $summary[] = [
+            'student_name' => $name,
+            'present' => $present,
+            'total' => $total,
+            'percentage' => $percentage
+        ];
+    }
+    $students_stmt->close();
+}
+
+// Fetch enrolled students for the selected program
+$enrolled_students = [];
+if ($selected_program_id != 'all') {
+    $enrolled_query = "SELECT student_name FROM participants WHERE program_id = ? AND status = 'accepted'";
+    $enrolled_stmt = $conn->prepare($enrolled_query);
+    $enrolled_stmt->bind_param("i", $selected_program_id);
+    $enrolled_stmt->execute();
+    $enrolled_result = $enrolled_stmt->get_result();
+    while ($row = $enrolled_result->fetch_assoc()) {
+        $enrolled_students[] = $row['student_name'];
+    }
+    $enrolled_stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,19 +194,24 @@ if ($notifications_result) {
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="logo">eTRACKER</div>
+       <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+        <span class="logo-text">eTRACKER</span>
+      </div>
       <nav>
         <ul>
-          <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
           <li class="active"><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li ><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.PHP"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
-        <div class="sign-out">Sign Out</div>
-      </nav>
+ <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
+          <a href="/register/index.html" style="color: inherit; text-decoration: none; display: block; padding: 12px 0;">Sign Out</a>
+        </div>      </nav>
     </aside>
 
     <!-- Main Grid -->
@@ -111,13 +221,7 @@ if ($notifications_result) {
         <header class="topbar">
           <div class="role-label">Faculty Attendance</div>
           <div class="last-login">Last login: <?php echo date('m-d-y H:i:s'); ?></div>
-          <div class="top-actions">
-            <div class="search-bar">
-              <input type="text" placeholder="Search" />
-            </div>
-            <div class="message-icon">✉️</div>
-          </div>
-        </header>
+</header>
 
         <!-- Program Selection and Attendance Controls -->
         <div class="program-selection">
@@ -142,14 +246,13 @@ if ($notifications_result) {
               <th>Name</th>
               <th>Status</th>
               <th>Time-In</th>
-              <th>Time-Out</th>
               <th>Date</th>
               <th>Program</th>
             </tr>
           </thead>
           <tbody>
             <?php if (empty($attendance_records)): ?>
-              <tr><td colspan="6">No attendance records found.</td></tr>
+              <tr><td colspan="5">No attendance records found.</td></tr>
             <?php else: ?>
               <?php foreach ($attendance_records as $record): ?>
                 <tr>
@@ -158,7 +261,6 @@ if ($notifications_result) {
                     <?php echo htmlspecialchars($record['status'] ?? 'Absent'); ?>
                   </td>
                   <td><?php echo htmlspecialchars($record['time_in'] ?? '-'); ?></td>
-                  <td><?php echo htmlspecialchars($record['time_out'] ?? '-'); ?></td>
                   <td><?php echo htmlspecialchars(date('m-d-y', strtotime($record['date'] ?? 'now'))); ?></td>
                   <td><?php echo htmlspecialchars($record['program_name']); ?></td>
                 </tr>
@@ -166,21 +268,69 @@ if ($notifications_result) {
             <?php endif; ?>
           </tbody>
         </table>
+
+        <?php if ($selected_program_id != 'all'): ?>
+          <h3>Attendance Summary</h3>
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Present</th>
+                <th>Total Sessions</th>
+                <th>Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (empty($summary)): ?>
+                <tr><td colspan="4">No attendance summary available.</td></tr>
+              <?php else: ?>
+                <?php foreach ($summary as $row): ?>
+                  <tr<?php if ($row['percentage'] < 80): ?> style="background:#ffeaea;"<?php endif; ?>>
+                    <td><?php echo htmlspecialchars($row['student_name']); ?></td>
+                    <td><?php echo $row['present']; ?></td>
+                    <td><?php echo $row['total']; ?></td>
+                    <td><?php echo $row['percentage']; ?>%</td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
       </div>
 
       <!-- Right Side -->
       <div class="right-panel">
         <div class="user-info">
-          <div class="name">Full Name</div>
-          <div class="email">email@cvsu.edu.ph</div>
+          <div class="name"><?php echo htmlspecialchars($user_fullname); ?></div>
+          <div class="email"><?php echo htmlspecialchars($user_email); ?></div>
         </div>
         <div class="notifications">
-          <h3>🔔 Notification</h3>
+          <h3>🔔 Notifications</h3>
           <?php if (empty($notifications)): ?>
-            <div class="note">No notifications at this time.</div>
+            <div class="note no-notifications">No notifications at this time.</div>
           <?php else: ?>
-            <?php foreach ($notifications as $notification): ?>
-              <div class="note priority-<?php echo htmlspecialchars($notification['priority']); ?>">
+            <?php foreach ($notifications as $notification): 
+              // Priority icon, label, and class
+              switch ($notification['priority']) {
+                case 'high':
+                  $icon = '<i class="fas fa-exclamation-circle" style="color:#e53935;"></i>';
+                  $label = 'Urgent';
+                  $class = 'notif-high';
+                  break;
+                case 'medium':
+                  $icon = '<i class="fas fa-exclamation-triangle" style="color:#fbc02d;"></i>';
+                  $label = 'Reminder';
+                  $class = 'notif-medium';
+                  break;
+                default:
+                  $icon = '<i class="fas fa-check-circle" style="color:#43a047;"></i>';
+                  $label = 'FYI';
+                  $class = 'notif-low';
+              }
+            ?>
+              <div class="note <?php echo $class; ?>">
+                <span class="notif-icon"><?php echo $icon; ?></span>
+                <span class="notif-label"><?php echo $label; ?></span>
                 <?php echo htmlspecialchars($notification['message']); ?>
               </div>
             <?php endforeach; ?>
@@ -199,7 +349,16 @@ if ($notifications_result) {
         <input type="hidden" name="program_id" value="<?php echo htmlspecialchars($selected_program_id != 'all' ? $selected_program_id : (empty($programs) ? '' : $programs[0]['id'])); ?>">
         <div class="form-group">
           <label for="student_name">Student Name</label>
-          <input type="text" id="student_name" name="student_name" required>
+          <?php if ($selected_program_id != 'all' && !empty($enrolled_students)): ?>
+            <select id="student_name" name="student_name" required>
+              <option value="">Select student</option>
+              <?php foreach ($enrolled_students as $student): ?>
+                <option value="<?php echo htmlspecialchars($student); ?>"><?php echo htmlspecialchars($student); ?></option>
+              <?php endforeach; ?>
+            </select>
+          <?php else: ?>
+            <input type="text" id="student_name" name="student_name" required>
+          <?php endif; ?>
         </div>
         <div class="form-group">
           <label for="status">Status</label>

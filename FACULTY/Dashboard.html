@@ -13,51 +13,25 @@
       
   <div class="container">
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="logo">eTRACKER</div>
+      <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+        <span class="logo-text">eTRACKER</span>
+      </div>
       <nav>
         <ul>
-          <li class="active">
-            <a href="dashboard.html">
-              <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="profile.php">
-              <i class="fas fa-user"></i> Profile
-            </a>
-          </li>
-          <li>
-            <a href="Programs.php">
-              <i class="fas fa-tasks"></i> Program
-            </a>
-          </li>
-          <li>
-            <a href="attendance.html">
-              <i class="fas fa-calendar-check"></i> Attendance
-            </a>
-          </li>
-          <li>
-            <a href="evaluation.html">
-              <i class="fas fa-star-half-alt"></i> Evaluation
-            </a>
-          </li>
-          <li>
-            <a href="certificate.html">
-              <i class="fas fa-certificate"></i> Certificate
-            </a>
-          </li>
-          <li>
-            <a href="reports.html">
-              <i class="fas fa-chart-line"></i> Reports
-            </a>
-          </li>
+          <li class="active"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li ><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
+          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="certificate.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
+          <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
-        <div class="sign-out">Sign Out</div>
-      </nav>
-      
-      
-    
+ <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
+          <a href="/register/index.html" style="color: inherit; text-decoration: none; display: block; padding: 12px 0;">Sign Out</a>
+        </div>      </nav>
     </aside>
 
     <!-- Main Grid -->
@@ -67,74 +41,121 @@
         <header class="topbar">
           <div class="last-login">Last login: 05-24-25 13:45:00</div>
           <div class="top-actions">
-            <div class="search-bar">
-              <input type="text" placeholder="Search" />
-            </div>
-            <div class="message-icon">✉️</div>
+            <!-- Removed search bar and message icon -->
           </div>
-          
         </header>
 
         <section class="overview">
-            <h1 class="role-label">Faculty</h1>
-            <h2>Dashboard Overview</h2>
-            <div class="overview-box">
-              <div class="cards">
-                <div class="card">
-                  <h3>Program Overview</h3>
-                  <p><strong>Total Programs: 3 (2 Active, 1 Completed)</strong></p>
-                  <ul>
-                    <li>Community Outreach: Active - 25/30 Students Enrolled</li>
-                    <li>Volunteer Mentoring: Active - 12/20 Students Enrolled</li>
-                    <li>Tech Workshop: Completed - 15/15 Students Enrolled</li>
-                  </ul>
-                  <button>Manage Programs</button>
+          <h1 class="role-label">Faculty</h1>
+          <h2>Welcome, [Faculty Name]!</h2>
+          <div class="overview-box">
+            <div class="quick-actions">
+              <button class="quick-btn">Create New Program</button>
+              <button class="quick-btn">Mark Attendance</button>
+            </div>
+
+            <div class="cards">
+
+              <!-- Row 1: My Programs & Document Submission Tracker -->
+              <div class="card">
+                <h3><i class="fas fa-chalkboard-teacher"></i> My Programs</h3>
+                <ul>
+                  <li>
+                    <strong>Community Outreach</strong> <span style="color:green;">(Active)</span><br>
+                    <small>Enrolled: 25/30 | Attendance: 88%</small>
+                    <div>
+                      <button>Manage</button>
+                      <button>View Students</button>
+                    </div>
+                  </li>
+                  <li>
+                    <strong>Volunteer Mentoring</strong> <span style="color:green;">(Active)</span><br>
+                    <small>Enrolled: 12/20 | Attendance: 91%</small>
+                    <div>
+                      <button>Manage</button>
+                      <button>View Students</button>
+                    </div>
+                  </li>
+                  <li>
+                    <strong>Tech Workshop</strong> <span style="color:gray;">(Completed)</span><br>
+                    <small>Enrolled: 15/15 | Attendance: 100%</small>
+                    <div>
+                      <button>View Report</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <h3><i class="fas fa-file-upload"></i> Document Submission Tracker</h3>
+                <ul>
+                  <li>
+                    <strong>Workload Report</strong>
+                    <span style="color:green;">Submitted</span>
+                  </li>
+                  <li>
+                    <strong>Attendance Sheets</strong>
+                    <span style="color:orange;">Pending</span>
+                    <button>Upload</button>
+                  </li>
+                  <li>
+                    <strong>Evaluation Forms</strong>
+                    <span style="color:orange;">Pending</span>
+                    <button>Upload</button>
+                  </li>
+                  <li>
+                    <strong>Photo Documentation</strong>
+                    <span style="color:green;">Submitted</span>
+                  </li>
+                </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 75%;"></div>
                 </div>
-          
-                <div class="card">
-                  <h3>Student Progress: Community Outreach</h3>
-                  <p>Total Students: 25</p>
-                  <p>Attendance Rate: 88% (Average)</p>
-                  <p>Evaluations Submitted: 20/25</p>
-                  <p>Certificates Eligible: 0/25 (Program Ongoing)</p>
-                  <button>View Attendance</button>
-                  <button>View Evaluations</button>
-                </div>
-          
-                <div class="card">
-                  <h3>Evaluation Management</h3>
-                  <p>Submissions: 20/25 Students</p>
-                  <p>Average Rating: 4.2/5</p>
-                  <p>Pending Evaluations: 5 Students</p>
-                  <small>Due by 06-05-25</small>
-                  <button>Review Evaluations</button>
-                </div>
-          
-                <div class="card">
-                  <h3>Certificate Issuance</h3>
-                  <p>Eligible Students: 15/15</p>
-                  <p>Certificates Issued: 12/15</p>
-                  <p>Pending Issuance: 3 Students</p>
-                  <button>Issue Certificates</button>
-                  <button>View Issued Certificates</button>
-                </div>
-          
-                <div class="card">
-                  <h3>Report Generation</h3>
-                  <p>Available Reports:</p>
-                  <ul>
-                    <li>Program Performance</li>
-                    <li>Attendance Summary</li>
-                    <li>Evaluation Insights</li>
-                  </ul>
-                  <p>Last Generated: Program Performance Report - 05-20-25</p>
-                  <button>Generate Report</button>
-                  <button>View Report History</button>
-                </div>
+                <small>75% Documents Submitted</small>
+                <button>View All Requirements</button>
+              </div>
+
+              <!-- Row 2: Attendance, Deadlines, Analytics -->
+              <div class="card">
+                <h3><i class="fas fa-calendar-check"></i> Attendance Overview</h3>
+                <p>Today's Sessions: <strong>2</strong></p>
+                <p>Students Present: <strong>34</strong></p>
+                <p>Students Absent: <strong>3</strong></p>
+                <button>View Attendance Logs</button>
+              </div>
+
+              <div class="card">
+                <h3><i class="fas fa-hourglass-half"></i> Upcoming Program Deadlines</h3>
+                <ul>
+                  <li>
+                    <strong>Program Registration</strong>
+                    <span style="color:orange;">May 30, 2025</span>
+                  </li>
+                  <li>
+                    <strong>Workload Report Submission</strong>
+                    <span style="color:orange;">May 20, 2025</span>
+                  </li>
+                  <li>
+                    <strong>Extension Coordinators Meeting</strong>
+                    <span style="color:orange;">May 25, 2025</span>
+                  </li>
+                </ul>
+                <button>View All Deadlines</button>
+              </div>
+
+              <div class="card">
+                <h3><i class="fas fa-chart-line"></i> Analytics Snapshot</h3>
+                <ul>
+                  <li>Active Programs: <strong>2</strong></li>
+                  <li>Avg. Attendance: <strong>89%</strong></li>
+                  <li>Certificates Issued: <strong>12</strong></li>
+                </ul>
+                <button>View Detailed Analytics</button>
               </div>
             </div>
-          </section>
-          
+          </div>
+        </section>
+        
       </div>
 
       <!-- Right Side -->
@@ -143,11 +164,9 @@
           <div class="name">Full Name</div>
           <div class="email">email@cvsu.edu.ph</div>
         </div>
-        <div class="notifications">
-          <h3>🔔 Notification</h3>
-          <div class="note">Extension Coordinators meeting on 05-25-25 at 1 PM at RDE office</div>
-          <div class="note">Submit Extension Workload Documents by 05-20-25</div>
-          <div class="note">Program Registration Deadline 05-30-25</div>
+        <div class="notifications" id="facultyNotifications">
+          <h3>🔔 Notifications</h3>
+          <div class="notif-list" id="notifList"></div>
         </div>
       </div>
     </div>
@@ -156,6 +175,33 @@
   <script>
     // Placeholder for future backend integration
     console.log("Faculty Dashboard Loaded");
+
+    // Set this to the faculty's department code, e.g., 'cs', 'hospitality', etc.
+const facultyDepartment = 'cs'; // <-- Replace with dynamic value as needed
+
+function loadFacultyNotifications() {
+  fetch(`../ADMIN/api_notifications.php?for=faculty&department=${facultyDepartment}`)
+    .then(res => res.json())
+    .then(data => {
+      const notifList = document.getElementById('notifList');
+      notifList.innerHTML = '';
+      if (data.success && data.data.length > 0) {
+        data.data.forEach(n => {
+          notifList.innerHTML += `
+            <div class="note notif-${n.priority}">
+              <span class="notif-badge">${n.priority.toUpperCase()}</span>
+              ${n.message}
+              <div class="notif-date">Expires: ${n.expires_at}</div>
+            </div>
+          `;
+        });
+      } else {
+        notifList.innerHTML = `<div class="note">No notifications.</div>`;
+      }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', loadFacultyNotifications);
   </script>
 </body>
 </html>

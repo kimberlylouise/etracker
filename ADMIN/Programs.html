@@ -21,180 +21,387 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  
   </div>
 
   <div class="main">
+  <h1>Program Management</h1>
 
+  <!-- Quick Stats -->
+  <section class="analytics">
+    <h2>Program Stats</h2>
+    <ul>
+      <li>Total Programs: <strong id="totalPrograms"></strong></li>
+      <li>Ongoing: <strong id="ongoingPrograms"></strong></li>
+      <li>Ended: <strong id="endedPrograms"></strong></li>
+      <li>Upcoming Sessions: <strong id="upcomingSessions"></strong></li>
+    </ul>
+  </section>
 
-    <h1>Program Schedule Management</h1>
+  <!-- Program List -->
+  <section class="program-overview">
+    <h2>All Programs</h2>
+    <table class="feature-table" id="programsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Dates</th>
+          <th>Location</th>
+          <th>Capacity</th>
+          <th>Status</th>
+          <th>Faculty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JS will populate this -->
+      </tbody>
+    </table>
+    <button onclick="showCreateProgramForm()">+ Create Program</button>
+  </section>
 
-    <section class="calendar-schedule">
-        <h2>Session Calendar</h2>
-        <div id="calendarContainer">
-          <div id="calendarHeader">
-            <button onclick="changeMonth(-1)">‹</button>
-            <h3 id="calendarMonthYear"></h3>
-            <button onclick="changeMonth(1)">›</button>
-          </div>
-          <table id="calendarTable"></table>
-        </div>
-      
-        <div class="daily-agenda">
-          <h3>Upcoming Sessions This Week</h3>
-          <ul id="sessionList">
-            <!-- JS will populate this -->
-          </ul>
-        </div>
-      </section>
-    <section class="program-overview">
-      <h2>Active Programs</h2>
-      <div class="program-card">
-        <h3>Community Literacy Outreach</h3>
-        <p><strong>Description:</strong> A weekend initiative to improve literacy skills among local youth.</p>
-        <p><strong>Schedule:</strong> Every Saturday, Apr 15 – Jun 30, 2025 | 9:00 AM – 12:00 PM</p>
-        <p><strong>Location:</strong> CvSU Imus – Room 204</p>
-        <p><strong>Capacity:</strong> 30 / 50 slots filled</p>
-        <p><strong>Status:</strong> In Progress</p>
-        <button>View Details</button>
-      </div>
-    
-      <div class="program-card">
-        <h3>Nutrition Awareness Program</h3>
-        <p><strong>Description:</strong> Promoting balanced diet and wellness habits in underserved communities.</p>
-        <p><strong>Schedule:</strong> May 10 – Jul 5, 2025 | 1:00 PM – 4:00 PM</p>
-        <p><strong>Location:</strong> Barangay Hall – Malagasang</p>
-        <p><strong>Capacity:</strong> 45 / 45 slots filled</p>
-        <p><strong>Status:</strong> Full</p>
-        <button>View Details</button>
-      </div>
-    </section>
-    
-    <section class="program-create">
-      <h2>Create New Program</h2>
-      <form>
-        <label>Program Name:</label><br/>
-        <input type="text" name="programName" placeholder="e.g., Digital Literacy Training"><br/>
-    
-        <label>Description:</label><br/>
-        <textarea name="description" placeholder="Brief overview of the program"></textarea><br/>
-    
-        <label>Start Date:</label><br/>
-        <input type="date" name="startDate"><br/>
-    
-        <label>End Date:</label><br/>
-        <input type="date" name="endDate"><br/>
-    
-        <label>Time:</label><br/>
-        <input type="time" name="timeStart"> to <input type="time" name="timeEnd"><br/>
-    
-        <label>Capacity:</label><br/>
-        <input type="number" name="capacity" placeholder="e.g., 50"><br/>
-    
-        <label>Location / Link:</label><br/>
-        <input type="text" name="location" placeholder="e.g., Zoom link or venue"><br/>
-    
-        <label>Requirements:</label><br/>
-        <input type="text" name="requirements" placeholder="e.g., None or prerequisite"><br/>
-    
-        <label>Registration Deadline:</label><br/>
-        <input type="date" name="deadline"><br/><br/>
-    
-        <button type="submit">Submit Program</button>
-      </form>
-    </section>
-    
-    <section class="analytics">
-      <h2>Quick Stats</h2>
-      <ul>
-        <li>Total Programs This Semester: <strong>8</strong></li>
-        <li>Active Programs: <strong>3</strong></li>
-        <li>Completed Programs: <strong>5</strong></li>
-        <li>Most Popular Program: <strong>Financial Literacy Workshop</strong></li>
-      </ul>
-    </section>
-    
- 
+  <!-- Program Details Modal -->
+  <div id="programDetailsModal" style="display:none;" class="modal" onclick="if(event.target===this)closeModal('programDetailsModal')"></div>
+
+  <!-- Create/Edit Program Modal -->
+  <div id="programFormModal" style="display:none;" class="modal"></div>
 </div>
-  <script>
-  const sessions = [
-    { title: "Community Literacy Outreach", date: "2025-05-24", time: "9:00 AM", location: "Room 204" },
-    { title: "Nutrition Awareness Program", date: "2025-05-25", time: "1:00 PM", location: "Malagasang Hall" },
-    { title: "Financial Literacy Workshop", date: "2025-05-27", time: "10:00 AM", location: "Room 101" }
-  ];
-  
-  let currentDate = new Date();
-  
-  function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const table = document.getElementById("calendarTable");
-    const monthYear = document.getElementById("calendarMonthYear");
-    table.innerHTML = "";
-    monthYear.innerText = currentDate.toLocaleString("default", { month: "long", year: "numeric" });
-  
-    const headerRow = document.createElement("tr");
-    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(d => {
-      const th = document.createElement("th");
-      th.innerText = d;
-      headerRow.appendChild(th);
-    });
-    table.appendChild(headerRow);
-  
-    let date = 1;
-    for (let i = 0; i < 6; i++) {
-      const row = document.createElement("tr");
-      for (let j = 0; j < 7; j++) {
-        const cell = document.createElement("td");
-        if (i === 0 && j < firstDay.getDay()) {
-          cell.innerHTML = "";
-        } else if (date > lastDay.getDate()) {
-          break;
-        } else {
-          const currentFullDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
-          const hasSession = sessions.find(s => s.date === currentFullDate);
-          cell.innerHTML = date;
-          if (hasSession) {
-            cell.classList.add("session-day");
-            cell.title = hasSession.title;
+
+<script>
+// --- Utility functions ---
+function fetchPrograms() {
+  return fetch('/backend/get_programs.php').then(res => res.json());
+}
+function fetchFaculty() {
+  return fetch('/backend/get_faculty.php').then(res => res.json());
+}
+function fetchSessions(programId) {
+  return fetch(`/backend/get_sessions.php?program_id=${programId}`).then(res => res.json());
+}
+
+// --- Render Stats ---
+function renderStats(programs, sessions) {
+  document.getElementById('totalPrograms').innerText = programs.length;
+  document.getElementById('ongoingPrograms').innerText = programs.filter(p => p.status === 'ongoing').length;
+  document.getElementById('endedPrograms').innerText = programs.filter(p => p.status === 'ended').length;
+  const today = new Date();
+  const upcoming = sessions.filter(s => new Date(s.session_date) >= today);
+  document.getElementById('upcomingSessions').innerText = upcoming.length;
+}
+
+let currentPage = 1;
+const pageSize = 5;
+let programsData = [];
+let facultyListData = [];
+let sessionsByProgramData = {};
+
+async function renderProgramsTable() {
+  const [programs, facultyList, allSessions] = await Promise.all([
+    fetchPrograms(),
+    fetchFaculty(),
+    fetch('/backend/get_all_sessions.php').then(res => res.json())
+  ]);
+
+  // Save data for pagination
+  programsData = programs;
+  facultyListData = facultyList;
+
+  // Group sessions by program_id
+  sessionsByProgramData = {};
+  allSessions.forEach(s => {
+    if (!sessionsByProgramData[s.program_id]) sessionsByProgramData[s.program_id] = [];
+    sessionsByProgramData[s.program_id].push(s);
+  });
+
+  renderStats(programs, allSessions);
+  renderProgramsPage();
+}
+
+function renderProgramsPage() {
+  const tbody = document.querySelector('#programsTable tbody');
+  tbody.innerHTML = '';
+
+  const startIdx = (currentPage - 1) * pageSize;
+  const endIdx = startIdx + pageSize;
+  const pagePrograms = programsData.slice(startIdx, endIdx);
+
+  pagePrograms.forEach(prog => {
+    const faculty = facultyListData.find(f => f.id === prog.faculty_id);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${prog.program_name}</td>
+      <td>${prog.department}</td>
+      <td>${prog.start_date} to ${prog.end_date}</td>
+      <td>${prog.location}</td>
+      <td>${prog.max_students}</td>
+      <td>${prog.status}</td>
+      <td>${faculty ? faculty.name : 'N/A'}</td>
+      <td>
+        <button onclick="showProgramDetails(${prog.id})">View</button>
+        <button onclick="showEditProgramForm(${prog.id})">Edit</button>
+        <button onclick="deleteProgram(${prog.id})">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  renderPaginationControls();
+}
+
+function renderPaginationControls() {
+  let pagination = document.getElementById('paginationControls');
+  if (!pagination) {
+    pagination = document.createElement('div');
+    pagination.id = 'paginationControls';
+    pagination.style.margin = '16px 0';
+    document.querySelector('.program-overview').appendChild(pagination);
+  }
+
+  const totalPages = Math.ceil(programsData.length / pageSize);
+  let html = '';
+
+  html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="gotoPage(${currentPage - 1})">Prev</button> `;
+
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button ${i === currentPage ? 'disabled style="font-weight:bold;"' : ''} onclick="gotoPage(${i})">${i}</button> `;
+  }
+
+  html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="gotoPage(${currentPage + 1})">Next</button>`;
+
+  pagination.innerHTML = html;
+}
+
+function gotoPage(page) {
+  currentPage = page;
+  renderProgramsPage();
+}
+
+// --- Program Details Modal ---
+async function showProgramDetails(programId) {
+  const modal = document.getElementById('programDetailsModal');
+  modal.style.display = 'flex'; // Use flex for centering
+
+  const prog = programsData.find(p => p.id == programId);
+  if (!prog) {
+    modal.innerHTML = '<div class="modal-content"><p>Program not found.</p><button onclick="closeModal(\'programDetailsModal\')" class="close-modal">&times;</button></div>';
+    return;
+  }
+  const sessions = sessionsByProgramData[programId] || [];
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <button onclick="closeModal('programDetailsModal')" class="close-modal" title="Close">&times;</button>
+      <h2>${prog.program_name}</h2>
+      <p><strong>Department:</strong> ${prog.department}</p>
+      <p><strong>Dates:</strong> ${prog.start_date} to ${prog.end_date}</p>
+      <p><strong>Location:</strong> ${prog.location}</p>
+      <p><strong>Capacity:</strong> ${prog.max_students}</p>
+      <p><strong>Status:</strong> ${prog.status}</p>
+      <p><strong>Description:</strong> ${prog.description}</p>
+      <h3>Sessions</h3>
+      <table class="feature-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${
+            sessions.length
+              ? sessions.map(s => `
+                <tr>
+                  <td>${s.session_title}</td>
+                  <td>${s.session_date}</td>
+                  <td>${s.session_start}</td>
+                  <td>${s.session_end}</td>
+                  <td>${s.location}</td>
+                  <td>
+                    <button onclick="showEditSessionForm(${s.id}, ${programId})">Edit</button>
+                    <button onclick="deleteSession(${s.id}, ${programId})">Delete</button>
+                  </td>
+                </tr>
+              `).join('')
+              : `<tr><td colspan="6" style="text-align:center;color:#888;">No sessions yet.</td></tr>`
           }
-          date++;
-        }
-        row.appendChild(cell);
-      }
-      table.appendChild(row);
-    }
+        </tbody>
+      </table>
+      <button onclick="showCreateSessionForm(${programId})">+ Add Session</button>
+    </div>
+  `;
+}
+
+// --- Create/Edit Program Modal ---
+function showCreateProgramForm() {
+  const modal = document.getElementById('programFormModal');
+  modal.style.display = 'block';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Create Program</h2>
+      <form id="createProgramForm">
+        <input name="program_name" placeholder="Program Name" required />
+        <input name="department" placeholder="Department" required />
+        <input name="start_date" type="date" required />
+        <input name="end_date" type="date" required />
+        <input name="location" placeholder="Location" required />
+        <input name="max_students" type="number" placeholder="Capacity" required />
+        <select name="status" required>
+          <option value="ongoing">Ongoing</option>
+          <option value="ended">Ended</option>
+        </select>
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="submit">Create</button>
+        <button type="button" onclick="closeModal('programFormModal')">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.getElementById('createProgramForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    await fetch('/backend/create_program.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+    closeModal('programFormModal');
+    renderProgramsTable();
+  };
+}
+
+// --- Edit Program Form ---
+async function showEditProgramForm(programId) {
+  const prog = programsData.find(p => p.id == programId);
+  const modal = document.getElementById('programFormModal');
+  modal.style.display = 'flex';
+  if (!prog) {
+    modal.innerHTML = `<div class="modal-content"><p>Program not found.</p><button onclick="closeModal('programFormModal')" class="close-modal">&times;</button></div>`;
+    return;
   }
-  
-  function changeMonth(offset) {
-    currentDate.setMonth(currentDate.getMonth() + offset);
-    renderCalendar();
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Edit Program</h2>
+      <form id="editProgramForm">
+        <input name="program_name" value="${prog.program_name}" required />
+        <input name="department" value="${prog.department}" required />
+        <input name="start_date" type="date" value="${prog.start_date}" required />
+        <input name="end_date" type="date" value="${prog.end_date}" required />
+        <input name="location" value="${prog.location}" required />
+        <input name="max_students" type="number" value="${prog.max_students}" required />
+        <select name="status" required>
+          <option value="ongoing" ${prog.status.trim() === 'ongoing' ? 'selected' : ''}>Ongoing</option>
+          <option value="ended" ${prog.status.trim() === 'ended' ? 'selected' : ''}>Ended</option>
+        </select>
+        <textarea name="description">${prog.description}</textarea>
+        <button type="submit">Save</button>
+        <button type="button" onclick="closeModal('programFormModal')">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.getElementById('editProgramForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    await fetch(`/backend/update_program.php?id=${programId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+    closeModal('programFormModal');
+    renderProgramsTable();
+  };
+}
+
+// --- Delete Program ---
+async function deleteProgram(programId) {
+  if (confirm('Delete this program?')) {
+    await fetch(`/backend/delete_program.php?id=${programId}`); // Use GET
+    renderProgramsTable();
   }
-  
-  function renderSessions() {
-    const today = new Date();
-    const list = document.getElementById("sessionList");
-    list.innerHTML = "";
-  
-    const next7Days = new Date(today);
-    next7Days.setDate(today.getDate() + 7);
-  
-    sessions.forEach(s => {
-      const sessionDate = new Date(s.date);
-      if (sessionDate >= today && sessionDate <= next7Days) {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${s.title}</strong> - ${s.date} at ${s.time} (${s.location})`;
-        list.appendChild(li);
-      }
-    });
+}
+
+// --- Session Management (Create/Edit/Delete) ---
+function showCreateSessionForm(programId) {
+  closeModal('programDetailsModal');
+  const modal = document.getElementById('programFormModal');
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>Add Session</h2>
+      <form id="createSessionForm">
+        <input name="session_title" placeholder="Session Title" required />
+        <input name="session_date" type="date" required />
+        <input name="session_start" type="time" required />
+        <input name="session_end" type="time" required />
+        <input name="location" placeholder="Location" required />
+        <button type="submit">Add</button>
+        <button type="button" onclick="closeModal('programFormModal')">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.getElementById('createSessionForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    await fetch(`/backend/create_session.php?program_id=${programId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+    closeModal('programFormModal');
+    showProgramDetails(programId);
+    renderProgramsTable();
+  };
+}
+
+async function showEditSessionForm(sessionId, programId) {
+  // Get the session from the already loaded sessionsByProgramData
+  const session = (sessionsByProgramData[programId] || []).find(s => s.id == sessionId);
+  const prog = programsData.find(p => p.id == programId);
+  const modal = document.getElementById('programFormModal');
+  modal.style.display = 'flex';
+
+  if (!session) {
+    modal.innerHTML = `<div class="modal-content"><p>Session not found.</p><button onclick="closeModal('programFormModal')" class="close-modal">&times;</button></div>`;
+    return;
   }
-  
-  renderCalendar();
-  renderSessions();
-  </script>
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <button onclick="closeModal('programFormModal')" class="close-modal" title="Close">&times;</button>
+      <h2>Edit Session</h2>
+      <form id="editSessionForm">
+        <label>Session Title</label>
+        <input name="session_title" value="${session.session_title}" required />
+        <label>Date</label>
+        <input name="session_date" type="date" value="${session.session_date}" required />
+        <label>Start Time</label>
+        <input name="session_start" type="time" value="${session.session_start}" required />
+        <label>End Time</label>
+        <input name="session_end" type="time" value="${session.session_end}" required />
+        <label>Location</label>
+        <input name="location" value="${session.location}" required />
+        <button type="submit">Save</button>
+        <button type="button" onclick="closeModal('programFormModal')">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.getElementById('editSessionForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    await fetch(`/backend/update_session.php?id=${sessionId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+    closeModal('programFormModal');
+    showProgramDetails(programId);
+    renderProgramsTable();
+  };
+}
+
+async function deleteSession(sessionId, programId) {
+  if (confirm('Delete this session?')) {
+    await fetch(`/backend/delete_session.php?id=${sessionId}`, { method: 'POST' });
+    showProgramDetails(programId);
+    renderProgramsTable();
+  }
+}
+
+// --- Modal Close Utility ---
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// --- Initial Render ---
+renderProgramsTable();
+</script>
   
  
   

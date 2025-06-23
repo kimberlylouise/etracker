@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
         error_log("Login successful: user_id={$user['id']}, role={$user['role']}");
-        $redirect_url = $user['role'] === 'faculty' ? '../FACULTY/profile.php' : '../STUDENT/Programs.html';
+        $redirect_url = $user['role'] === 'faculty' ? '../FACULTY/Dashboard.php' : '../STUDENT/index.php';
         echo json_encode(['status' => 'success', 'redirect_url' => $redirect_url]);
     } else {
         error_log("Login failed for email: $email");

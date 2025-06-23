@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eTracker Admin - Notifications</title>
+  <link rel="stylesheet" href="Dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* Main content for Notifications.html - modern card/grid layout */
+
+    .main {
+      padding: 48px 32px;
+      min-height: 100vh;
+      background: #f6f8fa;
+    }
+
+    .main h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #1b472b;
+      letter-spacing: 1px;
+    }
+
+    /* Notification Form */
+    #notificationForm {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(27,71,43,0.08);
+      padding: 32px 28px 24px 28px;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    #notificationForm label {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1b472b;
+    }
+
+    #notificationForm textarea,
+    #notificationForm select,
+    #notificationForm input[type="date"] {
+      width: 100%;
+      font-size: 1.08rem;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      transition: border 0.2s;
+    }
+
+    #notificationForm textarea:focus,
+    #notificationForm select:focus,
+    #notificationForm input[type="date"]:focus {
+      border: 1.5px solid #3bb77e;
+      outline: none;
+    }
+
+    #notificationForm button {
+      background: linear-gradient(90deg, #1b472b 60%, #3bb77e 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(59,183,126,0.08);
+      transition: background 0.18s, box-shadow 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #notificationForm button:hover {
+      background: linear-gradient(90deg, #3bb77e 60%, #1b472b 100%);
+      box-shadow: 0 4px 16px rgba(59,183,126,0.13);
+    }
+
+    /* Notifications Grid */
+    #adminNotificationsList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      max-width: 100%;
+    }
+
+    /* Notification Card */
+    #adminNotificationsList li {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(27,71,43,0.09);
+      padding: 28px 24px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 5px solid #3bb77e;
+      transition: box-shadow 0.18s, transform 0.18s;
+      position: relative;
+    }
+
+    #adminNotificationsList li:hover {
+      box-shadow: 0 8px 32px rgba(59,183,126,0.13);
+      transform: translateY(-2px) scale(1.015);
+    }
+
+    #adminNotificationsList li .notif-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    #adminNotificationsList li .notif-priority {
+      display: inline-block;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(90deg, #3bb77e 60%, #1b472b 100%);
+      border-radius: 6px;
+      padding: 4px 14px;
+      margin-right: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    #adminNotificationsList li .notif-message {
+      font-size: 1.08rem;
+      color: #222;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    #adminNotificationsList li .notif-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.98rem;
+      color: #888;
+    }
+
+    #adminNotificationsList li .notif-date {
+      font-size: 0.96rem;
+      color: #3bb77e;
+      font-weight: 500;
+    }
+
+    #adminNotificationsList li button {
+      background: #f6f8fa;
+      color: #1b472b;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    #adminNotificationsList li button:hover {
+      background: #3bb77e;
+      color: #fff;
+    }
+
+    /* Notification Layout */
+    .notif-layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 32px;
+    }
+
+    .notif-form-col {
+      flex: 0 0 420px;
+    }
+
+    .notif-carousel-col {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      background: #fafdff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(27,71,43,0.06);
+      padding: 24px 24px 18px 24px;
+      min-height: 480px;
+    }
+
+    .notif-carousel-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      gap: 18px;
+    }
+
+    .notif-priority-label {
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 8px 24px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e53935 80%, #ffb300 100%);
+      color: #fff;
+      min-width: 140px;
+      text-align: center;
+    }
+
+    .notif-arrow {
+      background: #eafaf1;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 1.4rem;
+      color: #1b472b;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .notif-arrow:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .notif-arrow:hover:not(:disabled) {
+      background: #3bb77e;
+      color: #fff;
+    }
+
+    .notif-carousel-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    /* See CSS section below */
+    .notif-main {
+      background: #f6f8fa;
+      min-height: 100vh;
+    }
+
+    .notif-flex-container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      margin-top: 24px;
+    }
+
+    .notif-form-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(27,71,43,0.08);
+      padding: 32px 28px 24px 28px;
+      min-width: 340px;
+      max-width: 400px;
+      flex: 0 0 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .notif-tabs-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(27,71,43,0.08);
+      padding: 28px 28px 24px 28px;
+      flex: 1 1 0;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .notif-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .notif-tab {
+      background: #f6f8fa;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1b472b;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notif-tab.active,
+    .notif-tab:hover {
+      background: linear-gradient(90deg, #3bb77e 60%, #1b472b 100%);
+      color: #fff;
+    }
+
+    .notif-tab-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .notif-card {
+      background: #fafdff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(27,71,43,0.06);
+      padding: 18px 18px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 5px solid #3bb77e;
+      transition: box-shadow 0.18s, transform 0.18s;
+      position: relative;
+    }
+
+    .notif-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .notif-badge {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      border-radius: 6px;
+      padding: 4px 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: #3bb77e;
+    }
+
+    .notif-card.notif-high .notif-badge { background: #e53935; }
+    .notif-card.notif-medium .notif-badge { background: #fbc02d; color: #222; }
+    .notif-card.notif-low .notif-badge { background: #43a047; }
+
+    .notif-date {
+      font-size: 0.96rem;
+      color: #3bb77e;
+      font-weight: 500;
+    }
+
+    .notif-card-message {
+      font-size: 1.08rem;
+      color: #222;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .notif-card-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .notif-card-actions button {
+      background: #eafaf1;
+      color: #1b472b;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.98rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .notif-card-actions button:hover {
+      background: #3bb77e;
+      color: #fff;
+    }
+
+    .notif-empty {
+      grid-column: 1/-1;
+      text-align: center;
+      color: #bbb;
+      font-style: italic;
+      padding: 32px 0;
+    }
+
+    /* Pagination */
+    .notif-pagination {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin: 18px 0 0 0;
+    }
+    .notif-pagination button {
+      background: #f6f8fa;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1b472b;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .notif-pagination button.active,
+    .notif-pagination button:hover:not(:disabled) {
+      background: #3bb77e;
+      color: #fff;
+    }
+    .notif-pagination button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* Card fade-in animation */
+    .notif-fade-in {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      animation: notifFadeIn 0.5s forwards;
+    }
+    @keyframes notifFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Button hover animation */
+    #notificationForm button, .notif-card-actions button {
+      transition: background 0.18s, color 0.18s, transform 0.18s;
+    }
+    #notificationForm button:hover, .notif-card-actions button:hover {
+      transform: translateY(-2px) scale(1.04);
+    }
+
+    /* Tab highlight animation */
+    .notif-tab {
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+    .notif-tab.active {
+      box-shadow: 0 4px 16px rgba(59,183,126,0.13);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .main {
+        margin-left: 70px;
+        padding: 32px 10px;
+      }
+      #notificationForm {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .main {
+        padding: 16px 2vw;
+      }
+      #notificationForm {
+        padding: 18px 8px 14px 8px;
+      }
+      #adminNotificationsList {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .notif-carousel-list {
+        flex-direction: column;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .notif-flex-container {
+        flex-direction: column;
+        gap: 24px;
+      }
+      .notif-form-card,
+      .notif-tabs-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+      .notif-tab-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-icon {
+      position: relative;
+    }
+    .input-icon textarea,
+    .input-icon select,
+    .input-icon input[type="date"] {
+      width: 100%;
+      padding-right: 36px;
+    }
+    .input-icon i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #3bb77e;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+    <a href="Notifications.html" class="active"><i class="fas fa-bell"></i> Notifications</a>
+  </div>
+
+  <div class="main notif-main">
+    <h1>Manage Notifications</h1>
+    <div class="notif-flex-container">
+      <!-- Notification Form -->
+      <div class="notif-form-card">
+        <form id="notificationForm">
+          <label for="notifMessage"><i class="fas fa-comment-dots"></i> Message</label>
+          <div class="input-icon">
+            <textarea id="notifMessage" name="message" placeholder="Notification message" required></textarea>
+            <i class="fas fa-comment"></i>
+          </div>
+          <label for="notifType"><i class="fas fa-bullhorn"></i> Type</label>
+          <div class="input-icon">
+            <select id="notifType" name="type">
+              <option value="info">Info</option>
+              <option value="alert">Alert</option>
+              <option value="reminder">Reminder</option>
+              <option value="event">Event</option>
+            </select>
+            <i class="fas fa-bell"></i>
+          </div>
+          <label for="notifPriority"><i class="fas fa-flag"></i> Priority</label>
+          <div class="input-icon">
+            <select id="notifPriority" name="priority">
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+            <i class="fas fa-exclamation"></i>
+          </div>
+          <label for="notifAudience"><i class="fas fa-users"></i> Audience</label>
+          <div class="input-icon">
+            <select id="notifAudience" name="audience" required>
+              <option value="all">All</option>
+              <option value="" disabled>Select Department</option>
+              <option value="hospitality">Department of Hospitality Management</option>
+              <option value="language">Department of Language and Mass Communication</option>
+              <option value="pe">Department of Physical Education</option>
+              <option value="ssh">Department of Social Sciences and Humanities</option>
+              <option value="teachered">Teacher Education Department</option>
+              <option value="entrep">Department of Administration - ENTREP</option>
+              <option value="bsoa">Department of Administration - BSOA</option>
+              <option value="bm">Department of Administration - BM</option>
+              <option value="cs">Department of Computer Studies</option>
+            </select>
+            <i class="fas fa-users"></i>
+          </div>
+          <label for="notifDate"><i class="fas fa-calendar-alt"></i> Expires At</label>
+          <div class="input-icon">
+            <input id="notifDate" type="date" name="expires_at" required>
+            <i class="fas fa-calendar"></i>
+          </div>
+
+          <input type="hidden" name="id" value="">
+          <button type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
+        </form>
+      </div>
+      <!-- Notification Tabs -->
+      <div class="notif-tabs-card">
+        <div class="notif-tabs">
+          <button class="notif-tab active" data-priority="high"><i class="fas fa-fire"></i> High</button>
+          <button class="notif-tab" data-priority="medium"><i class="fas fa-exclamation-triangle"></i> Medium</button>
+          <button class="notif-tab" data-priority="low"><i class="fas fa-leaf"></i> Low</button>
+        </div>
+        <ul id="notifTabList" class="notif-tab-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Pagination variables ---
+    let allNotifications = [];
+    let currentTab = 'high';
+    let currentPage = 1;
+    const pageSize = 5; // Max 5 notifications per page
+
+    function fetchAndRenderNotifications() {
+      fetch('api_notifications.php?for=admin')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            allNotifications = data.data;
+            currentPage = 1;
+            renderTab(currentTab);
+          }
+        });
+    }
+
+    function renderTab(priority) {
+      currentTab = priority;
+      currentPage = 1;
+      renderTabPage();
+    }
+
+    function renderTabPage() {
+      document.querySelectorAll('.notif-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.priority === currentTab);
+      });
+      const list = document.getElementById('notifTabList');
+      list.innerHTML = '';
+      // Remove old pagination if present
+      const oldPagination = document.getElementById('notifPagination');
+      if (oldPagination) oldPagination.remove();
+
+      const filtered = allNotifications.filter(n => n.priority === currentTab);
+      const totalPages = Math.ceil(filtered.length / pageSize);
+      const start = (currentPage - 1) * pageSize;
+      const pageItems = filtered.slice(start, start + pageSize);
+
+      if (pageItems.length === 0) {
+        list.innerHTML = `<li class="notif-empty">No ${currentTab} priority notifications.</li>`;
+      } else {
+        pageItems.forEach((n, i) => {
+          list.innerHTML += `
+            <li class="notif-card notif-${n.priority} notif-fade-in" style="animation-delay:${i * 80}ms">
+              <div class="notif-card-header">
+                <span class="notif-badge">${n.priority.toUpperCase()}</span>
+                <span class="notif-date">Expires: ${n.expires_at}</span>
+              </div>
+              <div class="notif-card-message">${n.message}</div>
+              <div class="notif-card-actions">
+                <button onclick="editNotification(${n.id}, '${n.message.replace(/'/g, "\\'")}', '${n.priority}', '${n.expires_at}')">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+              </div>
+            </li>
+          `;
+        });
+      }
+
+      // Pagination controls (only if more than 1 page)
+      if (totalPages > 1) {
+        let paginationHTML = `<div class="notif-pagination" id="notifPagination">`;
+        paginationHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="prevNotifPage()">&lt;</button>`;
+        for (let p = 1; p <= totalPages; p++) {
+          paginationHTML += `<button class="${p === currentPage ? 'active' : ''}" onclick="gotoNotifPage(${p})">${p}</button>`;
+        }
+        paginationHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="nextNotifPage()">&gt;</button>`;
+        paginationHTML += `</div>`;
+        list.insertAdjacentHTML('afterend', paginationHTML);
+      }
+    }
+
+    window.prevNotifPage = function() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTabPage();
+      }
+    };
+    window.nextNotifPage = function() {
+      const filtered = allNotifications.filter(n => n.priority === currentTab);
+      const totalPages = Math.ceil(filtered.length / pageSize);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTabPage();
+      }
+    };
+    window.gotoNotifPage = function(p) {
+      currentPage = p;
+      renderTabPage();
+    };
+
+    document.querySelectorAll('.notif-tab').forEach(btn => {
+      btn.onclick = () => renderTab(btn.dataset.priority);
+    });
+
+    document.getElementById('notificationForm').onsubmit = function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch('api_notifications.php', {
+        method: 'POST',
+        body: formData
+      }).then(() => {
+        this.reset();
+        fetchAndRenderNotifications();
+      });
+    };
+
+    window.editNotification = function(id, message, priority, expires_at) {
+      const form = document.getElementById('notificationForm');
+      form.message.value = message;
+      form.priority.value = priority;
+      form.expires_at.value = expires_at;
+      form.id.value = id;
+      form.scrollIntoView({behavior: "smooth"});
+    };
+
+    window.addEventListener('DOMContentLoaded', fetchAndRenderNotifications);
+  </script>
+</body>
+</html>

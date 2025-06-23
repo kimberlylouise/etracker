@@ -6,9 +6,19 @@
   
   body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f4fdf5;
-    height: 100vh;
+    background: #f4fdf5; /* very light green, almost white */
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
   }
+  
+  /* Remove or comment out the body::before and body::after if you want it pure white */
+  /*
+  body::before, body::after {
+    content: "";
+    display: none;
+  }
+  */
   
   .container {
     display: flex;
@@ -58,15 +68,28 @@
   }
   
   .sidebar .logo {
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 30px;
     font-weight: bold;
     color: #247a37;
     margin-bottom: 30px;
   }
   
+  .logo-img {
+    width: 80px;
+    height: 50px;
+    object-fit: contain;
+  }
+  
+  .logo-text {
+    font-size: 20px;
+  }
+  
   .sidebar nav ul {
     list-style: none;
     width: 100%;
+    padding: 0;
   }
   
   .sidebar nav ul li {
@@ -77,13 +100,35 @@
     cursor: pointer;
     color: #1e3927;
     transition: all 0.2s ease;
+    border-radius: 15px 0 0 15px;
+    margin-bottom: 4px;
   }
+  
+  .sidebar nav ul li a {
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.2s;
+}
+
+.sidebar nav ul li a:visited,
+.sidebar nav ul li a:active {
+  color: inherit;
+}
+
+.sidebar nav ul li.active a,
+.sidebar nav ul li:hover a {
+  color: #fff;
+}
   
   .sidebar nav ul li.active,
   .sidebar nav ul li:hover {
     background-color: #247a37;
     color: #ffffff;
-    border-radius: 15px 0 0 15px;
   }
   
   .sidebar nav ul li i {
@@ -91,14 +136,22 @@
     font-size: 18px;
   }
   
-  .sign-out {
-    margin-top: auto;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    color: red;
-    cursor: pointer;
-  }
-  
+
+
+.sign-out {
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  color: red;
+  cursor: pointer;
+  border-radius: 16px;
+  font-weight: 600;
+  background: none;
+  box-shadow: none;
+  letter-spacing: 1px;
+  border: none;
+  transition: background 0.2s, color 0.2s, transform 0.18s;
+}
   /* GRID LAYOUT */
   .main-grid {
     display: grid;
@@ -112,6 +165,12 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    animation: fadeIn 1.2s;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: none;}
   }
   
   /* RIGHT PANEL */
@@ -134,25 +193,60 @@
   
   /* NOTIFICATIONS */
   .notifications {
-    margin-top: 10px;
-    background-color: #d9f8dc;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    background: #d2eac8;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(27,71,43,0.06);
+    padding: 18px 18px 10px 18px;
+    margin-bottom: 18px;
     width: 250px;
+    height: 90vh;           /* Set height to 70% of viewport */
+    overflow-y: auto;       /* Make content scrollable if too long */
+    display: flex;
+    flex-direction: column;
   }
   
   .notifications h3 {
-    margin-bottom: 10px;
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #1b472b;
+    margin-bottom: 12px;
   }
   
   .note {
-    background: white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-left: 5px solid #59a96a;
+    background: #fafdff;
     border-radius: 8px;
-    font-size: 14px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    box-shadow: 0 1px 4px rgba(59,183,126,0.06);
+    position: relative;
+    transition: box-shadow 0.18s;
+  }
+  
+  .note:last-child {
+    margin-bottom: 0;
+  }
+  
+  .notif-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 10px;
+    margin-right: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: #3bb77e;
+  }
+  .notif-high .notif-badge { background: #e53935; }
+  .notif-medium .notif-badge { background: #fbc02d; color: #222; }
+  .notif-low .notif-badge { background: #43a047; }
+  
+  .notif-date {
+    font-size: 0.85rem;
+    color: #3bb77e;
+    margin-top: 4px;
   }
   
   /* TOPBAR */
@@ -198,4 +292,228 @@
     font-size: 20px;
     cursor: pointer;
   }
-    
+
+  /* Add or adjust in Dashboard.css */
+
+  /* Card container and grid */
+  .overview-box {
+    margin-top: 15px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Card style */
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 2px 2px 12px rgba(36, 122, 55, 0.07);
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(36, 122, 55, 0.15);
+  }
+  
+  .card h3 {
+    color: #247a37;
+    margin-bottom: 8px;
+  }
+  
+  .card button {
+    background: #247a37;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 16px;
+    margin: 4px 4px 0 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .card button:hover {
+    background: #1e3927;
+  }
+  
+  .card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .card ul li {
+    margin-bottom: 12px;
+    background: #f4fdf5;
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  
+  /* Quick Actions Styling */
+.quick-actions {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 28px;
+  margin-top: 8px;
+}
+
+.quick-btn {
+  background: linear-gradient(90deg, #247a37 80%, #eee48f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(36, 122, 55, 0.10);
+  transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.quick-btn:hover {
+  background: linear-gradient(90deg, #1e3927 80%, #eee48f 100%);
+  color: #eee48f;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(36, 122, 55, 0.13);
+}
+
+/* Custom card grid layout: 1 on top, 2 in middle, 2 on bottom */
+.cards {
+  display: grid;
+  grid-template-areas:
+    "card1 card2"
+    "card3 card4"
+    "card5 card5";
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.cards .card:nth-child(1) { grid-area: card1; }
+.cards .card:nth-child(2) { grid-area: card2; }
+.cards .card:nth-child(3) { grid-area: card3; }
+.cards .card:nth-child(4) { grid-area: card4; }
+.cards .card:nth-child(5) { grid-area: card5; }
+
+/* Responsive: stack on small screens */
+@media (max-width: 900px) {
+  .cards {
+    grid-template-areas:
+      "card1"
+      "card2"
+      "card3"
+      "card4"
+      "card5";
+    grid-template-columns: 1fr;
+  }
+}
+
+.progress-bar {
+  background: #f4fdf5;
+  border-radius: 8px;
+  height: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.progress {
+  background: linear-gradient(90deg, #247a37 80%, #eee48f 100%);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+
+/* Notification styles for faculty dashboard */
+#facultyNotifications {
+  background: #d2eac8;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(27,71,43,0.06);
+  padding: 18px 18px 10px 18px;
+  margin-bottom: 18px;
+}
+
+#facultyNotifications h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #1b472b;
+  margin-bottom: 12px;
+}
+
+.notif-list .note {
+  background: #fafdff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  box-shadow: 0 1px 4px rgba(59,183,126,0.06);
+  position: relative;
+  transition: box-shadow 0.18s;
+}
+
+.notif-list .note:last-child {
+  margin-bottom: 0;
+}
+
+.notif-badge {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 10px;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #3bb77e;
+}
+.notif-high .notif-badge { background: #e53935; }
+.notif-medium .notif-badge { background: #fbc02d; color: #222; }
+.notif-low .notif-badge { background: #43a047; }
+
+.notif-date {
+  font-size: 0.85rem;
+  color: #3bb77e;
+  margin-top: 4px;
+}
+
+.note.notif-high {
+  background: #fff3f3;
+  border-left: 4px solid #e53935;
+}
+
+.note.notif-medium {
+  background: #fff8e1;
+  border-left: 4px solid #fbc02d;
+}
+
+.note.notif-low {
+  background: #e8f5e9;
+  border-left: 4px solid #43a047;
+}
+
+.notif-icon {
+  font-size: 18px;
+  margin-right: 10px;
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+}
+
+.notif-label {
+  font-weight: bold;
+  display: inline-block;
+  width: 60px;
+}
+
+.notif-high { border-left: 5px solid #e53935; }
+.notif-medium { border-left: 5px solid #fbc02d; }
+.notif-low { border-left: 5px solid #43a047; }
+
+.notif-icon { margin-right: 8px; font-size: 1.2em; vertical-align: middle; }
+.notif-label { font-weight: bold; margin-right: 8px; }
+

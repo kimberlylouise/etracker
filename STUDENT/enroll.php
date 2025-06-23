@@ -30,18 +30,21 @@
      }
 
      $user_id = $_SESSION['user_id'];
-     $stmt = $conn->prepare("SELECT id FROM enrollments WHERE user_id = ? AND program_id = ?");
+     $stmt = $conn->prepare("SELECT id, status FROM enrollments WHERE user_id = ? AND program_id = ? ORDER BY id DESC LIMIT 1");
      $stmt->bind_param('ii', $user_id, $program_id);
      $stmt->execute();
-     if ($stmt->get_result()->num_rows > 0) {
-         file_put_contents('debug.log', "Already enrolled: user_id=$user_id, program_id=$program_id\n", FILE_APPEND);
-         echo json_encode(['status' => 'error', 'message' => 'Already enrolled in this program']);
-         $stmt->close();
-         $conn->close();
-         exit;
+     $result = $stmt->get_result();
+     if ($row = $result->fetch_assoc()) {
+         if ($row['status'] === 'pending' || $row['status'] === 'approved') {
+             file_put_contents('debug.log', "Already enrolled: user_id=$user_id, program_id=$program_id\n", FILE_APPEND);
+             echo json_encode(['status' => 'error', 'message' => 'Already enrolled in this program']);
+             $stmt->close();
+             $conn->close();
+             exit;
+         }
      }
 
-     $stmt = $conn->prepare("INSERT INTO enrollments (user_id, program_id, reason, status) VALUES (?, ?, ?, 'pending')");
+     $stmt = $conn->prepare("INSERT INTO enrollments (user_id, program_id, reason, status, enrollment_date) VALUES (?, ?, ?, 'pending', NOW())");
      $stmt->bind_param('iis', $user_id, $program_id, $reason);
      if ($stmt->execute()) {
          file_put_contents('debug.log', "Enrollment successful: user_id=$user_id, program_id=$program_id\n", FILE_APPEND);

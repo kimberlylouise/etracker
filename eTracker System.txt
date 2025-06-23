@@ -1,0 +1,546 @@
+eTracker System
+
+
+Objectives
+Streamline student, stakeholders, partners & faculty registration and attendance
+Efficient program management
+Real-time tracking 
+Automated evaluation and reporting 
+Enhanced communication
+
+
+Key Features
+
+- Student, stakeholders, partners, & faculty Registration & Profile Management
+- Program/Service Management
+- Attendance Tracking
+- Evaluation & Feedback System
+- Communication & Notifications
+- Reporting & Analytics Dashbaord
+
+
+STUDENT, STAKEHOLDERS, PARTNERS, & FACULTY REGISTRATION & PROFILE MANAGEMENT
+
+- Online registration form
+- Student, stakeholders, partners, & faculty dashboard
+- Profile update options 
+- Verification via email/SMS
+
+
+PROGRAMS/ SERVICE MANAGEMENT
+
+- Program creation
+- Enrollment management
+- Scheduling and capacity monitoring 
+- Faculty Dashboard
+
+ATTENDANCE TRACKING
+- QR Code-based attendance
+- Manual attendance
+- Time-stamped logs
+- Attendance reports
+
+EVALUATION & FEEDBACK SYSTEM
+
+- Student, stakeholders, partners, & faculty evaluation forms
+- Faculty assessment
+- Automated feedback summary 
+- Program improvement insights
+
+COMMUNICATION SYSTEM
+
+- In-app messaging 
+- Automated notifications ( enrollment, reminders, alerts, feedback)
+
+REPORTING & ANALYTICS
+
+- Real-time dashboard
+- Participation reports
+- Attendance analysis
+- feedback reports
+- Export Options (Excel, PDF)
+
+USER ROLES AND ;ERMISSIONS
+
+- Admin: Full System Access
+- Faculty: manage Programs an dparticipants
+- Student: Enroll and track participation
+
+
+Please be informed that there will be an Extension Coordinators' Meeting on Wednesday, April 30, 2025, at 1:00 PM to be held at the Conference Area. 
+The agenda will include the following: 
+Submission of extension workload documents 
+Finalization of accomplishment reports 
+Assessment of ongoing activities 
+Planning and scheduling for the next semester 
+Discussion of concerns and recommendations from coordinators 
+All Extension Coordinators are required to attend as your input is essential in the successful implementation and improvement of our extension services. 
+Should you have any preliminary concerns or agenda items to propose, kindly forward them to the Campus Extension Office on or before April 28, 2025. 
+Thank you, and we look forward to your active participation. 
+
+
+For faculty:
+
+The documents to be submitted include, but are not limited to: 
+Approved extension activity proposal 
+Activity and implementation reports 
+Attendance sheets and photo documentation 
+Evaluation and feedback forms from participants 
+Summary of workload hours 
+Summary of accomplishments 
+Other supporting documents relevant to your extension activity 
+
+
+eTRACKER SYSTEM FOR CVSU IMUS CAMPUS EXTENSION SERVICES 
+OBJECTIVES 
+Streamline management of extension programs 
+Enhance tracking of student participation and performance 
+Facilitate communication between extension office and participants 
+KEY FEATURES 
+Student Registration & Profile Management 
+Evaluation & Feedback 
+Program/Service Management 
+Communication System 
+Attendance Tracking 
+Reporting & Analytics 
+BENEFITS 
+Improved efficiency and organization of extension services 
+Better monitoring of student involvement in programs 
+Informed decision-making through data-driven insights
+
+
+Absolutely! Let's dive deeper into each section to provide more specifics on the implementation and how you can go about developing this eTracker system for CSU Imus Campus Extension Services 
+1. Student Registration & Profile Management 
+Registration Process: 
+Student Registration Form: 
+Students will fill out a registration form with the following fields: 
+Full Name 
+Student ID Number 
+Course/Department 
+Contact Information (email and phone number) 
+Preferred Programs (a drop-down list or checkboxes with available programs) 
+Emergency Contact Information 
+Terms & Conditions (checkbox for consent) 
+After submission, the system will send an email/SMS confirmation with their registration details and a welcorne message. 
+Profile Management: 
+Dashboard: Students will have access to a dashboard where they can view: 
+Personal Information: Name, ID, course, contact details (editable only by the student). 
+Program Registrations: The programs they are currently enrolled in, with status (Pending, Active, Completed). 
+Attendance Records: View which sessions they attended and their attendance percentage. 
+Evaluation Forms: Pending and completed evaluation forms with submission status. 
+Certificates: If applicable, they will have downloadable certificates once they complete a program. 
+Profile Update: 
+Students can update their contact information, reset passwords, and change preferences for communication (email, SMS). 
+
+Admin & Faculty Control:
+
+Admin Access: Admins can manage student profiles, including changing their program registration, reviewing attendance, and manually adjusting records if needed 
+Faculty Access: Faculty can only access students enrolled in their programs and cannot change student data. 
+2. Program/Service Management 
+Program Creation and Management: 
+Program Creation Form: 
+Program Name 
+Description: Short and detailed descriptions, including goals, learning outcomes, and expected results. 
+Schedule: Start date, end date, time of each session. 
+Requirements: Prerequisites (e.g., certain courses completed, materials needed, etc.) 
+Capacity: Number of students who can register. This could be a dynamic value to reflect available slots. 
+Location: For in-person programs, add a venue with address or link to an online meeting platform (e.g., Zoom). 
+Registration Deadline: Deadline for students to register for the program 
+Managing Programs: 
+Faculty members will have access to view the programs they've created. They can edit or update details if needed. Admins have access to manage all programs created by any faculty member. 
+The system can send automatic reminders to students about upcoming deadlines, events, and program start dates. 
+Program Dashboard: 
+Program List: Shows all available programs, including their status (Upcoming, In Progress, Completed). 
+Program Enrollment: Faculty can view the number of students enrolled in each program, track attendance, and generate progress reports. 
+Analytics: Show participation data and trends over time, like which programs are most popular. 
+3. Attendance Tracking 
+Attendance Management: 
+QR Code Scanning
+
+During each program session, the system generates a unique QR code that students scan using their mobile devices to mark attendance 
+Manual Entry: If OR scanning is not available, faculty can manually mark attendance by selecting student names from a list of enrolled participants 
+Automatic Time Logging: The system logs the exact time a student scans the GR code or when the faculty marks their attendance manually. 
+Attendance Reports: 
+Admins can generate reports on student attendance for each program session. 
+Faculty can review attendance history for each student 
+Absence Notifications: 
+0 If a student misses a session, the system will automatically send them a reminder and alert them about the importance of attending 
+Attendance Status: 
+The system can set attendance thresholds, such as 80% attendance required to complete a program. Students who fail to meet the threshold can be flagged for follow-up 
+4. Evaluation & Feedback 
+Student Feedback Forms: 
+After the program or session ends, students are prompted to fill out an evaluation 
+form: 
+Rating Questions: 1-5 scale for aspects like course content, instructor performance, session interaction, and overall satisfaction. 
+Open-ended Questions: Space for students to provide detailed feedback or suggestions for improvement. 
+Feedback Report: 
+After submission, feedback is processed and summarized. Faculty can view individual student feedback and overall trends. 
+Faculty Evaluations: 
+Faculty can assess students based on their participation, performance, and behavior in the program, 
+Evaluation could include: 
+Participation Rating: A score based on the student's engagement. 
+Assignment or Project Submission: if any assignments are given, faculty will rate them. 
+
+Program Effectiveness Report:
+
+Aggregate Feedback: Admins can generate reports to see how students rated nach program, which can be used to improve future offerings 
+5. Communication System 
+Automated Notifications: 
+Notifications will be sent via email, SMS, or in-app based on the following triggers 
+Program Registration: Confirmation and reminders of registration deadlines. 
+Session Reminders: Notifications about upcoming sessions or program related events. 
+Program Feedback Request: After completing a program or session, students will automatically receive a feedback request. 
+Attendance Alerts: If a student has missed a session or has low attendance, they'll receive a reminder to attend 
+Program Updates: Any changes in the schedule or important updates related to the program. 
+In-App Messaging: 
+Students, faculty, and admins can send direct messages to each other regarding any issues or questions about a program. 
+Faculty can message all enrolled students about program-related updates, such as schedule changes or urgent announcements. 
+6. Reporting & Analytics 
+Admin Reports: 
+Admins can generate detailed reports for various metrics: 
+Program Enrollment Reports: Lists students enrolled in each program, along with their attendance and feedback scores. 
+Student Performance: Aggregate of student evaluations, attendance, and grades (if applicable). 
+Program Completion Reports: Shows which students have completed their programs and earned certificates. 
+Attendance Reports: Detailed logs of student attendance across all sessions. 
+Data Visualization: 
+Use charts, graphs, and tables to display: 
+Program Popularity: Track the most enrolled programs. 
+Attendance Trends: Visual representation of attendance rates over time. 
+Feedback Ratings: Average program ratings, percentage of positive feedback, etc
+
+Exportable Reports: 
+Reports can be downloaded as PDFs or Excel files for further analysis of presentation 
+7. Tech Stack Implementation: Detailed Insights 
+Frontend: 
+React.js. React will allow for a highly dynamic and responsive interface, Components like form inputs, lists, and modals will automatically update as users interact with the system. 
+State Management (Redux): This is crucial for managing the state of the application, such as storing session detalls, user data, and program registrations. 
+Material Ul or Tailwind CSS: Pre-built Ul components for rapid development and a modern, clean look. 
+Backend: 
+Node.js + Express.js: This will handle all server-side operations and API routes for managing student data, programs, attendance, etc. Express simplifies routing and middleware handling. 
+JWT Authentication: To ensure secure login and access control for different user roles (Admin, Faculty, Student). 
+Role-based Access Control: Protect certain routes (e.g., student profile, admin panel) to be accessible only by users with the correct role. 
+Database: 
+PostgreSQL: Ideal for structured data like students, programs, attendance, and feedback. 
+Tables: 
+Users (students, faculty, admins) 
+Programs 
+Attendance 
+Feedback 
+Messages 
+Notifications 
+Foreign Keys to link data like attendance records to programs and students. 
+Deployment: 
+AWS or Heroku: Both are popular options for deploying web applications. AWS offers more control, while Heroku is easier to set up and manage
+
+CI/CD: Automated testing and deployment using GitHub Actions or GitLab CI/CD This ensures code is automatically tested before deployment and reduces manual errors. 
+Development Phases: Detailed Breakdown 
+Phase 1: Requirements & Design (2-3 weeks) 
+Conduct detailed interviews and surveys with stakeholders (students, faculty, administrators) to refine the requirements. 
+Finalize wireframes and database design (ER diagrams, table relationships). 
+Phase 2: Core Features Development (4-6 weeks) 
+Build the user authentication system (login, role-based access). 
+Develop the registration and program management features. 
+Implement attendance tracking (QR code scanning or manual entry). 
+Phase 3: Evaluation & Reporting Features (3-4 weeks) 
+Develop feedback forms and integrate with program reports. 
+Implement automated report generation and analytics. 
+Phase 4: Testing & QA (2-3 weeks) 
+Manual and automated testing of all features. Simulate multiple users and edge cases. 
+Load testing to ensure the system can handle concurrent users, especially during program registrations. 
+Phase 5: Deployment & Maintenance (2-3 weeks) 
+Deploy the system to production servers. 
+Train faculty and admin staff on using the system. 
+Continuous monitoring and bug fixing. 
+Let me know if you'd like further expansion on any specific phase or technical implementation!
+
+
+
+
+
+
+
+
+---
+
+
+Creating an effracker system for the CVS/ Imus Campin Extension Services requires outlining the core features and functionalities to track various activities, students, anel services offered by the extension office. Below is an overview of how you can desigis this system 
+1. System Overview 
+The etracker system will be designed to manage and track all extension services, student participation, faculty involvement, and related administrative tasks at CuS Imus. The system will handle the registration of extension programs, monitor progress, provide reports, and enable communication between the students, faculty, and extension office 
+2. Key Features 
+1. Student Registration & Profile Management 
+Students can register for extension programs. 
+Track personal details, program history, and performance. 
+View and update registration status. 
+Access program-related documents and assignments. 
+2. Program/Service Management 
+Create, update, and manage extension programs or services offered by CvSU 
+Include service description, schedule, and requirements. 
+Track program participants, budget, and performance. 
+3. Attendance Tracking 
+Monitor student attendance during program sessions. 
+Generate reports on attendance records, 
+4. Evaluation & Feedback 
+Collect feedback from students and faculty about each extension program. 
+Evaluate student performance and program effectiveness. 
+5. Communication System 
+Notification and messaging system for updates on programs and events. 
+Direct communication between students, faculty, and the extension office. 
+6. Reporting & Analytics 
+Generate reports on program participation, student progress, and faculty involvement. 
+Analytics dashboard to monitor trends and outcomes. 
+7. Document Management
+
+Store and manage important documents related to the extension services (eg, registration forms, certificates, reports). 
+B. Admin Panel 
+Administrators can manage all aspects of the eTracker system: students, faculty, programs, reports, and user roles. 
+User access levels to ensure the right permissions for different users (admin, student, faculty, etc.). 
+3. User Roles 
+Admin: 
+Full control over the system, 
+Can manage users, programs, reports, and access control. 
+Faculty: 
+Create and manage programs. 
+Track student progress and attendance. 
+Provide evaluations and feedback. 
+Students: 
+Register for programs. 
+View participation details, attendance, and grades. 
+Submit evaluations and feedback. 
+4. Tech Stack Suggestions 
+Frontend: HTML, CSS, JavaScript (React or Angular) 
+Backend: Node.js with Express or Python with Django 
+Database: MySQL or PostgreSQL 
+Authentication: JWT (JSON Web Tokens) for secure user authentication 
+Hosting: AWS, Azure, or Heroku for deployment 
+Version Control: GitHub or GitLab 
+5. System Workflow 
+1. Student Registration: 
+A student logs into the system and registers for an extension program, 
+The system confirms registration and provides program details. 
+2. Program Management:
+
+Faculty members create programs and outline schedules, requirements, and objectives. 
+Students receive notifications about upcoming programs, deadlines, and events. 
+3. Attendance Tracking: 
+During each program session, faculty mark attendance via the eTracker system. 
+Attendance is stored and can be accessed by both faculty and students. 
+4. Evaluation and Feedback: 
+At the end of each program, students complete an evaluation form. 
+Faculty assess student performance and provide feedback. 
+5. Reporting: 
+Admins can generate reports on program participation, student attendance, grades, and feedback. 
+Reports can be exported in formats such as PDF, Excel, etc. 
+6. Communication: 
+0 Students, faculty, and admins can send and receive messages regarding program updates, reminders, and feedback. 
+6. Development Phases 
+1. Phase 1: Requirement Analysis & Design 
+Identify detailed requirements and workflows. 
+Design system architecture, database schema, and wireframes. 
+2. Phase 2: Core Features Development 
+Develop user registration, program management, and attendance tracking features. 
+Implement basic communication and reporting features. 
+3. Phase 3: Feedback & Evaluation 
+Integrate student evaluation forms, feedback collection, and performance tracking. 
+4. Phase 4: Testing & Deployment 
+Conduct thorough testing (unit testing, integration testing, and user acceptance testing). 
+Deploy the system to the chosen hosting platform. 
+5. Phase 5: Maintenance & Updates
+
+Monitor the system and provide regular updates, brug fans, and feature enhancements 
+This system will ensure smooth operation and management of CviU Imus Campus Extension Services while providing clear and accessible tracking of student and faculty interactions, programs, and performance. 
+
+Let's dive deeper into the specific parts of the eTracker System for CvSU Imus Campu Extension Services. 
+1. System Features Breakdown 
+Student Registration & Profile Management 
+Registration Process: 
+Form Fields: Name, student ID, course, contact info, program preferences 
+Verification: Once a student registers for a program, an automated email or SMS confirmation is sent with further instructions. 
+Student Dashboard. After logging in, students can view their profile with personal details, registered programs, attendance, performance, and any pending tasks or assignments. 
+Profile Updates: Students can update contact details, password, or view history of all extension programs they've attended. 
+Program/Service Management 
+Program Creation (for Faculty/Administrators): 
+Admins or Faculty members can create new programs by entering 
+Program Title: Name of the program. 
+Description: Short and long description of the program. 
+Schedule: Start date, end date, and location (if applicable). 
+Requirements: Prerequisites or any documentation the student needs before attending. 
+Capacity: Maximum number of students that can enroll. 
+Program Dashboard: Faculty/Admin can view all programs, check the number of enrolled students, and the status of each (upcoming, in-progress, completed). 
+Attendance Tracking 
+Manual Attendance: 
+QR Code: Students can scan a QR code on their mobile device to mark attendance at the start of each session. Alternatively, faculty can mark attendance via the system manually. 
+Integration with Program Schedule: Attendance is tied to the program's schedule and specific dates/times. 
+Automated Reminders: Faculty can send reminders to students to attend, reducing no-shows. 
+Evaluation & Feedback
+
+Evaluation Forms (for Students and Faculty): 
+At the end of the program or event, both students and faculty will fill out evaluation forms: 
+Student Evaluation Form: This could include rating different aspects such as content quality, instructor effectiveness, overall satisfaction. 
+Faculty Evaluation Form: Faculty can assess student participation, involvement, and other metrics 
+Rating Scale: Use a Likert scale (1-5) for easy collection of quantitative feedback 
+Program Feedback Summary: After submission, a summarized report of feedback will be generated automatically for the program creator/admin to review and improve future offerings. 
+Communication System 
+Notifications: 
+Students and faculty receive email/SMS/notification alerts for 
+New program offerings 
+Upcoming deadlines or events 
+Attendance reminders 
+Feedback forms 
+Program completion and certificates 
+In-app Messaging: Students, faculty, and admins can message each other directly within the platform for quick communication regarding programs or issues. 
+Reporting & Analytics 
+Admin Reports: 
+Program Participation: Track the number of students enrolled in each program, their attendance rates, and overall engagement. 
+Student Performance: Admins can view detailed student records, including participation, attendance, feedback, and grades. 
+Program Effectiveness: Generate reports on the average rating of programs from student feedback. 
+Export Reports: Reports can be exported to Excel, PDF, etc., for analysis or sharing with higher authorities. 
+Dashboard Analytics: 
+Visualize key data points such as student participation trends, program popularity, and faculty performance.
+
+
+Evaluation Forms (for Students and Faculty): 
+At the end of the program or event, both students and faculty will fill out evaluation forms: 
+Student Evaluation Form: This could include rating different aspects such as content quality, instructor effectiveness, overall satisfaction. 
+Faculty Evaluation Form: Faculty can assess student participation, involvement, and other metrics 
+Rating Scale: Use a Likert scale (1-5) for easy collection of quantitative feedback 
+Program Feedback Summary: After submission, a summarized report of feedback will be generated automatically for the program creator/admin to review and improve future offerings. 
+Communication System 
+Notifications: 
+Students and faculty receive email/SMS/notification alerts for 
+New program offerings 
+Upcoming deadlines or events 
+Attendance reminders 
+Feedback forms 
+Program completion and certificates 
+In-app Messaging: Students, faculty, and admins can message each other directly within the platform for quick communication regarding programs or issues. 
+Reporting & Analytics 
+Admin Reports: 
+Program Participation: Track the number of students enrolled in each program, their attendance rates, and overall engagement. 
+Student Performance: Admins can view detailed student records, including participation, attendance, feedback, and grades. 
+Program Effectiveness: Generate reports on the average rating of programs from student feedback. 
+Export Reports: Reports can be exported to Excel, PDF, etc., for analysis or sharing with higher authorities. 
+Dashboard Analytics: 
+Visualize key data points such as student participation trends, program popularity, and faculty performance
+
+Absolutely! Let's dive deeper into each section to provide more specifics on the Implementation and how you can go about developing this eTracker system for Cust Campus Extension Services. 
+1. Student Registration & Profile Management 
+Registration Process: 
+Student Registration Form: 
+Students will fill out a registration form with the following fields: 
+Full Name 
+Student ID Number 
+Course/Department 
+Contact Information (email and phone number) 
+Preferred Programs (a drop-down list or checkboxes with available programs) 
+Emergency Contact Information 
+Terms & Conditions (checkbox for consent) 
+After submission, the system will send an email/SMS confirmation with their registration details and a welcome message. 
+Profile Management: 
+Dashboard: Students will have access to a dashboard where they can view: 
+Personal Information: Name, ID, course, contact details (editable only by the student). 
+Program Registrations: The programs they are currently enrolled in, with status (Pending, Active, Completed). 
+Attendance Records: View which sessions they attended and their attendance percentage. 
+Evaluation Forms: Pending and completed evaluation forms with submission status. 
+Certificates: If applicable, they will have downloadable certificates once they complete a program. 
+Profile Update: 
+Students can update their contact information, reset passwords, and change preferences for communication (email, SMS). 
+Admin & Faculty Control:
+
+Admin Access Admins can manage student profiles, including changing their program registration, reviewing attendance, and manually adjusting records if needed 
+Faculty Access: Faculty can only access students enrolled in their programs and cannot change student data. 
+2. Program/Service Management 
+Program Creation and Management: 
+Program Creation Form: 
+Program Name 
+Description: Short and detailed descriptions, including goals, learning outcomes, and expected results. 
+Schedule: Start date, end date, time of each session. 
+Requirements: Prerequisites (e.g., certain courses completed, materials needed, etc.) 
+Capacity: Number of students who can register. This could be a dynamic value to reflect available slots. 
+Location: For in-person programs, add a venue with address or link to an online meeting platform (e.g., Zoom). 
+Registration Deadline: Deadline for students to register for the program. 
+Managing Programs: 
+Faculty members will have access to view the programs they've created. They can edit or update details if needed. Admins have access to manage all programs created by any faculty member. 
+The system can send automatic reminders to students about upcoming deadlines, events, and program start dates. 
+Program Dashboard: 
+Program List: Shows all available programs, including their status (Upcoming, In Progress, Completed). 
+Program Enrollment: Faculty can view the number of students enrolled in each program, track attendance, and generate progress reports. 
+Analytics: Show participation data and trends over time, like which programs are most popular. 
+3. Attendance Tracking 
+Attendance Management: 
+QR Code Scanning:
+
+During each program session, the system generates a unique QR code that students scan using their mobile devices to mark attendance. 
+Manual Entry: If QR scanning is not available, faculty can manually mark attendance by selecting student names from a list of enrolled participants 
+Automatic Time Logging: The system logs the exact time a student scans the QR code or when the faculty marks their attendance manually. 
+Attendance Reports: 
+Admins can generate reports on student attendance for each program session. 
+Faculty can review attendance history for each student. 
+Absence Notifications: 
+If a student misses a session, the system will automatically send them a reminder and alert them about the importance of attending. 
+Attendance Status: 
+The system can set attendance thresholds, such as 80% attendance required to complete a program. Students who fail to meet the threshold can be flagged for follow-up. 
+4. Evaluation & Feedback 
+Student Feedback Forms: 
+After the program or session ends, students are prompted to fill out an evaluation form: 
+Rating Questions: 1-5 scale for aspects like course content, instructor performance, session interaction, and overall satisfaction. 
+Open-ended Questions: Space for students to provide detailed feedback or suggestions for improvement. 
+Feedback Report: 
+After submission, feedback is processed and summarized. Faculty can view individual student feedback and overall trends. 
+Faculty Evaluations: 
+Faculty can assess students based on their participation, performance, and behavior in the program. 
+Evaluation could include: 
+Participation Rating: A score based on the student's engagement. 
+Assignment or Project Submission: If any assignments are given, faculty will rate them. 
+Program Effectiveness Report:
+
+Aggregate Feedback Admins can generate reports to see how students read each program, which can be used to improve future offerings 
+5. Communication System 
+Automated Notifications: 
+Notifications will be sent via email, SMS, or in-app based on the following triggers 
+Program Registration: Confirmation and reminders of registration deadlines. 
+related events. 
+Session Reminders: Notifications about upcoming sessions or program-
+Program Feedback Request: After completing a program or session, students will automatically receive a feedback request. 
+Attendance Alerts: If a student has missed a session or has low attendance, they'll receive a reminder to attend. 
+Program Updates: Any changes in the schedule or important updates related to the program. 
+In-App Messaging: 
+Students, faculty, and admins can send direct messages to each other regarding any issues or questions about a program. 
+Faculty can message all enrolled students about program-related updates, such as schedule changes or urgent announcements. 
+6. Reporting & Analytics 
+Admin Reports: 
+Admins can generate detailed reports for various metrics: 
+Program Enrollment Reports: Lists students enrolled in each program, along with their attendance and feedback scores. 
+Student Performance: Aggregate of student evaluations, attendance, and grades (if applicable). 
+Program Completion Reports: Shows which students have completed their programs and earned certificates. 
+Attendance Reports: Detailed logs of student attendance across all sessions 
+Data Visualization: 
+Use charts, graphs, and tables to display: 
+Program Popularity: Track the most enrolled programs. 
+Attendance Trends: Visual representation of attendance rates over time. 
+Feedback Ratings: Average program ratings, percentage of positive feedback, etc.
+
+Reportable Верните 
+presentation. 
+Reports can be downloaded as PDF's or Excel files for further analysis or 
+7. Tech Stack Implementation: Detailed Insights 
+Frontend: 
+React.js: React will allow for a highly dynamic and responsive interface. Components like form inputs, lists, and modals will automatically update as users interact with the system. 
+State Management (Redux): This is crucial for managing the state of the application, such as storing session details, user data, and program registrations. 
+Material Ul or Tailwind CSS: Pre-built Ul components for rapid development and a modern, clean look. 
+Backend: 
+Node.js + Express.js: This will handle all server-side operations and API routes for managing student data, programs, attendance, etc. Express simplifies routing and middleware handling. 
+JWT Authentication: To ensure secure login and access control for different user roles (Admin, Faculty, Student). 
+Role-based Access Control: Protect certain routes (e.g., student profile, admin panel) to be accessible only by users with the correct role. 
+Database: 
+PostgreSQL: Ideal for structured data like students, programs, attendance, and feedback. 
+o Tables: 
+Users (students, faculty, admins) 
+Programs 
+Attendance 
+Feedback 
+Messages 
+Notifications 
+Foreign Keys to link data like attendance records to programs and students. 
+Deployment: 
+AWS or Heroku: Both are popular options for deploying web applications. AWS offers more control, while Heroku is easier to set up and manage.
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Documents - eTracker</title>
+  <link rel="stylesheet" href="upload_documents.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+        <span class="logo-text">eTRACKER</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
+          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="certificate.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
+          <li class="active"><a href="upload_documents.html"><i class="fas fa-upload"></i> Upload Documents</a></li>
+        </ul>
+        <div class="sign-out" onclick="window.location.href='logout.php'">Sign Out</div>
+      </nav>
+    </aside>
+
+    <!-- Main grid (center + right panel) -->
+    <div class="main-grid">
+      <!-- Main Content Area (your upload form) -->
+      <div class="main-content">
+        <div class="topbar">
+          <div>
+            <h2>Upload Documents</h2>
+            <div class="last-login">Last login: 06-08-25 19:55:38</div>
+          </div>
+        </div>
+        <div class="profile-section">
+          <h3>Upload Documents</h3>
+          <form method="POST" action="#" enctype="multipart/form-data" class="upload-form">
+            <label for="document-type">Document Type</label>
+            <select name="document_type" id="document-type" required>
+              <option value="" disabled selected>Select Document Type</option>
+              <option value="proposal">Approved Extension Activity Proposal</option>
+              <option value="report">Activity and Implementation Report</option>
+              <option value="attendance">Attendance Sheet</option>
+              <option value="photos">Photo Documentation</option>
+              <option value="feedback">Evaluation and Feedback Forms</option>
+              <option value="workload">Summary of Workload Hours</option>
+              <option value="accomplishments">Summary of Accomplishments</option>
+              <option value="other">Other Supporting Documents</option>
+            </select>
+            <label for="document-file">Select File</label>
+            <input type="file" name="document_file" id="document-file" required>
+            <div class="form-buttons">
+              <button type="submit" class="submit"><i class="fas fa-upload"></i> Upload</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Panel (Notifications) -->
+      <div class="right-panel">
+        <div class="notifications">
+          <h3>🔔 Notifications</h3>
+          <div class="note">You have 2 pending document uploads.</div>
+          <div class="note">Your last upload was successful!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

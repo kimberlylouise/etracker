@@ -1,189 +1,4642 @@
-get_user_info.php called at 2025-06-03 16:12:20
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_user_info.php called at 2025-06-04 08:43:59
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-04 08:44:11
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-04 08:44:13
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-04 08:44:15
-Programs fetched: 25
-get_my_programs.php called at 2025-06-04 08:44:22
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-04 08:44:25
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-04 08:44:31
-Programs fetched: 25
-get_user_info.php called at 2025-06-04 08:44:39
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-04 08:48:55
-Programs fetched: 25
-get_user_info.php called at 2025-06-04 08:49:59
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 09:46:03
-Unauthorized: user_id=not set, role=not set
-get_user_info.php called at 2025-06-08 09:46:05
-Unauthorized: user_id=not set, role=not set
-get_my_programs.php called at 2025-06-08 09:46:26
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 09:46:33
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 09:46:34
-Programs fetched: 25
-get_user_info.php called at 2025-06-08 09:46:39
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 09:46:41
-Programs fetched: 25
-get_my_programs.php called at 2025-06-08 09:53:31
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 09:53:37
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 09:53:42
-Programs fetched: 25
-get_my_programs.php called at 2025-06-08 09:57:22
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 09:57:30
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 09:57:31
-Enrolled programs fetched: 0
-get_programs.php called at 2025-06-08 09:57:32
-Programs fetched: 25
-get_my_programs.php called at 2025-06-08 09:57:41
-Enrolled programs fetched: 0
-get_programs.php called at 2025-06-08 09:57:43
-Programs fetched: 25
-get_my_programs.php called at 2025-06-08 09:59:49
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 09:59:58
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 10:00:03
-Programs fetched: 25
-get_user_info.php called at 2025-06-08 10:00:15
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 10:00:16
-Programs fetched: 25
-get_user_info.php called at 2025-06-08 10:00:34
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:02:31
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 10:02:37
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_user_info.php called at 2025-06-08 10:03:56
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_user_info.php called at 2025-06-08 10:05:31
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:06:06
-Enrolled programs fetched: 0
-get_user_info.php called at 2025-06-08 10:06:07
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 10:06:17
-Programs fetched: 25
-get_user_info.php called at 2025-06-08 10:18:40
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_user_info.php called at 2025-06-08 10:19:12
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-enroll.php called at 2025-06-08 10:20:30
-Enrollment successful: user_id=1, program_id=7
-get_user_info.php called at 2025-06-08 10:20:31
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:20:35
-Enrolled programs fetched: 1
-get_my_programs.php called at 2025-06-08 10:21:38
-Enrolled programs fetched: 1
-get_user_info.php called at 2025-06-08 10:21:42
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-enroll.php called at 2025-06-08 10:21:47
-Enrollment successful: user_id=1, program_id=21
-get_user_info.php called at 2025-06-08 10:21:49
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:21:50
-Enrolled programs fetched: 1
-get_user_info.php called at 2025-06-08 10:21:54
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-enroll.php called at 2025-06-08 10:21:57
-Enrollment successful: user_id=1, program_id=25
-get_user_info.php called at 2025-06-08 10:21:59
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:22:01
-Enrolled programs fetched: 1
-get_my_programs.php called at 2025-06-08 10:23:34
-Enrolled programs fetched: 1
-get_my_programs.php called at 2025-06-08 10:24:37
-Enrolled programs fetched: 3
-get_user_info.php called at 2025-06-08 10:25:00
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:25:01
-Enrolled programs fetched: 3
-get_programs.php called at 2025-06-08 10:25:03
-Programs fetched: 25
-get_my_programs.php called at 2025-06-08 10:26:20
-Enrolled programs fetched: 3
-get_user_info.php called at 2025-06-08 10:26:31
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-enroll.php called at 2025-06-08 10:26:35
-Enrollment successful: user_id=1, program_id=11
-get_user_info.php called at 2025-06-08 10:26:37
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:26:38
-Enrolled programs fetched: 4
-get_programs.php called at 2025-06-08 10:26:42
+get_programs.php called at 2025-06-08 13:48:12
 Programs fetched: 8
-get_my_programs.php called at 2025-06-08 10:27:09
-Enrolled programs fetched: 4
-get_user_info.php called at 2025-06-08 10:27:11
+get_my_programs.php called at 2025-06-08 13:49:06
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-08 13:49:09
 Querying for user_id=1
 User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_my_programs.php called at 2025-06-08 10:37:30
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 10:38:39
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 10:41:05
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 10:44:50
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 10:46:11
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 10:48:48
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 11:27:50
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 11:27:59
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 11:28:07
-Enrolled programs fetched: 4
-get_user_info.php called at 2025-06-08 11:28:11
-Querying for user_id=1
-User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
-get_programs.php called at 2025-06-08 11:28:13
+get_my_programs.php called at 2025-06-08 13:49:10
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-08 13:49:16
 Programs fetched: 8
-get_my_programs.php called at 2025-06-08 11:32:21
-Enrolled programs fetched: 4
-get_my_programs.php called at 2025-06-08 11:35:26
-Enrolled programs fetched: 4
+get_programs.php called at 2025-06-08 13:51:59
+Programs fetched: 8
+get_programs.php called at 2025-06-08 13:52:54
+Programs fetched: 8
+get_my_programs.php called at 2025-06-08 15:36:51
+Enrolled programs fetched: 3
+get_my_programs.php called at 2025-06-08 17:41:45
+Enrolled programs fetched: 3
+get_my_programs.php called at 2025-06-08 18:11:28
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-08 18:11:32
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-08 18:11:35
+Programs fetched: 8
+get_my_programs.php called at 2025-06-08 18:41:59
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-08 18:42:01
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-08 18:42:06
+Enrollment successful: user_id=1, program_id=19
+get_user_info.php called at 2025-06-08 18:42:08
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-09 13:08:20
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-09 13:08:22
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-09 13:08:23
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-09 13:08:28
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-09 13:08:31
+Programs fetched: 8
+get_my_programs.php called at 2025-06-09 13:08:38
+Enrolled programs fetched: 3
+get_my_programs.php called at 2025-06-09 13:08:46
+Enrolled programs fetched: 3
+get_my_programs.php called at 2025-06-09 17:30:37
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-09 17:30:41
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-09 17:30:42
+Programs fetched: 8
+get_my_programs.php called at 2025-06-09 20:45:23
+Unauthorized: user_id=6, role=faculty
+get_user_info.php called at 2025-06-09 20:45:25
+Unauthorized: user_id=6, role=faculty
+get_my_programs.php called at 2025-06-09 20:45:31
+Unauthorized: user_id=6, role=faculty
+get_programs.php called at 2025-06-09 20:45:32
+Unauthorized: user_id=6, role=faculty
+get_my_programs.php called at 2025-06-09 20:47:37
+Unauthorized: user_id=6, role=faculty
+get_programs.php called at 2025-06-09 20:47:37
+Unauthorized: user_id=6, role=faculty
+get_my_programs.php called at 2025-06-09 20:47:38
+Unauthorized: user_id=6, role=faculty
+get_user_info.php called at 2025-06-09 20:47:39
+Unauthorized: user_id=6, role=faculty
+get_my_programs.php called at 2025-06-09 20:47:39
+Unauthorized: user_id=6, role=faculty
+get_user_info.php called at 2025-06-09 20:47:40
+Unauthorized: user_id=6, role=faculty
+get_programs.php called at 2025-06-09 20:47:42
+Unauthorized: user_id=6, role=faculty
+get_my_programs.php called at 2025-06-09 20:48:43
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-09 20:48:45
+Programs fetched: 11
+get_user_info.php called at 2025-06-09 20:48:55
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+enroll.php called at 2025-06-09 20:49:02
+Enrollment successful: user_id=1, program_id=29
+get_user_info.php called at 2025-06-09 20:49:03
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-09 20:49:05
+Enrolled programs fetched: 3
+get_my_programs.php called at 2025-06-09 20:49:13
+Enrolled programs fetched: 3
+get_user_info.php called at 2025-06-09 20:49:15
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_programs.php called at 2025-06-09 20:49:17
+Programs fetched: 11
+get_user_info.php called at 2025-06-09 20:49:19
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-10 08:50:57
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-10 08:50:57
+Programs fetched: 9
+get_user_info.php called at 2025-06-10 08:50:59
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-10 08:51:00
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-10 08:51:00
+Programs fetched: 9
+get_my_programs.php called at 2025-06-10 08:51:01
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-10 08:51:02
+Programs fetched: 9
+get_my_programs.php called at 2025-06-10 08:51:02
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-10 08:51:03
+Programs fetched: 9
+get_my_programs.php called at 2025-06-10 08:51:04
+Enrolled programs fetched: 3
+get_programs.php called at 2025-06-10 08:51:04
+Programs fetched: 9
+get_user_info.php called at 2025-06-10 08:56:21
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 08:56:52
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 08:59:10
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 09:00:45
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 09:00:55
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 09:01:13
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 09:05:40
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_user_info.php called at 2025-06-10 09:05:41
+Querying for user_id=1
+User found: {"firstname":"Kimberly","lastname":"Ravalo","student_id":"202110211"}
+get_my_programs.php called at 2025-06-10 09:20:24
+get_my_programs.php called at 2025-06-10 09:21:52
+get_my_programs.php called at 2025-06-10 09:22:01
+get_my_programs.php called at 2025-06-10 09:22:17
+get_my_programs.php called at 2025-06-10 09:22:26
+get_my_programs.php called at 2025-06-10 09:22:27
+get_my_programs.php called at 2025-06-10 09:23:32
+enroll.php called at 2025-06-10 09:25:08
+Already enrolled: user_id=1, program_id=29
+get_my_programs.php called at 2025-06-10 09:25:14
+get_my_programs.php called at 2025-06-10 09:25:24
+get_my_programs.php called at 2025-06-10 09:27:31
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:27:32
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:27:44
+Already enrolled: user_id=1, program_id=29
+enroll.php called at 2025-06-10 09:27:49
+Enrollment successful: user_id=1, program_id=23
+get_my_programs.php called at 2025-06-10 09:27:52
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:28:34
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:28:44
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:31:28
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:31:50
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:32:20
+Already enrolled: user_id=1, program_id=23
+enroll.php called at 2025-06-10 09:32:27
+Enrollment successful: user_id=1, program_id=9
+get_my_programs.php called at 2025-06-10 09:32:34
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:32:36
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:32:36
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:32:37
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:32:38
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:35:53
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:35:56
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:36:11
+Already enrolled: user_id=1, program_id=7
+enroll.php called at 2025-06-10 09:36:15
+Already enrolled: user_id=1, program_id=25
+enroll.php called at 2025-06-10 09:36:16
+Already enrolled: user_id=1, program_id=25
+enroll.php called at 2025-06-10 09:36:18
+Already enrolled: user_id=1, program_id=11
+get_my_programs.php called at 2025-06-10 09:36:20
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:38:46
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:38:48
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:39:38
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:39:40
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:40:08
+Already enrolled: user_id=1, program_id=23
+get_my_programs.php called at 2025-06-10 09:40:11
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:42:31
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:42:35
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:42:53
+Already enrolled: user_id=1, program_id=25
+enroll.php called at 2025-06-10 09:42:57
+Already enrolled: user_id=1, program_id=7
+enroll.php called at 2025-06-10 09:43:01
+Enrollment successful: user_id=1, program_id=17
+get_my_programs.php called at 2025-06-10 09:43:06
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:43:08
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:13
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:16
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:18
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:19
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:27
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:28
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:46:29
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:47:35
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:47:36
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:47:51
+Already enrolled: user_id=1, program_id=17
+get_my_programs.php called at 2025-06-10 09:50:28
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:50:30
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:50:39
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:50:39
+Prepare failed: Unknown column 'up.status' in 'field list'
+enroll.php called at 2025-06-10 09:50:48
+enroll.php called at 2025-06-10 09:50:51
+get_my_programs.php called at 2025-06-10 09:50:56
+Prepare failed: Unknown column 'up.status' in 'field list'
+get_my_programs.php called at 2025-06-10 09:54:09
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 09:54:11
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+enroll.php called at 2025-06-10 09:54:25
+get_my_programs.php called at 2025-06-10 10:08:00
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:08:04
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+enroll.php called at 2025-06-10 10:08:16
+Already enrolled: user_id=1, program_id=23
+get_my_programs.php called at 2025-06-10 10:10:47
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:10:49
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+enroll.php called at 2025-06-10 10:11:03
+Already enrolled: user_id=1, program_id=23
+enroll.php called at 2025-06-10 10:11:10
+Already enrolled: user_id=1, program_id=7
+enroll.php called at 2025-06-10 10:11:11
+Already enrolled: user_id=1, program_id=7
+get_my_programs.php called at 2025-06-10 10:11:15
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:11:25
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:11:44
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+enroll.php called at 2025-06-10 10:12:00
+Already enrolled: user_id=1, program_id=7
+enroll.php called at 2025-06-10 10:12:04
+Already enrolled: user_id=1, program_id=7
+get_my_programs.php called at 2025-06-10 10:14:10
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:14:13
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+enroll.php called at 2025-06-10 10:14:27
+Already enrolled: user_id=1, program_id=25
+get_my_programs.php called at 2025-06-10 10:14:38
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:20:48
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:21:09
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:21:21
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:22:06
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:23:33
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:25:40
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:25:57
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:26:11
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:27:32
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:27:51
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:32:12
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:32:31
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:37:49
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:38:23
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:40:08
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:43:58
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:44:34
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+get_my_programs.php called at 2025-06-10 10:47:01
+Current user_id: 1
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Prepare failed for attendance: Unknown column 'user_id' in 'where clause'
+Enrolled programs fetched: 0
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 21
+            [program_name] => Coding Bootcamp
+            [start_date] => 2025-05-25
+            [end_date] => 2025-06-15
+            [enrollment_status] => pending
+        )
+
+    [2] => Array
+        (
+            [id] => 25
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [3] => Array
+        (
+            [id] => 11
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [4] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [start_date] => 2025-05-15
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [start_date] => 2025-06-01
+            [end_date] => 2025-05-25
+            [enrollment_status] => approved
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [program_name] => AI Seminar
+            [start_date] => 2025-07-01
+            [end_date] => 2025-07-15
+            [enrollment_status] => pending
+        )
+
+    [7] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [start_date] => 2025-06-10
+            [end_date] => 2025-06-25
+            [enrollment_status] => pending
+        )
+
+    [8] => Array
+        (
+            [id] => 23
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [9] => Array
+        (
+            [id] => 9
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+    [10] => Array
+        (
+            [id] => 17
+            [program_name] => Data Science Workshop
+            [start_date] => 2025-06-01
+            [end_date] => 2025-07-01
+            [enrollment_status] => pending
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+)
+
+enroll.php called at 2025-06-12 08:12:02
+Enrollment successful: user_id=1, program_id=31
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+)
+
+enroll.php called at 2025-06-12 13:39:45
+Enrollment successful: user_id=1, program_id=33
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ongoing
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+enroll.php called at 2025-06-17 03:58:19
+Enrollment successful: user_id=1, program_id=6
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+Programs array: Array
+(
+    [0] => Array
+        (
+            [id] => 7
+            [program_name] => Coding Bootcamps
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [1] => Array
+        (
+            [id] => 1
+            [program_name] => Year-End PArty
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [program_name] => Community Outreach
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [3] => Array
+        (
+            [id] => 29
+            [program_name] => Meeting for Etracker
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [4] => Array
+        (
+            [id] => 31
+            [program_name] => Friday meeting
+            [status] => approved
+            [program_status] => ended
+        )
+
+    [5] => Array
+        (
+            [id] => 33
+            [program_name] => MOA
+            [status] => approved
+            [program_status] => ended
+        )
+
+)
+
+enroll.php called at 2025-06-17 08:24:48
+Enrollment successful: user_id=1, program_id=35

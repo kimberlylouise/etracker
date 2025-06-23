@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="Certificates.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
+  <!-- Add to your CSS or in a <style> tag -->
+  <style>
+    #eligible-section { display: none; }
+  </style>
 </head>
 <body>
 
@@ -21,8 +25,7 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  
   </div>
 
     <div class="main">
@@ -30,66 +33,340 @@
             <h2>Generate Certificates</h2>
             <p>Select a program and participant type to generate certificates.</p>
             <label>Program:</label>
-            <select>
+            <select id="programs">
               <option value="">-- Select Program --</option>
-              <option value="nutrition">Community Nutrition Seminar</option>
-              <option value="livelihood">Livelihood Training</option>
             </select>
-            <label>Participant Type:</label>
-            <select>
-              <option value="">-- Select Type --</option>
-              <option value="student">Student</option>
-              <option value="faculty">Faculty</option>
-              <option value="stakeholder">Stakeholder</option>
-            </select>
-            <button class="btn">Generate Certificates</button>
-          </div>
-        
-          <div class="section">
-            <h2>Certificate Records</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Participant Name</th>
-                  <th>Program</th>
-                  <th>Issued On</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Juan Dela Cruz</td>
-                  <td>Community Nutrition Seminar</td>
-                  <td>2025-04-21</td>
-                  <td>Issued</td>
-                  <td><button class="btn">Download</button></td>
-                </tr>
-                <tr>
-                  <td>Maria Santos</td>
-                  <td>Livelihood Training</td>
-                  <td>2025-05-02</td>
-                  <td>Pending</td>
-                  <td><button class="btn">Issue Now</button></td>
-                </tr>
-              </tbody>
+            <button id="load-eligible" class="btn">Show Eligible Participants</button>
+            
+            <div class="section">
+            <h2>Pending Certificates</h2>
+            <table id="pending-table">
+                <thead>
+                    <tr>
+                        <th>Participant Name</th>
+                        <th>Program</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Will be filled dynamically -->
+                </tbody>
             </table>
           </div>
         
-          <div class="section">
-            <h2>Certificate Template Management</h2>
-            <p>Upload or edit certificate templates used for issuing.</p>
-            <input type="file" accept=".docx,.pdf" />
-            <button class="btn">Upload Template</button>
+            </table>
           </div>
         
+         
           <div class="section">
-            <h2>Search Certificates</h2>
-            <input type="text" placeholder="Search by name or program..." />
-            <button class="btn">Search</button>
+            <h2>Certificate Records</h2>
+            <table id="records-table">
+  <thead>
+    <tr>
+      <th>Participant Name</th>
+      <th>Program</th>
+      <th>Issued On</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- This will be dynamically filled with JavaScript -->
+  </tbody>
+</table>
           </div>
+        
+          
+        
+          <div class="section" id="eligible-section">
+  <h2>Eligible Participants</h2>
+  <table id="eligible-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Issued On</th>
+        <th>Evaluated</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Will be filled dynamically -->
+    </tbody>
+  </table>
+</div>
       </div>
       
+      <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial loads
+    loadCertificates();
+    loadPendingCertificates();
+    
+    // Load programs dropdown
+    fetch('/backend/api.php?action=programs')
+        .then(res => res.json())
+        .then(programs => {
+            const sel = document.getElementById('programs');
+            programs.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.program_name;
+                sel.appendChild(opt);
+            });
+        });
+});
+
+    // Load eligible users (PENDING only)
+    document.getElementById('load-eligible').onclick = function() {
+        const program_id = document.getElementById('programs').value;
+        if (!program_id) {
+            alert('Please select a program first.');
+            return;
+        }
+        document.getElementById('eligible-section').style.display = 'block'; // Show section
+
+        fetch('/backend/api.php?action=eligible_for_certificate&program_id=' + program_id)
+            .then(res => res.json())
+            .then(data => {
+                console.log('Received data:', data); // Debug log
+                const tbody = document.getElementById('eligible-table').querySelector('tbody');
+                tbody.innerHTML = '';
+
+                // Log counts
+                console.log('Students:', data.students?.length || 0);
+                console.log('Faculty:', data.faculty?.length || 0);
+
+                // Add student rows first
+                if (data.students && data.students.length > 0) {
+                    const studentHeader = document.createElement('tr');
+                    studentHeader.innerHTML = '<td colspan="5" class="section-header">Students</td>';
+                    tbody.appendChild(studentHeader);
+
+                    data.students.forEach(student => {
+                        console.log('Processing student:', student); // Debug log
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${student.name}</td>
+                            <td>${student.role}</td>
+                            <td>${student.issued_on || ''}</td>
+                            <td>${student.evaluated ? 'Yes' : 'No'}</td>
+                            <td><button onclick="issueCert(${student.cert_id},${student.program_id},this)">Issue Certificate</button></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                // Then add faculty rows
+                if (data.faculty && data.faculty.length > 0) {
+                    const facultyHeader = document.createElement('tr');
+                    facultyHeader.innerHTML = '<td colspan="5" class="section-header">Faculty</td>';
+                    tbody.appendChild(facultyHeader);
+
+                    data.faculty.forEach(faculty => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${faculty.name}</td>
+                            <td>${faculty.role}</td>
+                            <td>${faculty.issued_on || ''}</td>
+                            <td>${faculty.evaluated ? 'Yes' : 'No'}</td>
+                            <td><button onclick="issueFacultyCert(${faculty.program_id}, this)">Issue Certificate</button></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading eligible certificates:', error);
+            });
+    };
+
+    // Issue certificate for a user
+    function issueCert(participant_id, program_id, btn) {
+      const formData = new FormData();
+      formData.append('participant_id', participant_id);
+      fetch('/backend/api.php?action=issue_certificate', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(resp => {
+        alert(resp.message);
+        // Do NOT replace the button, just reload both tables:
+        loadCertificates();
+        loadPendingCertificates();
+        document.getElementById('load-eligible').click();
+      });
+    }
+
+    // Load certificate records (ISSUED only)
+function loadCertificates() {
+    fetch('/backend/api.php?action=list_certificates')
+        .then(res => res.json())
+        .then(certs => {
+            console.log('Certificates:', certs); // <--- Add this line
+            const tbody = document.querySelector('#records-table tbody');
+            tbody.innerHTML = '';
+            
+            certs
+                .filter(cert => cert.certificate_issued == 1)
+                .forEach(cert => {
+                    const tr = document.createElement('tr');
+                    // Determine the correct certificate path
+                    const certPath = cert.type === 'faculty' 
+                        ? `certificates/faculty_certificate_${cert.program_id}.pdf`
+                        : `certificates/certificate_${cert.cert_id}.pdf`;
+                    
+                    tr.innerHTML = `
+                        <td>${cert.name}</td>
+                        <td>${cert.program_name}</td>
+                        <td>${cert.issued_on || ''}</td>
+                        <td>Issued</td>
+                        <td>
+                            <a href="/${certPath}" 
+                               class="btn" 
+                               target="_blank"
+                               onclick="return checkCertificateExists('${certPath}')">
+                                View Certificate
+                            </a>
+                            <button class="btn" onclick="regenerateCert(${cert.cert_id}, ${cert.program_id}, '${cert.type}', this)">Regenerate</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+        });
+}
+loadCertificates();
+
+    // 4. Download certificate (dummy)
+function downloadCert(participant_id) {
+  alert('Download for participant ID: ' + participant_id);
+  // Implement actual download logic if you have certificate files
+}
+
+// 5. Search certificates
+document.querySelectorAll('.btn')[3].onclick = function() {
+  const query = document.querySelector('input[type="text"]').value.toLowerCase();
+  document.querySelectorAll('table tbody tr').forEach(row => {
+    const name = row.cells[0].innerText.toLowerCase();
+    const program = row.cells[1].innerText.toLowerCase();
+    row.style.display = (name.includes(query) || program.includes(query)) ? '' : 'none';
+  });
+};
+
+function issueFacultyCert(program_id, btn) {
+  const formData = new FormData();
+  formData.append('program_id', program_id);
+  fetch('/backend/api.php?action=issue_faculty_certificate', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(resp => {
+    alert(resp.message);
+    btn.disabled = true;
+    btn.textContent = 'Issued';
+    loadCertificates();
+    loadPendingCertificates();
+  });
+}
+
+// Load pending certificates (if any)
+function loadPendingCertificates() {
+    const program_id = document.getElementById('programs').value;
+    fetch('/backend/api.php?action=list_certificates')
+        .then(res => res.json())
+        .then(certificates => {
+            const tbody = document.querySelector('#pending-table tbody');
+            tbody.innerHTML = '';
+            let pendingCerts = certificates.filter(cert =>
+
+            cert.certificate_issued == 0 ||
+    cert.certificate_issued === "0" ||
+    cert.certificate_issued === null
+);
+            // If a program is selected, filter by program_id
+            if (program_id) {
+                pendingCerts = pendingCerts.filter(cert => cert.program_id == program_id);
+            }
+            
+            if (pendingCerts.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="5">No pending certificates found</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+
+            pendingCerts.forEach(cert => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cert.name}</td>
+                    <td>${cert.program_name}</td>
+                    <td>${cert.type === 'faculty' ? 'Faculty' : 'Student'}</td>
+                    <td>Pending</td>
+                    <td>
+                        ${
+                            cert.type === 'faculty'
+                                ? `<button onclick="issueFacultyCert(${cert.program_id}, this)">Issue Certificate</button>`
+                                : `<button onclick="issueCert(${cert.cert_id},${cert.program_id},this)">Issue Certificate</button>`
+                        }
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading pending certificates:', error);
+        });
+}
+
+// Check if certificate file exists
+function checkCertificateExists(path) {
+    fetch('/' + path, {
+        method: 'HEAD'
+    }).then(response => {
+        if (!response.ok) {
+            alert('Certificate file not found. Please try regenerating the certificate.');
+            return false;
+        }
+        return true;
+    }).catch(error => {
+        alert('Error accessing certificate. Please try again.');
+        return false;
+    });
+}
+
+document.getElementById('programs').onchange = function() {
+    loadPendingCertificates();
+    // Optionally hide eligible section when program changes
+    document.getElementById('eligible-section').style.display = 'none';
+};
+
+function regenerateCert(cert_id, program_id, type, btn) {
+    if (!confirm('Are you sure you want to regenerate this certificate?')) return;
+    const formData = new FormData();
+    let url = '';
+    if (type === 'faculty') {
+        formData.append('program_id', program_id);
+        url = '/backend/api.php?action=regenerate_faculty_certificate';
+    } else {
+        formData.append('participant_id', cert_id);
+        url = '/backend/api.php?action=regenerate_certificate';
+    }
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(resp => {
+        alert(resp.message);
+        loadCertificates();
+        loadPendingCertificates();
+    });
+}
+</script>
   
 </body>
 </html>

@@ -240,25 +240,60 @@
   
   /* NOTIFICATIONS */
   .notifications {
-    background-color: #d9f8dc;
-    padding: 15px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #d9f8dc 60%, #fffde4 100%);
+    padding: 18px;
     border-radius: 20px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    height:85vh;
+    box-shadow: 0 2px 8px rgba(36, 122, 55, 0.08);
+    width: 100%;
+    min-width: 0;
+    max-width: unset;
+    animation: fadeInUp 1.3s;
+    box-sizing: border-box;
+    align-self: stretch;
+    height: 80vh;
   }
   
   .notifications h3 {
     margin-bottom: 10px;
+    color: #247a37;
+    font-size: 1.1rem;
   }
   
   .note {
-    background: white;
+    background: #fff;
     padding: 10px;
     margin-bottom: 10px;
     border-left: 5px solid #59a96a;
     border-radius: 8px;
     font-size: 14px;
+    box-shadow: 0 1px 4px rgba(36, 122, 55, 0.06);
+    animation: fadeInUp 1.4s;
+  }
+  
+  .no-notifications {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .notif-icon {
+    margin-right: 6px;
+  }
+  
+  .notif-label {
+    font-weight: 600;
+    margin-right: 5px;
+    font-size: 0.97em;
+  }
+  
+  .notif-high { border-left: 5px solid #e53935; background: #f8d7da; color: #721c24; }
+  .notif-medium { border-left: 5px solid #fbc02d; background: #fff3cd; color: #856404; }
+  .notif-low { border-left: 5px solid #43a047; background: #d4edda; color: #155724; }
+  
+  .notif-date {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
   }
   
   .logo {
@@ -336,66 +371,308 @@
   .modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.35);
     justify-content: center;
     align-items: center;
-    z-index: 1000;
   }
+  .modal.show {
+    display: flex;
+  }
+  /* --- Trendy, Eye-Pleasing Edit Program Modal Styles --- */
   .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 90%;
-    max-width: 500px;
+    background: linear-gradient(120deg, #f4fdf5 0%, #e6f6e6 60%, #f8fafc 100%);
+    border-radius: 22px;
+    box-shadow: 0 10px 40px 0 rgba(36, 122, 55, 0.13), 0 2px 12px 0 #b7e4c7;
+    padding: 32px 36px 22px 36px;
+    width: 480px;
+    max-width: 95vw;
+    max-height: 90vh;
+    min-width: 320px;
+    position: relative;
+    animation: modalPopIn 0.25s;
+    border: 2.5px solid #b7e4c7;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-content::before {
+    content: "";
+    position: absolute;
+    top: -70px; left: -70px;
+    width: 210px; height: 210px;
+    background: radial-gradient(circle at 40% 40%, #59a96a33 0%, #b7e4c700 100%);
+    opacity: 0.18;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .modal-content::after {
+    content: "";
+    position: absolute;
+    bottom: -70px; right: -70px;
+    width: 210px; height: 210px;
+    background: radial-gradient(circle at 60% 60%, #247a37 0%, #e6f6e600 100%);
+    opacity: 0.10;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  
+  @keyframes modalPopIn {
+    from { opacity: 0; transform: translateY(-40px) scale(0.97);}
+    to   { opacity: 1; transform: translateY(0) scale(1);}
   }
   .modal-content h3 {
-    margin-top: 0;
+    font-size: 1.6rem;
+    margin-bottom: 18px;
+    color: #247a37;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 16px #b7e4c7;
+    z-index: 1;
+    position: relative;
   }
   .modal-content label {
-    display: block;
-    margin-top: 10px;
+    margin-top: 12px;
+    margin-bottom: 2px;
+    font-size: 1.08rem;
+    color: #247a37;
+    font-weight: 600;
+    z-index: 1;
+    position: relative;
   }
   .modal-content input,
   .modal-content select,
   .modal-content textarea {
-    width: 100%;
-    padding: 8px;
+    padding: 12px 16px;
+    border-radius: 13px;
+    font-size: 1.05rem;
     margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1.5px solid #59a96a88;
+    background: rgba(255,255,255,0.96);
+    color: #247a37;
+    transition: border 0.2s, background 0.2s;
+    box-shadow: 0 2px 12px 0 rgba(36, 122, 55, 0.07);
+    z-index: 1;
+    position: relative;
+  }
+  .modal-content input:focus,
+  .modal-content textarea:focus {
+    border: 1.5px solid #247a37;
+    background: #e9fbe5;
+  }
+  .modal-content input[readonly] {
+    background: #e9fbe5;
+    color: #59a96a;
+    border-style: dashed;
+    cursor: not-allowed;
   }
   .form-buttons {
-    margin-top: 20px;
-    text-align: right;
+    margin-top: 22px;
+    gap: 16px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1;
+    position: relative;
   }
   .form-buttons button {
-    padding: 8px 16px;
-    margin-left: 10px;
+    padding: 11px 28px;
+    border-radius: 13px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
     cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 2px 12px 0 #b7e4c7;
   }
-  .submit {
-    background-color: #007bff;
-    color: white;
-    border: none;
+  .form-buttons .submit {
+    background: linear-gradient(90deg, #59a96a 0%, #247a37 100%);
+    color: #fff;
+    border: 1.5px solid #59a96a;
   }
-  .cancel {
-    background-color: #6c757d;
-    color: white;
-    border: none;
+  .form-buttons .submit:hover {
+    background: linear-gradient(90deg, #247a37 0%, #59a96a 100%);
+    color: #fff;
+  }
+  .form-buttons .cancel {
+    background: linear-gradient(90deg, #fff 0%, #b7e4c7 100%);
+    color: #247a37;
+    border: 1.5px solid #b7e4c7;
+  }
+  .form-buttons .cancel:hover {
+    background: #247a37;
+    color: #fff;
   }
   #form-message {
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    text-align: center;
+    z-index: 1;
+    position: relative;
   }
   #form-message.success {
-    color: green;
+    color: #247a37;
     background-color: #e6ffe6;
   }
   #form-message.error {
-    color: red;
+    color: #b30000;
     background-color: #ffe6e6;
+  }
+  
+  /* Pending Modal Table Styles */
+  #pendingModal table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px #b7e4c733;
+  }
+  
+  #pendingModal th, #pendingModal td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+  }
+  
+  #pendingModal th {
+    background: #fffbe6;
+    color: #856404;
+    font-weight: 600;
+  }
+  
+  #pendingModal tr:last-child td {
+    border-bottom: none;
+  }
+  
+  #pendingModal td {
+    color: #247a37;
+  }
+  
+  #pendingModal button {
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  
+  #pendingModal button[onclick*="approved"] {
+    background: #28a745;
+    color: #fff;
+  }
+  #pendingModal button[onclick*="approved"]:hover {
+    background: #218838;
+  }
+  
+  #pendingModal button[onclick*="rejected"] {
+    background: #dc3545;
+    color: #fff;
+  }
+  #pendingModal button[onclick*="rejected"]:hover {
+    background: #b52a37;
+  }
+  
+  /* Responsive for mobile */
+  @media (max-width: 900px) {
+    .modal-content {
+      padding: 18px 4vw 12px 4vw;
+      max-width: 99vw;
+    }
+  }
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .session-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .session-row input[type="date"],
+  .session-row input[type="time"],
+  .session-row input[type="text"] {
+    flex: 1 1 120px;
+    min-width: 110px;
+  }
+  
+  .session-row input[type="text"] {
+    min-width: 140px;
+  }
+  
+  .remove-session {
+    background: #fff0f0;
+    color: #b30000;
+    border: 1px solid #b7e4c7;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.18s, color 0.18s;
+  }
+  .remove-session:hover {
+    background: #ffeaea;
+    color: #fff;
+    background-color: #b30000;
+  }
+  
+  .sessions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 10px 0;
+  }
+  
+  .session-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #e6f6e6 60%, #b7e4c7 100%);
+    border-radius: 18px;
+    padding: 7px 16px;
+    font-size: 0.98rem;
+    color: #247a37;
+    box-shadow: 0 2px 8px 0 #b7e4c733;
+    border: 1.5px solid #b7e4c7;
+    min-width: 180px;
+    margin-bottom: 2px;
+    transition: box-shadow 0.18s;
+  }
+  
+  .session-pill .session-date,
+  .session-pill .session-time,
+  .session-pill .session-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .session-pill .fa-calendar,
+  .session-pill .fa-clock,
+  .session-pill .fa-chalkboard {
+    color: #59a96a;
+    font-size: 1.05em;
+  }
+  
+  .session-pill.session-empty {
+    background: #ffeaea;
+    color: #b30000;
+    border: 1.5px dashed #b7e4c7;
+    font-style: italic;
   }

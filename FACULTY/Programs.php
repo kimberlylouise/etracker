@@ -1,6 +1,42 @@
-
 <?php
 require_once 'db.php';
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Fetch user info for display (fetch from DB for more accurate info, like in profile.php)
+$user_id = $_SESSION['user_id'];
+$user_fullname = 'Unknown User';
+$user_email = 'unknown@cvsu.edu.ph';
+
+$user_sql = "SELECT firstname, lastname, mi, email FROM users WHERE id = ?";
+$user_stmt = $conn->prepare($user_sql);
+$user_stmt->bind_param("i", $user_id);
+$user_stmt->execute();
+$user_result = $user_stmt->get_result();
+if ($user_row = $user_result->fetch_assoc()) {
+    $user_fullname = $user_row['firstname'] . ' ' . $user_row['lastname'];
+    $user_email = $user_row['email'];
+}
+$user_stmt->close();
+
+// Fetch faculty department
+$faculty_id = '';
+$faculty_department = '';
+$faculty_sql = "SELECT id, department FROM faculty WHERE user_id = ?";
+$faculty_stmt = $conn->prepare($faculty_sql);
+$faculty_stmt->bind_param("i", $user_id);
+$faculty_stmt->execute();
+$faculty_result = $faculty_stmt->get_result();
+if ($faculty_row = $faculty_result->fetch_assoc()) {
+    $faculty_id = $faculty_row['id'];
+    $faculty_department = $faculty_row['department'];
+}
+$faculty_stmt->close();
 
 // Search handling
 $search = isset($_GET['search']) ? '%' . $conn->real_escape_string(trim($_GET['search'])) . '%' : '%';
@@ -17,9 +53,9 @@ $ended_page = isset($_GET['ended_page']) ? (int)$_GET['ended_page'] : 1;
 $ended_page = max(1, $ended_page);
 
 // Count total active programs for pagination
-$active_count_query = "SELECT COUNT(*) AS total FROM programs p WHERE p.end_date >= CURDATE() AND p.program_name LIKE ?";
+$active_count_query = "SELECT COUNT(*) AS total FROM programs p WHERE p.status = 'ongoing' AND p.program_name LIKE ? AND p.faculty_id = ?";
 $active_count_stmt = $conn->prepare($active_count_query);
-$active_count_stmt->bind_param('s', $search);
+$active_count_stmt->bind_param('si', $search, $faculty_id);
 $active_count_stmt->execute();
 $active_count_result = $active_count_stmt->get_result();
 $active_total = $active_count_result ? $active_count_result->fetch_assoc()['total'] : 0;
@@ -35,7 +71,7 @@ if ($active_page > $active_total_pages && $active_total_pages > 0) {
 $active_offset = ($active_page - 1) * $programs_per_page;
 
 // Count total ended programs for pagination
-$ended_count_query = "SELECT COUNT(*) AS total FROM programs p WHERE p.end_date < CURDATE() AND p.program_name LIKE ?";
+$ended_count_query = "SELECT COUNT(*) AS total FROM programs p WHERE p.status = 'ended' AND p.program_name LIKE ?";
 $ended_count_stmt = $conn->prepare($ended_count_query);
 $ended_count_stmt->bind_param('s', $search);
 $ended_count_stmt->execute();
@@ -56,12 +92,14 @@ $ended_offset = ($ended_page - 1) * $programs_per_page;
 $active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, COUNT(pt.id) AS enrolled
                  FROM programs p
                  LEFT JOIN participants pt ON p.id = pt.program_id
-                 WHERE p.end_date >= CURDATE() AND p.program_name LIKE ?
+                 WHERE p.status = 'ongoing'
+                   AND p.program_name LIKE ?
+                   AND p.faculty_id = ?
                  GROUP BY p.id
                  ORDER BY p.start_date
                  LIMIT ? OFFSET ?";
 $active_stmt = $conn->prepare($active_query);
-$active_stmt->bind_param('sii', $search, $programs_per_page, $active_offset);
+$active_stmt->bind_param('siis', $search, $faculty_id, $programs_per_page, $active_offset);
 $active_stmt->execute();
 $active_result = $active_stmt->get_result();
 $active_programs = [];
@@ -77,12 +115,12 @@ $active_stmt->close();
 $ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, COUNT(pt.id) AS enrolled
                 FROM programs p
                 LEFT JOIN participants pt ON p.id = pt.program_id
-                WHERE p.end_date < CURDATE() AND p.program_name LIKE ?
+                WHERE p.status = 'ended' AND p.program_name LIKE ? AND p.faculty_id = ?
                 GROUP BY p.id
                 ORDER BY p.start_date
                 LIMIT ? OFFSET ?";
 $ended_stmt = $conn->prepare($ended_query);
-$ended_stmt->bind_param('sii', $search, $programs_per_page, $ended_offset);
+$ended_stmt->bind_param('siis', $search, $faculty_id, $programs_per_page, $ended_offset);
 $ended_stmt->execute();
 $ended_result = $ended_stmt->get_result();
 $ended_programs = [];
@@ -107,6 +145,17 @@ if ($notifications_result) {
         $notifications[] = $row;
     }
     $notifications_result->free();
+}
+
+// After fetching active programs, update status if needed
+foreach ($active_programs as $program) {
+    if (strtotime($program['end_date']) < strtotime(date('Y-m-d'))) {
+        // Update status in DB
+        $update_stmt = $conn->prepare("UPDATE programs SET status = 'ended' WHERE id = ?");
+        $update_stmt->bind_param("i", $program['id']);
+        $update_stmt->execute();
+        $update_stmt->close();
+    }
 }
 ?>
 
@@ -270,45 +319,40 @@ if ($notifications_result) {
       padding: 10px;
     }
     .note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 10px;
       margin-bottom: 10px;
-      border-radius: 4px;
-      position: relative;
+      border-radius: 8px;
       font-size: 14px;
+      position: relative;
+      background: #fafdff;
+      box-shadow: 0 1px 4px rgba(59,183,126,0.06);
+      border-left: 5px solid #3bb77e;
     }
-    .note.low {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .note.medium {
-      background-color: #fff3cd;
-      color: #856404;
-    }
-    .note.high {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-    .note .timestamp {
-      font-size: 12px;
-      color: #555;
-      margin-top: 5px;
-    }
-    .note .dismiss-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #555;
-    }
-    .note .dismiss-btn:hover {
-      color: #000;
-    }
+    .note.high { border-left: 5px solid #e53935; background: #f8d7da; color: #721c24; }
+.note.medium { border-left: 5px solid #fbc02d; background: #fff3cd; color: #856404; }
+.note.low { border-left: 5px solid #43a047; background: #d4edda; color: #155724; }
+.notif-icon { font-size: 1.1em; }
+.notif-label { font-weight: 600; margin-right: 5px; font-size: 0.97em; }
+.timestamp { font-size: 12px; color: #555; margin-left: auto; }
+.dismiss-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+}
+.dismiss-btn:hover { color: #000; }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- User info at top right -->
+    
     <!-- Sidebar (unchanged) -->
     <aside class="sidebar">
       <div class="logo">
@@ -317,16 +361,18 @@ if ($notifications_result) {
       </div>
       <nav>
         <ul>
-          <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li class="active"><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
           <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
-          <li><a href="certificate.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
-        <div class="sign-out">Sign Out</div>
-      </nav>
+  <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
+          <a href="/register/index.html" style="color: inherit; text-decoration: none; display: block; padding: 12px 0;">Sign Out</a>
+        </div>      </nav>
     </aside>
 
     <div class="main-grid">
@@ -346,7 +392,7 @@ if ($notifications_result) {
     </div>
     <button onclick="applySearch()" class="search-btn">Search</button>
   </div>
-  <button class="create-btn" onclick="window.location.href='Create.html'">Create New Program</button>
+  <button class="create-btn" onclick="window.location.href='Create.php'">Create New Program</button>
 </div>
         <div class="tab-container">
           <div class="tab active" data-tab="active">Active Programs</div>
@@ -366,7 +412,29 @@ if ($notifications_result) {
                   <h3><?php echo htmlspecialchars($program['program_name']); ?></h3>
                   <p><strong>Description:</strong> <?php echo htmlspecialchars($program['description'] ?: 'No description provided.'); ?></p>
                   <p><strong>Dates:</strong> <?php echo htmlspecialchars(date('F j, Y', strtotime($program['start_date']))); ?> - <?php echo htmlspecialchars(date('F j, Y', strtotime($program['end_date']))); ?></p>
-                  <p><strong>Schedule:</strong> To be defined</p>
+                  <p><strong>Schedule:</strong></p>
+<div class="sessions-list">
+  <?php
+  $session_stmt = $conn->prepare("SELECT * FROM program_sessions WHERE program_id = ?");
+  $session_stmt->bind_param("i", $program['id']);
+  $session_stmt->execute();
+  $sessions_result = $session_stmt->get_result();
+  if ($sessions_result->num_rows > 0) {
+      while ($session = $sessions_result->fetch_assoc()) {
+          echo '<div class="session-pill">';
+          echo '<span class="session-date"><i class="fa-regular fa-calendar"></i> ' . htmlspecialchars(date('M d, Y', strtotime($session['session_date']))) . '</span>';
+          echo '<span class="session-time"><i class="fa-regular fa-clock"></i> ' . htmlspecialchars(substr($session['session_start'], 0, 5)) . ' - ' . htmlspecialchars(substr($session['session_end'], 0, 5)) . '</span>';
+          if (!empty($session['session_title'])) {
+              echo '<span class="session-title"><i class="fa-solid fa-chalkboard"></i> ' . htmlspecialchars($session['session_title']) . '</span>';
+          }
+          echo '</div>';
+      }
+  } else {
+      echo '<div class="session-pill session-empty">To be defined</div>';
+  }
+  $session_stmt->close();
+  ?>
+</div>
                   <p><strong>Enrolled Students:</strong> 
                     <?php echo $program['enrolled'] > 0 
                       ? htmlspecialchars($program['enrolled']) . ' out of ' . htmlspecialchars($program['max_students'])
@@ -377,6 +445,7 @@ if ($notifications_result) {
                 <div class="program-actions">
                   <button class="edit">Edit Program</button>
                   <button class="view">View Participants</button>
+                  <button class="pending" onclick="showPendingEnrollments(<?php echo $program['id']; ?>)">Pending Requests</button>
                   <button class="end">End Program</button>
                 </div>
               </div>
@@ -422,58 +491,81 @@ if ($notifications_result) {
 
       <!-- Right Panel with Updated Notifications -->
       <div class="right-panel">
-        <div class="top-actions">
-          <div class="user-info">
-            <div class="name">Full Name</div>
-            <div class="email">email@cvsu.edu.ph</div>
-          </div>
-        </div>
-        <div class="notifications">
-          <h3>🔔 Notifications</h3>
-          <?php if (empty($notifications)): ?>
-            <p class="no-notifications">No notifications at this time.</p>
-          <?php else: ?>
-            <?php foreach ($notifications as $notification): ?>
-              <div class="note priority-<?php echo htmlspecialchars($notification['priority']); ?>" data-notification-id="<?php echo htmlspecialchars($notification['id']); ?>">
-                <div><?php echo htmlspecialchars($notification['message']); ?></div>
-                <div class="timestamp">
-                  Created: <?php echo date('F j, Y, g:i A', strtotime($notification['created_at'])); ?>
-                  <?php if ($notification['expires_at']): ?>
-                    | Expires: <?php echo date('F j, Y', strtotime($notification['expires_at'])); ?>
-                  <?php endif; ?>
-                </div>
-                <button class="dismiss-btn" onclick="dismissNotification(<?php echo $notification['id']; ?>)"><i class="fas fa-times"></i></button>
-              </div>
-            <?php endforeach; ?>
+  <div class="top-actions">
+    <div class="user-info">
+      <div class="name"><?php echo htmlspecialchars($user_fullname); ?></div>
+      <div class="email"><?php echo htmlspecialchars($user_email); ?></div>
+    </div>
+  </div>
+  <div class="notifications">
+    <h3>🔔 Notifications</h3>
+    <?php if (empty($notifications)) { ?>
+      <p class="no-notifications">No notifications at this time.</p>
+    <?php } else { ?>
+      <?php foreach ($notifications as $notification) { 
+        // Icon, label, and class for priority
+        switch ($notification['priority']) {
+          case 'high':
+            $icon = '<i class="fas fa-exclamation-circle" style="color:#e53935;"></i>';
+            $label = 'Urgent';
+            $class = 'notif-high';
+            break;
+          case 'medium':
+            $icon = '<i class="fas fa-exclamation-triangle" style="color:#fbc02d;"></i>';
+            $label = 'Reminder';
+            $class = 'notif-medium';
+            break;
+          default:
+            $icon = '<i class="fas fa-check-circle" style="color:#43a047;"></i>';
+            $label = 'FYI';
+            $class = 'notif-low';
+        }
+      ?>
+        <div class="note <?php echo $class; ?>">
+          <span class="notif-icon"><?php echo $icon; ?></span>
+          <span class="notif-label"><?php echo $label; ?></span>
+          <?php echo htmlspecialchars($notification['message']); ?>
+          <?php if ($notification['expires_at']): ?>
+            <div class="notif-date">Expires: <?php echo htmlspecialchars($notification['expires_at']); ?></div>
           <?php endif; ?>
         </div>
-      </div>
+      <?php } ?>
+    <?php } ?>
+  </div>
+</div>
     </div>
 
-    <!-- Edit Program Modal (unchanged) -->
+    <!-- Edit Program Modal -->
     <div id="editModal" class="modal">
       <div class="modal-content">
         <h3>Edit Program</h3>
         <form id="edit-program-form">
           <input type="hidden" name="program_id" id="edit-program-id" />
           <label>Program Name</label>
-          <input type="text" name="program_name" id="edit-program-name" placeholder="enter a program name" required />
+          <input type="text" name="program_name" id="edit-program-name" required />
+
           <label>Department</label>
-          <select name="department" id="edit-department" required>
-            <option disabled value="">select a department</option>
-            <option value="Department 1">Department 1</option>
-            <option value="Department 2">Department 2</option>
-          </select>
+          <input type="text" name="department" id="edit-department" value="<?php echo htmlspecialchars($faculty_department); ?>" readonly style="background:#f0f0f0;" />
+
           <label>Start Date</label>
           <input type="date" name="start_date" id="edit-start-date" required />
+
           <label>End Date</label>
           <input type="date" name="end_date" id="edit-end-date" required />
+
           <label>Location</label>
-          <input type="text" name="location" id="edit-location" placeholder="enter location" required />
+          <input type="text" name="location" id="edit-location" required />
+
           <label>Max Students</label>
-          <input type="number" name="max_students" id="edit-max-students" placeholder="enter maximum number of students" min="1" required />
+          <input type="number" name="max_students" id="edit-max-students" min="1" required />
+
           <label>Description</label>
-          <textarea name="description" id="edit-description" placeholder="describe the program"></textarea>
+          <textarea name="description" id="edit-description"></textarea>
+
+          <label>Sessions</label>
+          <div id="edit-sessions-container"></div>
+          <button type="button" id="edit-add-session-btn" style="margin-top:8px;">Add Another Session</button>
+
           <div class="form-buttons">
             <button type="button" class="cancel" onclick="closeModal()">Cancel</button>
             <button type="submit" class="submit">Update Program</button>
@@ -502,6 +594,30 @@ if ($notifications_result) {
         </div>
         <div class="modal-buttons">
           <button type="button" class="close-participants" onclick="closeParticipantsModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Participants Modal -->
+    <div id="pendingModal" class="participants-modal">
+      <div class="participants-modal-content">
+        <h3>Pending Enrollment Requests</h3>
+        <div id="pending-list">
+          <table id="pending-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Enrolled Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="pending-table-body"></tbody>
+          </table>
+          <p id="no-pending-message" style="display: none;">No pending requests.</p>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" onclick="closePendingModal()">Close</button>
         </div>
       </div>
     </div>
@@ -566,7 +682,7 @@ if ($notifications_result) {
 
     // Handle Create New Program button (unchanged)
     document.querySelector('.create-btn').addEventListener('click', () => {
-      window.location.href = 'Create.html';
+      window.location.href = 'Create.php';
     });
 
     // Handle Edit, View, and End buttons (unchanged)
@@ -582,12 +698,32 @@ if ($notifications_result) {
                 const program = data.data;
                 document.getElementById('edit-program-id').value = programId;
                 document.getElementById('edit-program-name').value = program.program_name;
-                document.getElementById('edit-department').value = program.department;
+                document.getElementById('edit-department').value = "<?php echo htmlspecialchars($faculty_department); ?>";
                 document.getElementById('edit-start-date').value = program.start_date;
                 document.getElementById('edit-end-date').value = program.end_date;
                 document.getElementById('edit-location').value = program.location;
                 document.getElementById('edit-max-students').value = program.max_students;
                 document.getElementById('edit-description').value = program.description || '';
+                // Load sessions
+                const sessionsContainer = document.getElementById('edit-sessions-container');
+                sessionsContainer.innerHTML = '';
+                if (program.sessions && program.sessions.length > 0) {
+                  program.sessions.forEach((session, index) => {
+                    const sessionRow = document.createElement('div');
+                    sessionRow.className = 'session-row';
+                    sessionRow.innerHTML = `
+                      <input type="hidden" name="session_id[]" value="${session.id}">
+                      <input type="text" name="session_title[]" value="${session.session_title || ''}" placeholder="Session Title">
+                      <input type="date" name="session_date[]" value="${session.session_date || ''}">
+                      <input type="time" name="session_start[]" value="${session.session_start || ''}">
+                      <input type="time" name="session_end[]" value="${session.session_end || ''}">
+                      <button type="button" class="remove-session" onclick="this.parentElement.remove()">Remove</button>
+                    `;
+                    sessionsContainer.appendChild(sessionRow);
+                  });
+                } else {
+                  sessionsContainer.innerHTML = '<p>No sessions found. Please add sessions.</p>';
+                }
                 document.getElementById('editModal').style.display = 'flex';
                 document.getElementById('form-message').style.display = 'none';
               } else {
@@ -674,6 +810,71 @@ if ($notifications_result) {
       document.getElementById('no-participants-message').style.display = 'none';
     }
 
+    // Close pending participants modal
+    function closePendingModal() {
+      document.getElementById('pendingModal').style.display = 'none';
+      document.getElementById('pending-table-body').innerHTML = '';
+    }
+
+
+
+
+
+
+// Show pending enrollments for a program
+function showPendingEnrollments(programId) {
+  fetch(`get_pending_enrollments.php?id=${programId}`)
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.getElementById('pending-table-body');
+      const noPendingMessage = document.getElementById('no-pending-message');
+      tableBody.innerHTML = '';
+      if (data.status === 'success' && data.data.length > 0) {
+        data.data.forEach(enrollment => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${enrollment.student_name}</td>
+            <td>${enrollment.student_email}</td>
+            <td>${new Date(enrollment.enrollment_date).toLocaleDateString()}</td>
+            <td>
+              <button onclick="updateEnrollmentStatus(${enrollment.id}, 'approved', ${programId})">Accept</button>
+              <button onclick="updateEnrollmentStatus(${enrollment.id}, 'rejected', ${programId})">Reject</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+        tableBody.parentElement.style.display = 'table';
+        noPendingMessage.style.display = 'none';
+      } else {
+        tableBody.parentElement.style.display = 'none';
+        noPendingMessage.style.display = 'block';
+      }
+      document.getElementById('pendingModal').style.display = 'flex';
+    })
+    .catch(error => {
+      alert('Error fetching pending enrollments: ' + error.message);
+    });
+}
+
+// Approve or reject an enrollment
+function updateEnrollmentStatus(enrollmentId, status, programId) {
+  fetch('update_enrollment_status.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: enrollmentId, status: status })
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message);
+    if (data.status === 'success') {
+      showPendingEnrollments(programId); // Refresh the list
+    }
+  })
+  .catch(error => {
+    alert('Error updating status: ' + error.message);
+  });
+}
+
     // Show notification (unchanged)
     function showNotification(message, type) {
       const notification = document.getElementById('notification');
@@ -730,6 +931,29 @@ if ($notifications_result) {
         closeParticipantsModal();
       }
     });
+    document.getElementById('pendingModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closePendingModal();
+      }
+    });
+    document.getElementById('edit-add-session-btn').addEventListener('click', function() {
+  const container = document.getElementById('edit-sessions-container');
+  const row = document.createElement('div');
+  row.className = 'session-row';
+  row.innerHTML = `
+    <input type="hidden" name="session_id[]" value="">
+    <input type="text" name="session_title[]" placeholder="Session Title">
+    <input type="date" name="session_date[]">
+    <input type="time" name="session_start[]">
+    <input type="time" name="session_end[]">
+    <button type="button" class="remove-session" onclick="this.parentElement.remove()">Remove</button>
+  `;
+  container.appendChild(row);
+});
   </script>
 </body>
 </html>
+
+
+
+

@@ -23,8 +23,7 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+
   </div>
 
    
@@ -37,9 +36,9 @@
       <div class="report-left">
         <section class="filters">
           <h2>Generate Reports</h2>
-          <form>
+          <form id="reportForm">
             <label for="reportType">Report Type</label>
-            <select id="reportType" name="reportType">
+            <select id="reportType" name="reportType" required>
               <option value="">-- Select Report Type --</option>
               <option value="participation">Program Participation</option>
               <option value="attendance">Attendance Summary</option>
@@ -47,29 +46,24 @@
               <option value="completion">Program Completion</option>
               <option value="faculty">Faculty Performance</option>
             </select>
-  
+
             <label for="startMonth">Date Range</label>
-            <input type="month" id="startMonth" name="startMonth">
+            <input type="month" id="startMonth" name="startMonth" required>
             <span style="margin: 0 5px;">to</span>
-            <input type="month" id="endMonth" name="endMonth">
-  
+            <input type="month" id="endMonth" name="endMonth" required>
+
             <button type="submit">Generate</button>
           </form>
         </section>
   
         <section class="report-output">
-          <h2>Sample Report Output</h2>
-          <div class="report-box">
-            <p><strong>Program:</strong> Environmental Awareness Drive</p>
-            <p><strong>Participants:</strong> 152</p>
-            <p><strong>Average Attendance:</strong> 86%</p>
-            <p><strong>Average Feedback Rating:</strong> 4.6 / 5</p>
-            <p><strong>Status:</strong> Completed</p>
+          <h2>Report Output</h2>
+          <div class="report-box" id="reportBox">
+            <p>Select a report type and date range, then click Generate.</p>
           </div>
-  
-          <div class="actions">
-            <button>Download PDF</button>
-            <button>Export Excel</button>
+          <div class="actions" id="reportActions" style="display:none;">
+            <button onclick="downloadReport('pdf')">Download PDF</button>
+            <button onclick="downloadReport('excel')">Export Excel</button>
           </div>
         </section>
       </div>
@@ -153,6 +147,46 @@
       }
     });
   </script>
+  <script>
+document.getElementById('reportForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const type = document.getElementById('reportType').value;
+  const start = document.getElementById('startMonth').value + '-01';
+  const endMonth = document.getElementById('endMonth').value;
+  const end = endMonth ? endMonth + '-31' : '';
+  const box = document.getElementById('reportBox');
+  const actions = document.getElementById('reportActions');
+  box.innerHTML = '<em>Loading...</em>';
+  actions.style.display = 'none';
+
+  const res = await fetch(`/backend/reports_api.php?type=${type}&start=${start}&end=${end}`);
+  const data = await res.json();
+
+  if (!data.length) {
+    box.innerHTML = '<em>No data found for this selection.</em>';
+    return;
+  }
+
+  // Render table based on report type
+  let html = '<table class="report-table"><thead><tr>';
+  let fields = Object.keys(data[0]);
+  fields.forEach(f => html += `<th>${f.replace(/_/g, ' ').toUpperCase()}</th>`);
+  html += '</tr></thead><tbody>';
+  data.forEach(row => {
+    html += '<tr>';
+    fields.forEach(f => html += `<td>${row[f]}</td>`);
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  box.innerHTML = html;
+  actions.style.display = '';
+});
+
+// Dummy download functions
+function downloadReport(type) {
+  alert('Export functionality coming soon!');
+}
+</script>
     
   
 </body>

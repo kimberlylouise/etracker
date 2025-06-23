@@ -1,68 +1,168 @@
 <?php
 require_once 'db.php';
+session_start();
 
-// Fetch all programs for the dropdown
-$program_query = "SELECT id, program_name, start_date 
-                  FROM programs 
-                  ORDER BY start_date";
-$program_result = $conn->query($program_query);
+// Fetch user info for display (optional, for top right)
+$user_id = $_SESSION['user_id'] ?? null;
+$user_fullname = 'Unknown User';
+$user_email = 'unknown@cvsu.edu.ph';
+if ($user_id) {
+    $user_sql = "SELECT firstname, lastname, mi, email FROM users WHERE id = ?";
+    $user_stmt = $conn->prepare($user_sql);
+    $user_stmt->bind_param("i", $user_id);
+    $user_stmt->execute();
+    $user_result = $user_stmt->get_result();
+    if ($user_row = $user_result->fetch_assoc()) {
+        $user_fullname = $user_row['firstname'] . ' ' . $user_row['lastname'];
+        $user_email = $user_row['email'];
+    }
+    $user_stmt->close();
+}
+
+// Fetch all programs for the dropdown and stats
 $programs = [];
-if ($program_result) {
-    while ($row = $program_result->fetch_assoc()) {
-        $programs[] = $row;
+$program_ids = [];
+$stmt = $conn->prepare("SELECT id FROM faculty WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($faculty_id);
+$stmt->fetch();
+$stmt->close();
+
+$program_query = "SELECT id, program_name, start_date, end_date, status FROM programs WHERE faculty_id = ? ORDER BY start_date DESC";
+$stmt = $conn->prepare($program_query);
+$stmt->bind_param("i", $faculty_id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $programs[] = $row;
+    $program_ids[] = $row['id'];
+}
+$stmt->close();
+
+// Prepare for batching
+$in = implode(',', array_fill(0, count($program_ids), '?'));
+$types = str_repeat('i', count($program_ids));
+
+// Batch fetch enrollments
+$enrollments = [];
+if ($program_ids) {
+    $stmt = $conn->prepare("SELECT program_id, COUNT(*) as cnt FROM enrollments WHERE program_id IN ($in) GROUP BY program_id");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        $enrollments[$row['program_id']] = $row['cnt'];
     }
-    $program_result->free();
+    $stmt->close();
 }
 
-// Set default to "all" programs unless a program_id is provided via GET
-$selected_program_id = isset($_GET['program_id']) && $_GET['program_id'] != 'all' ? $_GET['program_id'] : 'all';
-
-// Fetch summary data based on selected program (default to all)
-$summary_query = "
-    SELECT 
-        p.program_name,
-        COUNT(DISTINCT a.id) as attendance_count,
-        AVG(CAST(REPLACE(e.score, '%', '') AS DECIMAL(5,2))) as avg_score,
-        COUNT(DISTINCT c.id) as certificate_count
-    FROM programs p
-    LEFT JOIN attendance a ON p.id = a.program_id
-    LEFT JOIN evaluations e ON p.id = e.program_id
-    LEFT JOIN certificates c ON p.id = c.program_id";
-if ($selected_program_id != 'all') {
-    $summary_query .= " WHERE p.id = ?";
-}
-$summary_query .= " GROUP BY p.id, p.program_name
-                    ORDER BY p.start_date DESC";
-$summary_stmt = $conn->prepare($summary_query);
-if ($selected_program_id != 'all') {
-    $summary_stmt->bind_param("i", $selected_program_id);
-}
-$summary_stmt->execute();
-$summary_result = $summary_stmt->get_result();
-$summary_data = [];
-if ($summary_result) {
-    while ($row = $summary_result->fetch_assoc()) {
-        $summary_data[] = $row;
+// Batch fetch attendance
+$attendance_present = [];
+$attendance_total = [];
+if ($program_ids) {
+    // Present
+    $stmt = $conn->prepare("SELECT program_id, COUNT(*) as cnt FROM attendance WHERE program_id IN ($in) AND status = 'Present' GROUP BY program_id");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        $attendance_present[$row['program_id']] = $row['cnt'];
     }
-    $summary_result->free();
+    $stmt->close();
+
+    // Total
+    $stmt = $conn->prepare("SELECT program_id, COUNT(*) as cnt FROM attendance WHERE program_id IN ($in) GROUP BY program_id");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        $attendance_total[$row['program_id']] = $row['cnt'];
+    }
+    $stmt->close();
 }
 
-// Fetch active notifications
-$notifications_query = "SELECT message, priority
-                       FROM notifications
-                       WHERE is_active = 1 AND (expires_at IS NULL OR expires_at >= CURDATE())
-                       ORDER BY created_at DESC
-                       LIMIT 5";
-$notifications_result = $conn->query($notifications_query);
+// Batch fetch feedback
+$feedback_scores_arr = [];
+if ($program_ids) {
+    $stmt = $conn->prepare("SELECT program_id, AVG(content + facilitators + relevance + organization + experience)/5 as avg_score FROM detailed_evaluations WHERE program_id IN ($in) GROUP BY program_id");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        $feedback_scores_arr[$row['program_id']] = $row['avg_score'] ? round($row['avg_score'], 2) : 0;
+    }
+    $stmt->close();
+}
+
+// Batch fetch certificates
+$certificates = [];
+if ($program_ids) {
+    $stmt = $conn->prepare("SELECT program_id, COUNT(*) as cnt FROM certificates WHERE program_id IN ($in) GROUP BY program_id");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        $certificates[$row['program_id']] = $row['cnt'];
+    }
+    $stmt->close();
+}
+
+// Batch fetch document uploads
+$doc_uploads = [];
+if ($program_ids) {
+    $stmt = $conn->prepare("SELECT program_id, document_type, status FROM document_uploads WHERE program_id IN ($in) ORDER BY upload_date DESC");
+    $stmt->bind_param($types, ...$program_ids);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) {
+        // Only keep the latest status per program+type
+        $key = $row['program_id'] . '_' . $row['document_type'];
+        if (!isset($doc_uploads[$key])) {
+            $doc_uploads[$key] = $row['status'];
+        }
+    }
+    $stmt->close();
+}
+
+// Prepare data for display
+$total_programs = count($programs);
+$total_participants = array_sum($enrollments);
+$total_certificates = array_sum($certificates);
+$attendance_rates = [];
+$feedback_scores = [];
+$program_labels = [];
+
+foreach ($programs as $program) {
+    $pid = $program['id'];
+    $enrolled = $enrollments[$pid] ?? 0;
+    $present = $attendance_present[$pid] ?? 0;
+    $total_attendance = $attendance_total[$pid] ?? 0;
+    $attendance_rate = $total_attendance > 0 ? round(($present / $total_attendance) * 100, 1) : 0;
+    $attendance_rates[] = $attendance_rate;
+    $program_labels[] = $program['program_name'];
+    $feedback_scores[] = $feedback_scores_arr[$pid] ?? 0;
+}
+
+// Fetch notifications (optional)
 $notifications = [];
+$notifications_query = "SELECT message, priority FROM notifications WHERE is_active = 1 AND (expires_at IS NULL OR expires_at >= CURDATE()) ORDER BY created_at DESC LIMIT 5";
+$notifications_result = $conn->query($notifications_query);
 if ($notifications_result) {
     while ($row = $notifications_result->fetch_assoc()) {
         $notifications[] = $row;
     }
     $notifications_result->free();
 }
-?>
 
+$faculty_id = null;
+$stmt = $conn->prepare("SELECT id FROM faculty WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($faculty_id);
+$stmt->fetch();
+$stmt->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,76 +171,123 @@ if ($notifications_result) {
   <title>eTracker Faculty Reports</title>
   <link rel="stylesheet" href="sample.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .program-selection { margin: 20px 0; display: flex; align-items: center; gap: 10px; }
-    .program-selection label { font-weight: bold; color: #247a37; }
-    .program-selection select { padding: 10px; border: 1px solid #ccc; border-radius: 25px; background: white; font-size: 14px; width: 300px; cursor: pointer; transition: all 0.3s ease; }
-    .program-selection select:hover { border-color: #247a37; box-shadow: 0 0 5px rgba(36, 122, 55, 0.3); }
-
-    .report-controls { display: flex; gap: 15px; margin: 20px 0; }
-    .btn { padding: 12px 25px; background: linear-gradient(90deg, #59a96a, #247a37); border: none; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: transform 0.2s, background 0.3s; }
-    .btn:hover { transform: scale(1.05); background: linear-gradient(90deg, #247a37, #59a96a); }
-
-    .note.priority-low { border-left-color: #59a96a; }
-    .note.priority-medium { border-left-color: #f1c40f; }
-    .note.priority-high { border-left-color: #e74c3c; }
-
-    /* Reports Section: Interactive Dashboard Cards */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+    .dashboard-cards {
+      display: flex;
+      gap: 24px;
+      margin: 30px 0 20px 0;
+      flex-wrap: wrap;
     }
-    .card {
-      background: linear-gradient(135deg, #ffffff, #f4f7f6);
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-    .card h3 {
+    .dashboard-card {
+      flex: 1 1 200px;
+      background: linear-gradient(135deg, #eafbe7 80%, #fffde4 100%);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(36,122,55,0.10);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 180px;
+      max-width: 260px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: #247a37;
-      margin: 0 0 15px;
-      font-size: 18px;
+      position: relative;
     }
-    .stat {
-      margin-bottom: 15px;
+    .dashboard-card i {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #59a96a;
     }
-    .stat span:first-child {
-      color: #666;
-      font-size: 14px;
-      display: block;
-    }
-    .stat span:last-child {
-      color: #247a37;
+    .dashboard-card .stat {
+      font-size: 2rem;
       font-weight: bold;
-      font-size: 20px;
+      color: #1e3927;
     }
-    .progress-bar {
-      height: 8px;
-      background: #e0e0e0;
-      border-radius: 4px;
-      margin: 5px 0;
+    .dashboard-card .label {
+      font-size: 1rem;
+      color: #247a37;
+      margin-top: 4px;
+    }
+    .charts-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 30px;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(36,122,55,0.10);
+      padding: 24px 18px;
+      flex: 1 1 350px;
+      min-width: 320px;
+      max-width: 600px;
+    }
+    .chart-title {
+      font-size: 1.1rem;
+      color: #247a37;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .documents-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(36,122,55,0.10);
       overflow: hidden;
     }
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, #59a96a, #247a37);
-      transition: width 0.3s ease;
+    .documents-table th, .documents-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+    }
+    .documents-table th {
+      background: #d2eac8;
+      color: #247a37;
+    }
+    .documents-table tr:last-child td { border-bottom: none; }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.98em;
+      font-weight: 600;
+      color: #fff;
+      display: inline-block;
+    }
+    .badge.submitted { background: #59a96a; }
+    .badge.pending { background: #f1c40f; color: #856404; }
+    .badge.missing { background: #e74c3c; }
+    .export-btn {
+      background: linear-gradient(90deg, #59a96a 60%, #247a37 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 18px 0 0 0;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .export-btn:hover {
+      background: linear-gradient(90deg, #247a37 60%, #59a96a 100%);
+      transform: translateY(-2px) scale(1.03);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar (Reverted to sample.css) -->
+    <!-- Sidebar (unchanged) -->
     <aside class="sidebar">
-      <div class="logo">eTRACKER</div>
+      <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+        <span class="logo-text">eTRACKER</span>
+      </div>
       <nav>
         <ul>
           <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -149,91 +296,87 @@ if ($notifications_result) {
           <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>
           <li class="active"><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
-        <div class="sign-out">Sign Out</div>
+        <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
+          <a href="/register/index.html" style="color: inherit; text-decoration: none; display: block; padding: 12px 0;">Sign Out</a>
+        </div>
       </nav>
     </aside>
-
-    <!-- Main Grid -->
     <div class="main-grid">
-      <!-- Center Content -->
       <div class="main-content">
         <header class="topbar">
           <div class="role-label">Faculty Reports</div>
           <div class="last-login">Last login: <?php echo date('m-d-y H:i:s'); ?></div>
-          <div class="top-actions">
-            <div class="search-bar">
-              <input type="text" placeholder="Search" />
-            </div>
-            <div class="message-icon">✉️</div>
-          </div>
         </header>
 
-        <!-- Program Selection -->
-        <div class="program-selection">
-          <label for="program-select">Select Program</label>
-          <select id="program-select" name="program_id" onchange="window.location.href='reports.php?program_id=' + this.value">
-            <option value="all" <?php echo ($selected_program_id == 'all') ? 'selected' : ''; ?>>All Programs</option>
-            <?php foreach ($programs as $program): ?>
-              <option value="<?php echo htmlspecialchars($program['id']); ?>" <?php echo ($selected_program_id == $program['id']) ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($program['program_name']) . ' (' . date('m/d/y', strtotime($program['start_date'])) . ')'; ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <div class="report-controls">
-          <button class="btn" onclick="exportReport()">Export Report</button>
-          <button class="btn" onclick="openChartPanel()">View Chart</button>
+        <!-- Quick Stats -->
+        <div class="dashboard-cards">
+          <div class="dashboard-card">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <div class="stat"><?php echo $total_programs; ?></div>
+            <div class="label">Programs</div>
+          </div>
+          <div class="dashboard-card">
+            <i class="fas fa-users"></i>
+            <div class="stat"><?php echo $total_participants; ?></div>
+            <div class="label">Participants</div>
+          </div>
+          <div class="dashboard-card">
+            <i class="fas fa-certificate"></i>
+            <div class="stat"><?php echo $total_certificates; ?></div>
+            <div class="label">Certificates</div>
+          </div>
         </div>
 
-        <!-- Reports Section: Interactive Dashboard Cards (Unchanged) -->
-        <div class="dashboard-grid">
-          <?php if (!empty($summary_data)): ?>
-            <?php foreach ($summary_data as $data): ?>
-              <div class="card" onclick="openChartPanel('<?php echo htmlspecialchars($data['program_name']); ?>')">
-                <h3><?php echo htmlspecialchars($data['program_name']); ?></h3>
-                <div class="stat">
-                  <span>Attendance</span>
-                  <div class="progress-bar">
-                    <div class="progress" style="width: <?php echo ($data['attendance_count'] / max(array_column($summary_data, 'attendance_count')) * 100); ?>%;"></div>
-                  </div>
-                  <span><?php echo htmlspecialchars($data['attendance_count'] ?? '0'); ?></span>
-                </div>
-                <div class="stat">
-                  <span>Avg Score</span>
-                  <span><?php echo htmlspecialchars($data['avg_score'] ? number_format($data['avg_score'], 2) . '%' : '-'); ?></span>
-                </div>
-                <div class="stat">
-                  <span>Certificates</span>
-                  <div class="progress-bar">
-                    <div class="progress" style="width: <?php echo ($data['certificate_count'] / max(array_column($summary_data, 'certificate_count')) * 100); ?>%;"></div>
-                  </div>
-                  <span><?php echo htmlspecialchars($data['certificate_count'] ?? '0'); ?></span>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <div class="card" style="text-align: center;">
-              <p>No data available.</p>
-            </div>
-          <?php endif; ?>
+        <!-- Charts Section -->
+        <div class="charts-section">
+          <div class="chart-container">
+            <div class="chart-title"><i class="fas fa-chart-line"></i> Attendance Rate by Program</div>
+            <canvas id="attendanceChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title"><i class="fas fa-star"></i> Average Feedback Score by Program</div>
+            <canvas id="feedbackChart"></canvas>
+          </div>
         </div>
+
+        <button class="export-btn" onclick="window.print()"><i class="fas fa-file-export"></i> Export as PDF</button>
       </div>
-
-      <!-- Right Side -->
+      <!-- Right Panel (optional, for notifications/user info) -->
       <div class="right-panel">
         <div class="user-info">
-          <div class="name">Full Name</div>
-          <div class="email">email@cvsu.edu.ph</div>
+          <div class="name"><?php echo htmlspecialchars($user_fullname); ?></div>
+          <div class="email"><?php echo htmlspecialchars($user_email); ?></div>
         </div>
         <div class="notifications">
-          <h3>🔔 Notification</h3>
+          <h3>🔔 Notifications</h3>
           <?php if (empty($notifications)): ?>
-            <div class="note">No notifications at this time.</div>
+            <div class="note no-notifications">No notifications at this time.</div>
           <?php else: ?>
-            <?php foreach ($notifications as $notification): ?>
-              <div class="note priority-<?php echo htmlspecialchars($notification['priority']); ?>">
+            <?php foreach ($notifications as $notification): 
+              // Priority icon, label, and class
+              switch ($notification['priority']) {
+                case 'high':
+                  $icon = '<i class="fas fa-exclamation-circle" style="color:#e53935;"></i>';
+                  $label = 'Urgent';
+                  $class = 'notif-high';
+                  break;
+                case 'medium':
+                  $icon = '<i class="fas fa-exclamation-triangle" style="color:#fbc02d;"></i>';
+                  $label = 'Reminder';
+                  $class = 'notif-medium';
+                  break;
+                default:
+                  $icon = '<i class="fas fa-check-circle" style="color:#43a047;"></i>';
+                  $label = 'FYI';
+                  $class = 'notif-low';
+              }
+            ?>
+              <div class="note <?php echo $class; ?>">
+                <span class="notif-icon"><?php echo $icon; ?></span>
+                <span class="notif-label"><?php echo $label; ?></span>
                 <?php echo htmlspecialchars($notification['message']); ?>
               </div>
             <?php endforeach; ?>
@@ -242,42 +385,44 @@ if ($notifications_result) {
       </div>
     </div>
   </div>
-
   <script>
-    function exportReport() {
-      alert('Export functionality to be implemented. Add logic to export data (e.g., CSV) here.');
-      // Placeholder: Replace with actual export logic
-    }
+    // Attendance Chart
+    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(attendanceCtx, {
+      type: 'bar',
+      data: {
+        labels: <?php echo json_encode($program_labels); ?>,
+        datasets: [{
+          label: 'Attendance Rate (%)',
+          data: <?php echo json_encode($attendance_rates); ?>,
+          backgroundColor: '#59a96a'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 100 } }
+      }
+    });
 
-    function openChartPanel(program) {
-      const chartCode = `
-        const ctx = document.createElement('canvas').getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['${program}'],
-            datasets: [{
-              label: 'Attendance Count',
-              data: [<?php echo json_encode(array_column(array_filter($summary_data, fn($d) => $d['program_name'] === $program), 'attendance_count')); ?>[0] ?? 0],
-              backgroundColor: '#59a96a',
-              borderColor: '#247a37',
-              borderWidth: 1
-            }, {
-              label: 'Certificate Count',
-              data: [<?php echo json_encode(array_column(array_filter($summary_data, fn($d) => $d['program_name'] === $program), 'certificate_count')); ?>[0] ?? 0],
-              backgroundColor: '#d2eac8',
-              borderColor: '#1e3927',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: { y: { beginAtZero: true } },
-            plugins: { legend: { labels: { color: '#1e3927' } } }
-          }
-        });
-      `;
-      eval(chartCode); // Placeholder; system will render in canvas panel
-    }
+    // Feedback Chart
+    const feedbackCtx = document.getElementById('feedbackChart').getContext('2d');
+    new Chart(feedbackCtx, {
+      type: 'bar',
+      data: {
+        labels: <?php echo json_encode($program_labels); ?>,
+        datasets: [{
+          label: 'Avg Feedback Score',
+          data: <?php echo json_encode($feedback_scores); ?>,
+          backgroundColor: '#247a37'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 5 } }
+      }
+    });
   </script>
 </body>
 </html>

@@ -21,8 +21,7 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+  
   </div>
 
     <div class="main">
@@ -52,35 +51,127 @@
       
         <section class="documents-table">
           <h2>Submitted Documents</h2>
-          <table>
+          <table border="1" cellpadding="6" cellspacing="0">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Date Uploaded</th>
-                <th>Submitted By</th>
-                <th>Actions</th>
+                <th>ID</th>
+                <th>Program ID</th>
+                <th>Faculty ID</th>
+                <th>Document Type</th>
+                <th>File Path</th>
+                <th>Original Filename</th>
+                <th>Upload Date</th>
+                <th>Status</th>
+                <th>Admin Remarks</th>
+                <th>Reviewed By</th>
+                <th>Reviewed At</th>
+                <th>Uploaded By</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Example row -->
-              <tr>
-                <td>Workload Summary - Q1 2025</td>
-                <td>Summary of Workload</td>
-                <td>2025-04-25</td>
-                <td>Prof. Santos</td>
-                <td>
-                  <button>View</button>
-                  <button>Download</button>
-                  <button class="delete">Delete</button>
-                </td>
-              </tr>
-              <!-- Additional rows dynamically populated -->
+            <tbody id="documentsTableBody">
+              <!-- Rows will be inserted here by JavaScript -->
             </tbody>
           </table>
         </section>
       </div>
       
-  
+      <script>
+async function fetchDocuments() {
+  const res = await fetch('/backend/get_documents.php');
+  const docs = await res.json();
+  return docs;
+}
+
+function renderDocumentsTable(docs) {
+  const tbody = document.getElementById('documentsTableBody');
+  tbody.innerHTML = '';
+  if (!docs.length) {
+    tbody.innerHTML = '<tr><td colspan="12">No documents found.</td></tr>';
+    return;
+  }
+  docs.forEach(doc => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${doc.id}</td>
+      <td>${doc.program_id}</td>
+      <td>${doc.faculty_id}</td>
+      <td>${doc.document_type}</td>
+      <td>${doc.file_path}</td>
+      <td>${doc.original_filename}</td>
+      <td>${doc.upload_date}</td>
+      <td>${doc.status}</td>
+      <td>${doc.admin_remarks || ''}</td>
+      <td>${doc.reviewed_by || ''}</td>
+      <td>${doc.reviewed_at || ''}</td>
+      <td>${doc.uploaded_by || ''}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+document.querySelector('.filter-section form').onsubmit = async function(e) {
+  e.preventDefault();
+  const docs = await fetchDocuments();
+  renderDocumentsTable(docs);
+};
+
+// Initial load
+window.addEventListener('DOMContentLoaded', async () => {
+  const docs = await fetchDocuments();
+  console.log(docs); // Debug: See what is fetched
+  renderDocumentsTable(docs);
+});
+
+// View document (simple, for PDFs/images)
+function viewDocument(path) {
+  window.open(path, '_blank');
+}
+
+// Review modal (approve/reject)
+function showReviewModal(id) {
+  const modal = document.createElement('div');
+  modal.style.position = 'fixed';
+  modal.style.top = 0;
+  modal.style.left = 0;
+  modal.style.right = 0;
+  modal.style.bottom = 0;
+  modal.style.background = 'rgba(30,41,59,0.45)';
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.style.zIndex = 1000;
+  modal.innerHTML = `
+    <div style="background:#fff;max-width:400px;width:95%;border-radius:10px;padding:24px 20px;position:relative;">
+      <button onclick="this.parentNode.parentNode.remove()" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+      <h2>Review Document</h2>
+      <textarea id="adminRemarks" placeholder="Remarks (optional)" style="width:100%;min-height:60px;"></textarea>
+      <div style="margin-top:12px;text-align:right;">
+        <button onclick="reviewDocument(${id},'approved')">Approve</button>
+        <button onclick="reviewDocument(${id},'rejected')">Reject</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+async function reviewDocument(id, status) {
+  const remarks = document.getElementById('adminRemarks').value;
+  await fetch(`/backend/review_document.php`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id, status, remarks})
+  });
+  document.querySelectorAll('#adminRemarks').forEach(el => el.closest('div[style]').parentNode.remove());
+  const docs = await fetchDocuments();
+  renderDocumentsTable(docs);
+}
+
+async function deleteDocument(id) {
+  if (!confirm('Delete this document?')) return;
+  await fetch(`/backend/delete_document.php?id=${id}`, { method: 'POST' });
+  const docs = await fetchDocuments();
+  renderDocumentsTable(docs);
+}
+</script>
 </body>
 </html>

@@ -20,7 +20,93 @@
   font-size: 1.1rem;
   gap: 10px;
 }
+.program-card-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .program-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0001;
+    width: 320px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .program-card:hover {
+    box-shadow: 0 4px 16px #0002;
+  }
+  .program-card .status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.9em;
+    padding: 0.2em 0.7em;
+    border-radius: 1em;
+    color: #fff;
+  }
+  .program-card .status.active { background: #28a745; }
+  .program-card .status.inactive { background: #aaa; }
+  .program-card .card-title { font-size: 1.2em; font-weight: bold; margin-bottom: 0.3em; }
+  .program-card .card-meta { font-size: 0.95em; color: #555; margin-bottom: 0.5em; }
+  .program-card .card-actions { margin-top: 1em; }
+  .program-card .expand-details { color: #007bff; cursor: pointer; font-size: 0.95em; }
+  .program-card .card-details { display: none; margin-top: 0.7em; font-size: 0.97em; }
+  .program-card.expanded .card-details { display: block; }
+  .my-programs-list { display: flex; flex-direction: column; gap: 1.2rem; }
+  .my-program-card { background: #f8f9fa; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 4px #0001; }
+  .my-program-card .card-title { font-weight: bold; }
+  .my-program-card .card-meta { font-size: 0.95em; color: #555; }
+  .my-program-card .attendance-bar { background: #e9ecef; border-radius: 4px; overflow: hidden; margin: 0.5em 0; height: 12px; }
+  .my-program-card .attendance-bar-inner { background: #28a745; height: 100%; }
+  .enroll-btn {
+    background: linear-gradient(90deg, #28a745 60%, #218838 100%);
+    color: #fff;
+    border: none;
+    padding: 0.55em 1.3em;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #28a74522;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin-right: 0.7em;
+    letter-spacing: 0.02em;
+  }
 
+  .enroll-btn:hover, .enroll-btn:focus {
+    background: linear-gradient(90deg, #218838 60%, #28a745 100%);
+    box-shadow: 0 4px 16px #28a74533;
+    transform: translateY(-2px) scale(1.04);
+    outline: none;
+  }
+
+  .mini-tabs {
+    margin: 1.5em 0;
+    display: flex;
+    gap: 0.5rem;
+  }
+  .mini-tabs button {
+    flex: 1;
+    padding: 0.7em;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .mini-tabs button:hover {
+    background: #0056b3;
+  }
+  #program-list {
+    display: none;
+    margin-top: 1em;
+  }
 .loading .spinner {
   width: 24px;
   height: 24px;
@@ -290,4 +376,258 @@ tr:last-child td {
 .page-btn:hover {
   background: #fff1a5;
   color: #005c00;
+}
+
+/* Place in Programs.css */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-bottom {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  color: #005c00;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.user-info i {
+  font-size: 1.6rem;
+  color: #4b5600;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff1a5;
+  color: #4b5600;
+  border: none;
+  border-radius: 16px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.logout-btn:hover {
+  background: #fce373;
+  color: #257a1c;
+}
+
+.nav-item i {
+  margin-right: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem 2.5rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 4px 24px #0002;
+  position: relative;
+  animation: modalIn .2s;
+}
+@keyframes modalIn {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.btn-confirm {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-cancel {
+  background: #eee;
+  color: #333;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-confirm:hover { background: #218838; }
+.btn-cancel:hover { background: #ccc; }
+
+
+/* My Programs Card Styles */
+.my-programs-list, .my-programs-container {
+  display: flex;
+  flex-direction: column; /* Stack vertically, but cards will be full width */
+  gap: 18px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.my-program-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1.2em 1.5em;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  border-left: 6px solid #28a745; /* default green, override for ended */
+  transition: box-shadow 0.2s, transform 0.2s;
+  min-height: 60px;
+}
+
+.my-program-card.ended {
+  border-left-color: #dc3545;
+}
+
+.my-program-card:hover {
+  box-shadow: 0 6px 18px #0002;
+  transform: translateY(-2px) scale(1.01);
+}
+
+.card-title {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin-right: 1em;
+  flex: 1;
+  color: #222;
+}
+
+.program-status {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95em;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.2em 0.9em 0.2em 0.7em;
+  margin-left: 0.5em;
+  box-shadow: 0 1px 4px #0001;
+  background: #eafbee;
+  color: #28a745;
+  gap: 0.4em;
+}
+
+.program-status.status-ended {
+  background: #fbeaea;
+  color: #dc3545;
+}
+
+.program-status .status-icon {
+  font-size: 1.1em;
+  margin-right: 0.3em;
+}
+
+.program-schedule {
+  font-size: 0.95em;
+  color: #888;
+  margin-top: 0.2em;
+  margin-left: 0.2em;
+}
+
+.program-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1.2em 1.5em;
+  margin-bottom: 1em;
+  min-height: 120px;
+}
+
+.program-card .card-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin-bottom: 0.3em;
+}
+
+.program-card .card-meta {
+  font-size: 0.97em;
+  color: #555;
+  margin-bottom: 0.7em;
+}
+
+.program-card .card-actions {
+  margin-top: 1em;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+
+.enroll-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.4em 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.enroll-btn:hover, .enroll-btn:focus {
+  background: #218838;
+}
+
+.status-badge {
+  border-radius: 999px;
+  padding: 0.3em 1em;
+  font-size: 0.95em;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.status-badge.enrolled {
+  background: #e2e3e5;
+  color: #495057;
+  border: 1px solid #d6d8db;
 }

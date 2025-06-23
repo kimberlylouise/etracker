@@ -21,8 +21,7 @@
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-    <a href="Settings.html"><i class="fas fa-cogs"></i> Settings</a>
-    <a href="Support.html."><i class="fas fa-question-circle"></i> Help & Support</a>
+ 
   </div>
 
   <div class="main">
@@ -81,11 +80,17 @@
     </div>
   </div>
   
-        <button class="btn"><i class="fas fa-file-download"></i> Export Report</button>
+        <button class="btn" onclick="exportAttendanceSummary()">Export Summary</button>
     </div>
     
+    <!-- Program Attendance Overview -->
     <div class="attendance-summary">
       <h2>Program Attendance Overview</h2>
+      <div class="filter-date">
+        <label>From: <input type="date" id="filterFrom"></label>
+        <label>To: <input type="date" id="filterTo"></label>
+        <button onclick="loadProgramAttendanceOverview()">Filter</button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -95,28 +100,10 @@
             <th>Present</th>
             <th>Absent</th>
             <th>Attendance %</th>
-            <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Community Health Seminar</td>
-            <td>May 15, 2025</td>
-            <td>50</td>
-            <td>46</td>
-            <td>4</td>
-            <td>92%</td>
-            <td><button class="btn-sm">View Logs</button></td>
-          </tr>
-          <tr>
-            <td>Environmental Awareness Drive</td>
-            <td>May 10, 2025</td>
-            <td>60</td>
-            <td>58</td>
-            <td>2</td>
-            <td>97%</td>
-            <td><button class="btn-sm">View Logs</button></td>
-          </tr>
+        <tbody id="programOverviewBody">
+          <!-- JS will populate rows here -->
         </tbody>
       </table>
     </div>
@@ -135,53 +122,31 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Ana Dela Cruz</td>
-            <td>2021-04123</td>
-            <td>Community Health Seminar</td>
-            <td>May 15, 2025</td>
-            <td>09:00 AM</td>
-            <td><span class="status present">Present</span></td>
-          </tr>
-          <tr>
-            <td>Juan Santos</td>
-            <td>2021-04256</td>
-            <td>Community Health Seminar</td>
-            <td>May 15, 2025</td>
-            <td>09:15 AM</td>
-            <td><span class="status late">Late</span></td>
-          </tr>
-          <tr>
-            <td>Maria Reyes</td>
-            <td>2021-04110</td>
-            <td>Environmental Awareness Drive</td>
-            <td>May 10, 2025</td>
-            <td>08:50 AM</td>
-            <td><span class="status present">Present</span></td>
-          </tr>
+          <!-- JS will populate rows here -->
         </tbody>
       </table>
     </div>
 
     <div class="role-insights">
-        <h2>Role-Based Attendance Insights</h2>
-        <div class="insight-cards">
-          <div class="card">
-            <h3>👩‍🎓 Students</h3>
-            <p>Total Students: <span id="studentTotal">0</span></p>
-            <p>Avg Attendance: <span id="studentAvg">0%</span></p>
-            <p>Sessions Tracked: <span id="studentSessions">0</span></p>
-          </div>
-      
-          <div class="card">
-            <h3>🧑‍🏫 Faculty</h3>
-            <p>Total Faculty: <span id="facultyTotal">0</span></p>
-            <p>Avg Attendance: <span id="facultyAvg">0%</span></p>
-            <p>Sessions Tracked: <span id="facultySessions">0</span></p>
-          </div>
+      <h2>Role-Based Attendance Insights</h2>
+      <div class="insight-cards">
+        <div class="card">
+          <h3>👩‍🎓 Students</h3>
+          <p>Total Students: <span id="studentTotal">0</span></p>
+          <p>Avg Attendance: <span id="studentAvg">0%</span></p>
+          <p>Sessions Tracked: <span id="studentSessions">0</span></p>
+        </div>
+
+        <div class="card">
+          <h3>🧑‍🏫 Faculty</h3>
+          <p>Total Faculty: <span id="facultyTotal">0</span></p>
+          <p>Avg Attendance: <span id="facultyAvg">0%</span></p>
+          <p>Sessions Tracked: <span id="facultySessions">0</span></p>
         </div>
       </div>
+    </div>
       
+      <!-- <canvas id="attendanceChart" width="400" height="120" style="margin:30px 0;"></canvas> -->
 </div>
 
     
@@ -197,19 +162,32 @@
       
         document.getElementById('manualEntryForm').addEventListener('submit', function (e) {
           e.preventDefault();
-      
-          const role = document.getElementById('participantRole').value;
-          const id = document.getElementById('studentId').value;
-          const name = document.getElementById('studentName').value;
-          const program = document.getElementById('programName').value;
-          const date = document.getElementById('attendanceDate').value;
+
+          const student_name = document.getElementById('studentName').value;
+          const program_id = document.getElementById('programName').value;
           const status = document.getElementById('status').value;
-      
-          // For now, just log to console or alert
-          alert(`Saved Attendance:\n${role} - ${name} (${id})\nProgram: ${program}\nDate: ${date}\nStatus: ${status}`);
-      
-          // Here you can send this data to your server via fetch/AJAX
-          closeModal();
+          const date = document.getElementById('attendanceDate').value;
+          const time_in = new Date().toLocaleTimeString('en-GB', { hour12: false }); // current time
+
+          const formData = new FormData();
+          formData.append('action', 'add_attendance');
+          formData.append('student_name', student_name);
+          formData.append('program_id', program_id);
+          formData.append('status', status);
+          formData.append('date', date);
+          formData.append('time_in', time_in);
+
+          fetch('api_attendance.php', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(res => {
+              if (res.success) {
+                alert('Attendance saved!');
+                closeModal();
+                loadAttendanceLogs();
+              } else {
+                alert('Failed to save attendance.');
+              }
+            });
         });
 
      
@@ -260,9 +238,116 @@
         calculateRoleInsights(attendanceLogs);
 
 
-        
+        function populateProgramsDropdown() {
+  fetch('api_attendance.php?action=get_programs')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const select = document.getElementById('programName');
+        select.innerHTML = '<option value="">Select a Program</option>';
+        data.data.forEach(program => {
+          const option = document.createElement('option');
+          option.value = program.id;
+          option.textContent = program.program_name;
+          select.appendChild(option);
+        });
+      }
+    });
+}
+populateProgramsDropdown();
+
+function loadAttendanceLogs() {
+  fetch('api_attendance.php?action=get_logs')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const tbody = document.querySelector('.attendance-logs tbody');
+        tbody.innerHTML = '';
+        data.data.forEach(log => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${log.student_name}</td>
+              <td>-</td>
+              <td>${log.program_name || ''}</td>
+              <td>${log.date}</td>
+              <td>${log.time_in || ''}</td>
+              <td><span class="status ${log.status.toLowerCase()}">${log.status}</span></td>
+            </tr>
+          `;
+        });
+      }
+    });
+}
+loadAttendanceLogs();
+
+
+function loadProgramAttendanceOverview() {
+  fetch('api_attendance.php?action=get_program_summary')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const tbody = document.getElementById('programOverviewBody');
+        tbody.innerHTML = '';
+        let totalRegistered = 0, totalPresent = 0, totalAbsent = 0, percentSum = 0, count = 0;
+        const labels = [];
+        const percents = [];
+
+        data.data.forEach(row => {
+          const highlight = row.attendance_percent < 75 ? ' style="background:#ffe5e5;"' : '';
+          tbody.innerHTML += `
+            <tr${highlight}>
+              <td>${row.program_name}</td>
+              <td>${row.date}</td>
+              <td>${row.registered}</td>
+              <td>${row.present}</td>
+              <td>${row.absent}</td>
+              <td>${row.attendance_percent}%</td>
+            </tr>
+          `;
+          totalRegistered += parseInt(row.registered);
+          totalPresent += parseInt(row.present);
+          totalAbsent += parseInt(row.absent);
+          percentSum += parseInt(row.attendance_percent);
+          count++;
+          labels.push(`${row.program_name} (${row.date})`);
+          percents.push(row.attendance_percent);
+        });
+
+        // Add totals row
+        const avgPercent = count > 0 ? Math.round(percentSum / count) : 0;
+        tbody.innerHTML += `
+          <tr style="font-weight:bold;background:#f7f7b6;">
+            <td>Total</td>
+            <td>-</td>
+            <td>${totalRegistered}</td>
+            <td>${totalPresent}</td>
+            <td>${totalAbsent}</td>
+            <td>${avgPercent}%</td>
+          </tr>
+        `;
+      }
+    });
+}
+loadProgramAttendanceOverview();
+
+
+function animateValue(id, start, end, duration) {
+  const obj = document.getElementById(id);
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerText = Math.floor(progress * (end - start) + start);
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      obj.innerText = end;
+    }
+  };
+  window.requestAnimationFrame(step);
+}
+// Usage: animateValue('studentTotal', 0, roles.Student.total, 800);
       </script>
-      
       
 </body>
 </html>

@@ -81,6 +81,14 @@ h1 {
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
   
+  .attendance-summary, .role-insights .card {
+    background: linear-gradient(135deg, #f8fafc 60%, #e0f7fa 100%);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
   table {
     width: 100%;
     border-collapse: collapse;
@@ -232,4 +240,17 @@ h1 {
     font-size: 14px;
     margin: 4px 0;
   }
-  
+
+  /* Add to Attendance.css */
+tr[style*="background:#ffe5e5;"] {
+  animation: pulse 1.5s infinite alternate;
+}
+@keyframes pulse {
+  from { background-color: #ffe5e5; }
+  to   { background-color: #fff0f0; }
+}
+
+.attendance-summary table tbody tr:hover {
+  background: #e3f2fd;
+  transition: background 0.3s;
+}

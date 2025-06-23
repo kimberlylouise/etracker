@@ -192,6 +192,33 @@
     background-color: #14532d;
   }
   
+  /* ====== TABLE STYLES ====== */
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 15px;
+  }
+  
+  .report-table th, .report-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  
+  .report-table th {
+    background: #e9f7d0;
+    color: #1B472B;
+    font-weight: 700;
+  }
+  
+  .report-table tr:last-child td {
+    border-bottom: none;
+  }
+  
   /* ====== RESPONSIVE (optional) ====== */
   @media (max-width: 900px) {
     .report-layout {
@@ -202,4 +229,3 @@
       width: 100%;
     }
   }
-  
