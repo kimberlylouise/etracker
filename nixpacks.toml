@@ -1,9 +1,8 @@
-# Railway will auto-detect PHP based on composer.json
-# This file specifies the PHP version for Railway
+# Railway configuration for PHP 8.2
 providers = ["php"]
 
 [phases.setup]
-nixPkgs = ["php81", "php81Packages.composer"]
+nixPkgs = ["php82", "php82Packages.composer"]
 
 [phases.build]
 cmds = ["composer install --no-dev --optimize-autoloader"]
