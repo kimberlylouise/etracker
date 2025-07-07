@@ -11,11 +11,39 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
+  <style>
+    .needs-attention {
+      background-color: #fff5f5 !important;
+      border-left: 4px solid #e74c3c;
+    }
+    .attention-icon {
+      margin-left: 8px;
+      font-size: 1.1em;
+      cursor: help;
+    }
+    .btn-warning {
+      background-color: #f39c12 !important;
+      color: white !important;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      margin-left: 4px;
+    }
+    .btn-warning:hover {
+      background-color: #e67e22 !important;
+    }
+    .evaluation-table tbody tr.needs-attention:hover {
+      background-color: #ffeaea !important;
+    }
+  </style>
   <div class="sidebar">
     <h2>eTracker Admin</h2>
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
     <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
@@ -32,130 +60,340 @@
     <section class="evaluation-section">
 
       <!-- Filters -->
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
-        <select id="filterProgram">
-          <option value="">All Programs</option>
-        </select>
-        <input type="date" id="filterStart" />
-        <input type="date" id="filterEnd" />
-        <input type="text" id="filterStudent" placeholder="Search Student" style="padding:4px 8px;" />
-        <button class="btn" onclick="applyFilters()">Apply Filters</button>
-        <button class="btn" onclick="resetFilters()">Reset</button>
+      <div class="filter-section">
+        <h3>🔍 Filter & Search</h3>
+        <div class="filter-controls">
+          <select id="filterProgram">
+            <option value="">All Programs</option>
+          </select>
+          <select id="filterRating">
+            <option value="">All Ratings</option>
+            <option value="excellent">Excellent (4.0-5.0)</option>
+            <option value="good">Good (3.0-3.9)</option>
+            <option value="average">Average (2.0-2.9)</option>
+            <option value="poor">Poor (1.0-1.9)</option>
+            <option value="critical">Critical (0.0-0.9)</option>
+          </select>
+          <input type="date" id="filterStart" placeholder="Start Date" />
+          <input type="date" id="filterEnd" placeholder="End Date" />
+          <input type="text" id="filterStudent" placeholder="Search Student" />
+          <button class="btn" onclick="applyFilters()">
+            <i class="fas fa-filter"></i> Apply Filters
+          </button>
+          <button class="btn" onclick="resetFilters()" style="background:#6c757d;">
+            <i class="fas fa-undo"></i> Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Rating Overview Dashboard -->
+      <div id="ratingOverview" class="rating-dashboard" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;">
+        <!-- Will be populated by JavaScript -->
       </div>
 
       <!-- Summary -->
-      <div id="evalSummary" style="margin-bottom:12px;font-weight:500;"></div>
+      <div id="evalSummary" style="margin-bottom:12px;font-weight:500;background:#e8f5e8;padding:12px;border-radius:6px;border-left:4px solid #1B472B;"></div>
 
-      <!-- Export Buttons -->
-      <div style="margin-bottom:12px;">
-        <button class="btn" onclick="exportEvaluations('pdf')"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+      <!-- Export & Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-pdf" onclick="exportEvaluations('pdf')">
+          <i class="fas fa-file-pdf"></i> Export PDF
+        </button>
+        <button class="btn btn-excel" onclick="exportEvaluations('excel')">
+          <i class="fas fa-file-excel"></i> Export Excel
+        </button>
+        <button class="btn btn-quality" onclick="generateQualityReport()">
+          <i class="fas fa-chart-line"></i> Quality Report
+        </button>
+        <button class="btn btn-bulk" onclick="sendBulkSuggestions()">
+          <i class="fas fa-envelope"></i> Send Bulk Suggestions
+        </button>
       </div>
 
       <!-- Chart -->
       <canvas id="avgRatingChart" height="80" style="margin-bottom:18px;"></canvas>
 
-      <!-- Table -->
-      <table class="evaluation-table">
-        <thead>
-          <tr>
-            <th>Program Name</th>
-            <th>Type</th>
-            <th>Student</th>
-            <th>Average Rating</th>
-            <th>Date</th>
-            <th>Reviewed</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- JS will populate this -->
-        </tbody>
-      </table>
+      <!-- Enhanced Table -->
+      <div style="background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);overflow:hidden;">
+        <table class="evaluation-table" style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#1B472B;color:white;">
+              <th style="padding:12px;text-align:left;border-bottom:1px solid #ddd;">Program Name</th>
+              <th style="padding:12px;text-align:left;border-bottom:1px solid #ddd;">Student</th>
+              <th style="padding:12px;text-align:center;border-bottom:1px solid #ddd;">Individual Rating</th>
+              <th style="padding:12px;text-align:center;border-bottom:1px solid #ddd;">Program Avg</th>
+              <th style="padding:12px;text-align:center;border-bottom:1px solid #ddd;">Quality Status</th>
+              <th style="padding:12px;text-align:left;border-bottom:1px solid #ddd;">Date</th>
+              <th style="padding:12px;text-align:center;border-bottom:1px solid #ddd;">Admin Status</th>
+              <th style="padding:12px;text-align:center;border-bottom:1px solid #ddd;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- JS will populate this -->
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 
 <script>
 let allEvaluations = [];
 let filteredEvaluations = [];
+let programSuggestions = {}; // Store admin suggestions for programs
 
+// Fetch evaluations from the database
 async function fetchEvaluations() {
-  const res = await fetch('/backend/get_evaluations.php');
-  return res.json();
+  try {
+    const response = await fetch('api_evaluations.php?action=evaluations');
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.error || 'Failed to fetch evaluations');
+    }
+    
+    if (!result.success) {
+      throw new Error(result.error || 'API returned error');
+    }
+    
+    console.log('Successfully fetched', result.data.length, 'evaluation records');
+    return result.data || [];
+  } catch (error) {
+    console.error('Error in fetchEvaluations:', error);
+    showToast('Error loading evaluation data: ' + error.message, 'error');
+    return [];
+  }
 }
 
-function populateProgramFilter(evaluations) {
-  const select = document.getElementById('filterProgram');
-  const programs = [...new Set(evaluations.map(ev => ev.program_name).filter(Boolean))];
-  select.innerHTML = `<option value="">All Programs</option>` +
-    programs.map(p => `<option value="${p}">${p}</option>`).join('');
+async function populateProgramFilter(evaluations) {
+  try {
+    // Fetch programs from API for more accurate data
+    const response = await fetch('api_evaluations.php?action=programs');
+    const result = await response.json();
+    
+    let programs = [];
+    if (response.ok && result.success) {
+      programs = result.data;
+    } else {
+      // Fallback to extracting from evaluations data
+      programs = [...new Set(evaluations.map(ev => ev.program_name).filter(Boolean))];
+    }
+    
+    const select = document.getElementById('filterProgram');
+    select.innerHTML = `<option value="">All Programs</option>` +
+      programs.map(p => `<option value="${p}">${p}</option>`).join('');
+  } catch (error) {
+    console.error('Error populating program filter:', error);
+    // Fallback to extracting from evaluations data
+    const select = document.getElementById('filterProgram');
+    const programs = [...new Set(evaluations.map(ev => ev.program_name).filter(Boolean))];
+    select.innerHTML = `<option value="">All Programs</option>` +
+      programs.map(p => `<option value="${p}">${p}</option>`).join('');
+  }
 }
 
 function applyFilters() {
   const prog = document.getElementById('filterProgram').value;
+  const rating = document.getElementById('filterRating').value;
   const start = document.getElementById('filterStart').value;
   const end = document.getElementById('filterEnd').value;
   const student = document.getElementById('filterStudent').value.trim().toLowerCase();
 
   filteredEvaluations = allEvaluations.filter(ev => {
     let ok = true;
+    
+    // Program filter
     if (prog && ev.program_name !== prog) ok = false;
+    
+    // Rating filter
+    if (rating) {
+      const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+      const avg = ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+      
+      switch (rating) {
+        case 'excellent': if (avg < 4.0) ok = false; break;
+        case 'good': if (avg < 3.0 || avg >= 4.0) ok = false; break;
+        case 'average': if (avg < 2.0 || avg >= 3.0) ok = false; break;
+        case 'poor': if (avg < 1.0 || avg >= 2.0) ok = false; break;
+        case 'critical': if (avg >= 1.0) ok = false; break;
+      }
+    }
+    
+    // Date filters
     if (start && (!ev.eval_date || ev.eval_date < start)) ok = false;
     if (end && (!ev.eval_date || ev.eval_date > end)) ok = false;
+    
+    // Student filter
     if (student && (!ev.student_name || !ev.student_name.toLowerCase().includes(student))) ok = false;
+    
     return ok;
   });
+  
   renderEvaluationsTable(filteredEvaluations);
   renderSummary(filteredEvaluations);
+  renderRatingOverview(filteredEvaluations);
   renderChart(filteredEvaluations);
 }
 
 function resetFilters() {
   document.getElementById('filterProgram').value = '';
+  document.getElementById('filterRating').value = '';
   document.getElementById('filterStart').value = '';
   document.getElementById('filterEnd').value = '';
   document.getElementById('filterStudent').value = '';
+  
   filteredEvaluations = allEvaluations;
   renderEvaluationsTable(filteredEvaluations);
   renderSummary(filteredEvaluations);
+  renderRatingOverview(filteredEvaluations);
   renderChart(filteredEvaluations);
 }
 
 function renderSummary(evaluations) {
-  const avg = evaluations.length
-    ? (evaluations.reduce((sum, ev) => {
-        const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
-        return sum + ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
-      }, 0) / evaluations.length).toFixed(2)
-    : '0.00';
-  document.getElementById('evalSummary').textContent =
-    `Showing ${evaluations.length} evaluations | Avg. Rating: ${avg}`;
+  try {
+    const avg = evaluations.length
+      ? (evaluations.reduce((sum, ev) => {
+          const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+          return sum + ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+        }, 0) / evaluations.length).toFixed(2)
+      : '0.00';
+    
+    const needsAttention = evaluations.filter(ev => {
+      const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+      const evAvg = ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+      return evAvg < 2.5;
+    }).length;
+    
+    const summaryContainer = document.getElementById('evalSummary');
+    if (summaryContainer) {
+      summaryContainer.innerHTML = `
+        📊 <strong>Evaluation Summary:</strong> 
+        Showing ${evaluations.length} evaluations | 
+        Overall Average: <strong>${avg}/5.0</strong> | 
+        ${needsAttention > 0 ? `<span style="color:#e74c3c;">⚠️ ${needsAttention} evaluations need attention</span>` : '✅ All evaluations are satisfactory'}
+      `;
+    }
+  } catch (error) {
+    console.error('Error rendering summary:', error);
+    const summaryContainer = document.getElementById('evalSummary');
+    if (summaryContainer) {
+      summaryContainer.innerHTML = '<strong style="color:#e74c3c;">⚠️ Error loading evaluation summary</strong>';
+    }
+  }
+}
+
+function renderRatingOverview(evaluations) {
+  try {
+    const categories = {
+      excellent: { count: 0, color: '#27ae60', label: 'Excellent', range: '4.0-5.0' },
+      good: { count: 0, color: '#3498db', label: 'Good', range: '3.0-3.9' },
+      average: { count: 0, color: '#f39c12', label: 'Average', range: '2.0-2.9' },
+      poor: { count: 0, color: '#e74c3c', label: 'Poor', range: '1.0-1.9' },
+      critical: { count: 0, color: '#8e44ad', label: 'Critical', range: '0.0-0.9' }
+    };
+    
+    evaluations.forEach(ev => {
+      const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+      const avg = ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+      
+      if (avg >= 4.0) categories.excellent.count++;
+      else if (avg >= 3.0) categories.good.count++;
+      else if (avg >= 2.0) categories.average.count++;
+      else if (avg >= 1.0) categories.poor.count++;
+      else categories.critical.count++;
+    });
+    
+    const overviewHtml = Object.entries(categories).map(([key, cat]) => `
+      <div class="rating-card" style="border-left: 4px solid ${cat.color};">
+        <div class="rating-count" style="color: ${cat.color};">${cat.count}</div>
+        <div class="rating-label">${cat.label}</div>
+        <div class="rating-range">${cat.range}</div>
+      </div>
+    `).join('');
+    
+    const overviewContainer = document.getElementById('ratingOverview');
+    if (overviewContainer) {
+      overviewContainer.innerHTML = overviewHtml;
+    }
+  } catch (error) {
+    console.error('Error rendering rating overview:', error);
+    const overviewContainer = document.getElementById('ratingOverview');
+    if (overviewContainer) {
+      overviewContainer.innerHTML = '<div style="text-align:center;color:#e74c3c;padding:20px;">Error loading rating overview</div>';
+    }
+  }
+}
+
+function getRatingCategory(avg) {
+  if (avg >= 4.0) return { status: 'excellent', color: '#27ae60', text: 'Excellent' };
+  if (avg >= 3.0) return { status: 'good', color: '#3498db', text: 'Good' };
+  if (avg >= 2.0) return { status: 'average', color: '#f39c12', text: 'Average' };
+  if (avg >= 1.0) return { status: 'poor', color: '#e74c3c', text: 'Poor' };
+  return { status: 'critical', color: '#8e44ad', text: 'Critical' };
 }
 
 function renderEvaluationsTable(evaluations) {
   const tbody = document.querySelector('.evaluation-table tbody');
   tbody.innerHTML = '';
+  
   if (!evaluations.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#888;">No evaluations found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#888;padding:20px;">No evaluations found.</td></tr>`;
     return;
   }
+  
+  // Calculate program averages
+  const programAverages = calculateProgramAverages(evaluations);
+  
   evaluations.forEach(ev => {
     const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
-    const avg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length).toFixed(2);
+    const individualAvg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length);
+    const programAvg = programAverages[ev.program_name] || 0;
+    
+    const individualCategory = getRatingCategory(individualAvg);
+    const programCategory = getRatingCategory(programAvg);
+    
+    const needsAttention = individualAvg < 2.5 || programAvg < 2.5;
+    
     tbody.innerHTML += `
-      <tr>
-        <td>${ev.program_name || 'N/A'}</td>
-        <td>Student</td>
-        <td>${ev.student_name}</td>
-        <td>${avg} / 5</td>
-        <td>${ev.eval_date ? ev.eval_date.split(' ')[0] : ''}</td>
-        <td>
-          <span class="reviewed-status" style="color:${ev.reviewed == 1 ? '#1B472B' : '#888'};">
-            ${ev.reviewed == 1 ? 'Reviewed' : 'Pending'}
+      <tr style="border-bottom:1px solid #eee;${needsAttention ? 'background-color:#fff5f5;' : ''}">
+        <td style="padding:12px;border-bottom:1px solid #eee;">
+          <strong>${ev.program_name || 'N/A'}</strong>
+          ${needsAttention ? '<span style="color:#e74c3c;margin-left:8px;" title="Needs attention">⚠️</span>' : ''}
+        </td>
+        <td style="padding:12px;border-bottom:1px solid #eee;">${ev.student_name}</td>
+        <td style="padding:12px;text-align:center;border-bottom:1px solid #eee;">
+          <div style="background:${individualCategory.color};color:white;padding:4px 8px;border-radius:12px;display:inline-block;font-weight:bold;">
+            ${individualAvg.toFixed(1)}/5.0
+          </div>
+          <div style="font-size:0.8em;color:${individualCategory.color};font-weight:bold;margin-top:2px;">
+            ${individualCategory.text}
+          </div>
+        </td>
+        <td style="padding:12px;text-align:center;border-bottom:1px solid #eee;">
+          <div style="background:${programCategory.color};color:white;padding:4px 8px;border-radius:12px;display:inline-block;font-weight:bold;">
+            ${programAvg.toFixed(1)}/5.0
+          </div>
+          <div style="font-size:0.8em;color:${programCategory.color};font-weight:bold;margin-top:2px;">
+            ${programCategory.text}
+          </div>
+        </td>
+        <td style="padding:12px;text-align:center;border-bottom:1px solid #eee;">
+          <span style="background:${needsAttention ? '#e74c3c' : '#27ae60'};color:white;padding:4px 8px;border-radius:8px;font-size:0.85em;font-weight:bold;">
+            ${needsAttention ? 'NEEDS ATTENTION' : 'SATISFACTORY'}
           </span>
         </td>
-        <td>
-          <button class="btn-small" onclick="showEvaluationDetails(${ev.id})">View</button>
-          ${ev.reviewed == 1 ? '' : `<button class="btn-small" onclick="markReviewed(${ev.id})">Mark as Reviewed</button>`}
+        <td style="padding:12px;border-bottom:1px solid #eee;">${ev.eval_date ? new Date(ev.eval_date).toLocaleDateString() : ''}</td>
+        <td style="padding:12px;text-align:center;border-bottom:1px solid #eee;">
+          <span style="color:${ev.reviewed == 1 ? '#27ae60' : '#f39c12'};font-weight:bold;">
+            ${ev.reviewed == 1 ? '✅ Reviewed' : '⏳ Pending'}
+          </span>
+          ${ev.admin_suggestion ? '<br><span style="color:#3498db;font-size:0.8em;">💬 Suggestion Sent</span>' : ''}
+        </td>
+        <td style="padding:12px;text-align:center;border-bottom:1px solid #eee;">
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+            <button onclick="showEvaluationDetails(${ev.id})" style="background:#17a2b8;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.8em;width:60px;">View</button>
+            ${!ev.reviewed ? `<button onclick="markReviewed(${ev.id})" style="background:#28a745;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.8em;width:60px;">Review</button>` : ''}
+            ${needsAttention ? `<button onclick="addAdminSuggestion(${ev.id}, '${ev.program_name}')" style="background:#e74c3c;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.8em;width:60px;">Suggest</button>` : ''}
+          </div>
         </td>
       </tr>
     `;
@@ -163,82 +401,494 @@ function renderEvaluationsTable(evaluations) {
 }
 
 function renderChart(evaluations) {
-  const ctx = document.getElementById('avgRatingChart').getContext('2d');
-  if (window.avgRatingChart) window.avgRatingChart.destroy();
-  // Group by program
-  const progMap = {};
-  evaluations.forEach(ev => {
-    if (!progMap[ev.program_name]) progMap[ev.program_name] = [];
-    const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
-    progMap[ev.program_name].push(ratings.reduce((a, b) => a + Number(b), 0) / ratings.length);
-  });
-  const labels = Object.keys(progMap);
-  const data = labels.map(p => {
-    const arr = progMap[p];
-    return arr.reduce((a, b) => a + b, 0) / arr.length;
-  });
-  window.avgRatingChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Avg. Rating',
-        data,
-        backgroundColor: '#1B472B'
-      }]
-    },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: { y: { min: 0, max: 5 } }
+  try {
+    const ctx = document.getElementById('avgRatingChart').getContext('2d');
+    if (window.avgRatingChart) window.avgRatingChart.destroy();
+    
+    // Group by program and calculate averages
+    const progMap = {};
+    evaluations.forEach(ev => {
+      if (!progMap[ev.program_name]) progMap[ev.program_name] = [];
+      const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+      progMap[ev.program_name].push(ratings.reduce((a, b) => a + Number(b), 0) / ratings.length);
+    });
+    
+    const labels = Object.keys(progMap);
+    const data = labels.map(p => {
+      const arr = progMap[p];
+      return arr.reduce((a, b) => a + b, 0) / arr.length;
+    });
+    
+    // Color-code bars based on rating
+    const backgroundColors = data.map(rating => {
+      if (rating >= 4.0) return '#27ae60';
+      if (rating >= 3.0) return '#3498db';
+      if (rating >= 2.0) return '#f39c12';
+      if (rating >= 1.0) return '#e74c3c';
+      return '#8e44ad';
+    });
+    
+    window.avgRatingChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Avg. Rating',
+          data,
+          backgroundColor: backgroundColors,
+          borderColor: backgroundColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { 
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Program Average Ratings'
+          }
+        },
+        scales: { 
+          y: { 
+            min: 0, 
+            max: 5,
+            ticks: {
+              stepSize: 0.5
+            }
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error rendering chart:', error);
+    // Hide chart canvas if there's an error
+    const canvas = document.getElementById('avgRatingChart');
+    if (canvas) {
+      canvas.style.display = 'none';
     }
-  });
+  }
 }
 
-// Export (dummy, implement backend for real export)
+// Enhanced Export Functions
 function exportEvaluations(type) {
-  if (type !== 'pdf') return;
+  if (type === 'pdf') {
+    exportToPDF();
+  } else if (type === 'excel') {
+    exportToExcel();
+  }
+}
+
+function exportToPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  // Table headers
-  const headers = [["Program Name", "Type", "Student", "Avg. Rating", "Date", "Reviewed"]];
-  // Table rows
+  // Title
+  doc.setFontSize(18);
+  doc.text("Evaluation Report", 14, 20);
+  
+  // Summary
+  doc.setFontSize(12);
+  const totalEvals = filteredEvaluations.length;
+  const avgRating = totalEvals > 0 ? 
+    (filteredEvaluations.reduce((sum, ev) => {
+      const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+      return sum + ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+    }, 0) / totalEvals).toFixed(2) : '0.00';
+  
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 35);
+  doc.text(`Total Evaluations: ${totalEvals}`, 14, 45);
+  doc.text(`Average Rating: ${avgRating}/5.0`, 14, 55);
+
+  // Table
+  const headers = [["Program", "Student", "Individual Rating", "Date", "Status"]];
   const rows = filteredEvaluations.map(ev => {
     const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
-    const avg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length).toFixed(2);
+    const avg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length).toFixed(1);
     return [
       ev.program_name || 'N/A',
-      "Student",
       ev.student_name,
-      avg + " / 5",
-      ev.eval_date ? ev.eval_date.split(' ')[0] : '',
+      avg + "/5.0",
+      ev.eval_date ? new Date(ev.eval_date).toLocaleDateString() : '',
       ev.reviewed == 1 ? "Reviewed" : "Pending"
     ];
   });
 
-  doc.text("Evaluation Report", 14, 14);
   doc.autoTable({
-    startY: 20,
+    startY: 65,
     head: headers,
     body: rows,
-    styles: { fontSize: 9 }
+    styles: { fontSize: 8 },
+    headStyles: { fillColor: [27, 71, 43] }
   });
 
-  doc.save("evaluations.pdf");
+  doc.save("evaluation_report.pdf");
 }
 
-// Mark as Reviewed (dummy, implement backend for real update)
+function exportToExcel() {
+  // Create CSV data
+  const headers = ['Program Name', 'Student', 'Content', 'Facilitators', 'Relevance', 'Organization', 'Experience', 'Average', 'Date', 'Status'];
+  const csvData = [headers];
+  
+  filteredEvaluations.forEach(ev => {
+    const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+    const avg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length).toFixed(2);
+    csvData.push([
+      ev.program_name || 'N/A',
+      ev.student_name,
+      ev.content,
+      ev.facilitators,
+      ev.relevance,
+      ev.organization,
+      ev.experience,
+      avg,
+      ev.eval_date ? new Date(ev.eval_date).toLocaleDateString() : '',
+      ev.reviewed == 1 ? 'Reviewed' : 'Pending'
+    ]);
+  });
+  
+  // Convert to CSV
+  const csvContent = csvData.map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+  
+  // Download
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'evaluation_data.csv';
+  link.click();
+  window.URL.revokeObjectURL(url);
+}
+
+function generateQualityReport() {
+  const programAverages = calculateProgramAverages(filteredEvaluations);
+  const poorPrograms = Object.entries(programAverages).filter(([_, avg]) => avg < 2.5);
+  
+  let modal = document.getElementById('qualityReportModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'qualityReportModal';
+    modal.style.position = 'fixed';
+    modal.style.top = 0;
+    modal.style.left = 0;
+    modal.style.right = 0;
+    modal.style.bottom = 0;
+    modal.style.background = 'rgba(30,41,59,0.45)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = 1000;
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = `
+    <div style="background:#fff;max-width:700px;width:95%;border-radius:12px;padding:24px;position:relative;max-height:80vh;overflow-y:auto;">
+      <button onclick="document.getElementById('qualityReportModal').style.display='none'" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+      <h2 style="margin-top:0;color:#1B472B;">📊 Program Quality Report</h2>
+      
+      <div style="background:#f8f9fa;border-radius:8px;padding:16px;margin:16px 0;">
+        <h3>📈 Overall Statistics</h3>
+        <p><strong>Total Programs:</strong> ${Object.keys(programAverages).length}</p>
+        <p><strong>Programs Needing Attention:</strong> ${poorPrograms.length}</p>
+        <p><strong>Overall System Rating:</strong> ${Object.values(programAverages).length > 0 ? (Object.values(programAverages).reduce((a,b) => a+b, 0) / Object.values(programAverages).length).toFixed(2) : '0.00'}/5.0</p>
+      </div>
+      
+      ${poorPrograms.length > 0 ? `
+        <div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:16px;margin:16px 0;">
+          <h3 style="color:#e74c3c;">⚠️ Programs Requiring Immediate Attention</h3>
+          <ul>
+            ${poorPrograms.map(([name, avg]) => `
+              <li style="margin-bottom:8px;">
+                <strong>${name}</strong>: ${avg.toFixed(2)}/5.0 
+                <button onclick="addAdminSuggestionByProgram('${name}')" style="background:#e74c3c;color:white;border:none;padding:2px 8px;border-radius:4px;margin-left:8px;cursor:pointer;font-size:0.8em;">Add Suggestion</button>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      ` : '<div style="background:#e8f5e8;border:1px solid #c3e6c3;border-radius:8px;padding:16px;margin:16px 0;color:#27ae60;"><strong>✅ All programs are performing satisfactorily!</strong></div>'}
+      
+      <div style="margin-top:20px;text-align:center;">
+        <button onclick="downloadQualityReport()" style="background:#17a2b8;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;margin-right:10px;">Download Report</button>
+        <button onclick="document.getElementById('qualityReportModal').style.display='none'" style="background:#6c757d;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+function sendBulkSuggestions() {
+  const programAverages = calculateProgramAverages(filteredEvaluations);
+  const poorPrograms = Object.entries(programAverages).filter(([_, avg]) => avg < 2.5);
+  
+  if (poorPrograms.length === 0) {
+    alert('No programs currently need improvement suggestions.');
+    return;
+  }
+  
+  let modal = document.getElementById('bulkSuggestionsModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'bulkSuggestionsModal';
+    modal.style.position = 'fixed';
+    modal.style.top = 0;
+    modal.style.left = 0;
+    modal.style.right = 0;
+    modal.style.bottom = 0;
+    modal.style.background = 'rgba(30,41,59,0.45)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = 1000;
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = `
+    <div style="background:#fff;max-width:600px;width:95%;border-radius:12px;padding:24px;position:relative;">
+      <button onclick="document.getElementById('bulkSuggestionsModal').style.display='none'" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+      <h2 style="margin-top:0;color:#ffc107;">📬 Send Bulk Suggestions</h2>
+      
+      <p>Send improvement suggestions to faculty for the following programs:</p>
+      <ul>
+        ${poorPrograms.map(([name, avg]) => `<li><strong>${name}</strong> (${avg.toFixed(2)}/5.0)</li>`).join('')}
+      </ul>
+      
+      <textarea id="bulkSuggestionText" placeholder="Enter your suggestions for faculty improvement..." style="width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:6px;margin:16px 0;"></textarea>
+      
+      <div style="margin-top:20px;text-align:center;">
+        <button onclick="processBulkSuggestions()" style="background:#ffc107;color:#212529;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;margin-right:10px;">Send Suggestions</button>
+        <button onclick="document.getElementById('bulkSuggestionsModal').style.display='none'" style="background:#6c757d;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+async function processBulkSuggestions() {
+  const suggestionText = document.getElementById('bulkSuggestionText').value.trim();
+  if (!suggestionText) {
+    showToast('Please enter a suggestion message.', 'warning');
+    return;
+  }
+  
+  if (suggestionText.length < 10) {
+    showToast('Please provide a more detailed suggestion (at least 10 characters).', 'warning');
+    return;
+  }
+  
+  try {
+    // Get programs that need suggestions
+    const programAverages = calculateProgramAverages(filteredEvaluations);
+    const poorPrograms = Object.entries(programAverages).filter(([_, avg]) => avg < 2.5);
+    
+    if (poorPrograms.length === 0) {
+      showToast('No programs currently need improvement suggestions.', 'warning');
+      document.getElementById('bulkSuggestionsModal').style.display = 'none';
+      return;
+    }
+    
+    const response = await fetch('api_evaluations.php?action=bulk_suggestions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        suggestion: suggestionText,
+        program_ids: [] // Let API determine which programs need suggestions
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Failed to send bulk suggestions');
+    }
+    
+    // Update local data
+    poorPrograms.forEach(([programName, _]) => {
+      programSuggestions[programName] = {
+        message: suggestionText,
+        date: new Date().toISOString(),
+        admin: 'Admin User'
+      };
+      
+      // Update evaluations for this program
+      allEvaluations.forEach(ev => {
+        if (ev.program_name === programName && !ev.admin_suggestion) {
+          const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+          const avg = ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+          if (avg < 2.5) {
+            ev.admin_suggestion = {
+              message: suggestionText,
+              date: new Date().toISOString(),
+              admin: 'Admin User'
+            };
+          }
+        }
+      });
+    });
+    
+    showToast(result.message || `Suggestions sent to faculty for ${poorPrograms.length} programs.`, 'success');
+    document.getElementById('bulkSuggestionsModal').style.display = 'none';
+    
+    // Refresh the table to show suggestion indicators
+    renderEvaluationsTable(filteredEvaluations);
+  } catch (error) {
+    console.error('Error sending bulk suggestions:', error);
+    showToast('Error sending bulk suggestions: ' + error.message, 'error');
+  }
+}
+
+// Mark as Reviewed
 async function markReviewed(id) {
-  // await fetch('/backend/mark_reviewed.php?id=' + id, { method: 'POST' });
-  const ev = allEvaluations.find(e => e.id == id);
-  if (ev) ev.reviewed = 1;
-  applyFilters();
+  try {
+    const response = await fetch('api_evaluations.php?action=mark_reviewed', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: id })
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Failed to mark as reviewed');
+    }
+    
+    // Update local data
+    const ev = allEvaluations.find(e => e.id == id);
+    if (ev) {
+      ev.reviewed = 1;
+      applyFilters(); // Refresh display
+    }
+    
+    showToast('Evaluation marked as reviewed!', 'success');
+  } catch (error) {
+    console.error('Error marking as reviewed:', error);
+    showToast('Error marking evaluation as reviewed: ' + error.message, 'error');
+  }
 }
 
-// Modal for details
+// Enhanced Toast Notification System
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  // Auto-remove after 3 seconds
+  setTimeout(() => {
+    if (document.body.contains(toast)) {
+      document.body.removeChild(toast);
+    }
+  }, 3000);
+}
+
+// Admin Suggestion Functions
+function addAdminSuggestion(evalId, programName) {
+  let modal = document.getElementById('adminSuggestionModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'adminSuggestionModal';
+    modal.style.position = 'fixed';
+    modal.style.top = 0;
+    modal.style.left = 0;
+    modal.style.right = 0;
+    modal.style.bottom = 0;
+    modal.style.background = 'rgba(30,41,59,0.45)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = 1000;
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = `
+    <div style="background:#fff;max-width:500px;width:95%;border-radius:12px;padding:24px;position:relative;">
+      <button onclick="document.getElementById('adminSuggestionModal').style.display='none'" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+      <h2 style="margin-top:0;color:#e74c3c;">💬 Add Admin Suggestion</h2>
+      
+      <p><strong>Program:</strong> ${programName}</p>
+      <p style="color:#666;">Provide specific suggestions for improvement to the faculty member:</p>
+      
+      <textarea id="adminSuggestionText" placeholder="Enter specific suggestions for improvement..." style="width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:6px;margin:16px 0;"></textarea>
+      
+      <div style="margin-top:20px;text-align:center;">
+        <button onclick="saveAdminSuggestion(${evalId}, '${programName}')" style="background:#e74c3c;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;margin-right:10px;">Send Suggestion</button>
+        <button onclick="document.getElementById('adminSuggestionModal').style.display='none'" style="background:#6c757d;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+async function saveAdminSuggestion(evalId, programName) {
+  const suggestionText = document.getElementById('adminSuggestionText').value.trim();
+  if (!suggestionText) {
+    showToast('Please enter a suggestion message.', 'warning');
+    return;
+  }
+  
+  if (suggestionText.length < 10) {
+    showToast('Please provide a more detailed suggestion (at least 10 characters).', 'warning');
+    return;
+  }
+  
+  try {
+    const response = await fetch('api_evaluations.php?action=add_suggestion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        id: evalId, 
+        suggestion: suggestionText 
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Failed to save suggestion');
+    }
+    
+    // Update local data
+    const ev = allEvaluations.find(e => e.id == evalId);
+    if (ev) {
+      ev.admin_suggestion = {
+        message: suggestionText,
+        date: new Date().toISOString(),
+        admin: 'Admin User'
+      };
+    }
+    
+    // Also save to program suggestions
+    programSuggestions[programName] = {
+      message: suggestionText,
+      date: new Date().toISOString(),
+      admin: 'Admin User'
+    };
+    
+    document.getElementById('adminSuggestionModal').style.display = 'none';
+    showToast('Suggestion sent to faculty!', 'success');
+    
+    // Refresh display
+    applyFilters();
+  } catch (error) {
+    console.error('Error saving suggestion:', error);
+    showToast('Error saving suggestion: ' + error.message, 'error');
+  }
+}
+
+// Modal for evaluation details
 function showEvaluationDetails(id) {
   const ev = allEvaluations.find(e => e.id == id);
   if (!ev) return;
+  
+  const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+  const individualAvg = (ratings.reduce((a, b) => a + Number(b), 0) / ratings.length);
+  const category = getRatingCategory(individualAvg);
+  
   let modal = document.getElementById('evaluationModal');
   if (!modal) {
     modal = document.createElement('div');
@@ -255,44 +905,184 @@ function showEvaluationDetails(id) {
     modal.style.zIndex = 1000;
     document.body.appendChild(modal);
   }
+  
   modal.innerHTML = `
-    <div style="background:#fff;max-width:400px;width:95%;border-radius:10px;padding:24px 20px;position:relative;">
+    <div style="background:#fff;max-width:500px;width:95%;border-radius:12px;padding:24px;position:relative;max-height:80vh;overflow-y:auto;">
       <button onclick="document.getElementById('evaluationModal').style.display='none'" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
-      <h2 style="margin-top:0;">Evaluation Details</h2>
-      <p><strong>Program:</strong> ${ev.program_name || 'N/A'}</p>
-      <p><strong>Student:</strong> ${ev.student_name}</p>
-      <p><strong>Date:</strong> ${ev.eval_date ? ev.eval_date.split(' ')[0] : ''}</p>
-      <ul style="padding-left:18px;">
-        <li><strong>Content:</strong> ${ev.content}</li>
-        <li><strong>Facilitators:</strong> ${ev.facilitators}</li>
-        <li><strong>Relevance:</strong> ${ev.relevance}</li>
-        <li><strong>Organization:</strong> ${ev.organization}</li>
-        <li><strong>Experience:</strong> ${ev.experience}</li>
-      </ul>
-      <p><strong>Suggestion:</strong> ${ev.suggestion || '-'}</p>
-      <p><strong>Recommend:</strong> ${ev.recommend || '-'}</p>
-      <div style="margin-top:16px;">
-        <button class="btn-small" onclick="markReviewed(${ev.id})" ${ev.reviewed == 1 ? 'disabled' : ''}>Mark as Reviewed</button>
-        <button class="btn-small" onclick="replyToEvaluation(${ev.id})">Reply</button>
+      <h2 style="margin-top:0;color:#1B472B;">📋 Evaluation Details</h2>
+      
+      <div style="background:#f8f9fa;border-radius:8px;padding:16px;margin:16px 0;">
+        <p style="margin:0 0 8px 0;"><strong>Program:</strong> ${ev.program_name || 'N/A'}</p>
+        <p style="margin:0 0 8px 0;"><strong>Student:</strong> ${ev.student_name}</p>
+        <p style="margin:0 0 8px 0;"><strong>Date:</strong> ${ev.eval_date ? new Date(ev.eval_date).toLocaleDateString() : ''}</p>
+        <p style="margin:0;"><strong>Overall Rating:</strong> 
+          <span style="background:${category.color};color:white;padding:4px 8px;border-radius:8px;font-weight:bold;margin-left:8px;">
+            ${individualAvg.toFixed(1)}/5.0 (${category.text})
+          </span>
+        </p>
+      </div>
+      
+      <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0;">
+        <h4 style="margin-top:0;color:#1B472B;">Detailed Ratings:</h4>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">
+          <div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:6px;">
+            <div style="font-weight:bold;font-size:1.2em;color:${ev.content >= 3 ? '#27ae60' : '#e74c3c'};">${ev.content}</div>
+            <div style="font-size:0.8em;color:#666;">Content</div>
+          </div>
+          <div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:6px;">
+            <div style="font-weight:bold;font-size:1.2em;color:${ev.facilitators >= 3 ? '#27ae60' : '#e74c3c'};">${ev.facilitators}</div>
+            <div style="font-size:0.8em;color:#666;">Facilitators</div>
+          </div>
+          <div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:6px;">
+            <div style="font-weight:bold;font-size:1.2em;color:${ev.relevance >= 3 ? '#27ae60' : '#e74c3c'};">${ev.relevance}</div>
+            <div style="font-size:0.8em;color:#666;">Relevance</div>
+          </div>
+          <div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:6px;">
+            <div style="font-weight:bold;font-size:1.2em;color:${ev.organization >= 3 ? '#27ae60' : '#e74c3c'};">${ev.organization}</div>
+            <div style="font-size:0.8em;color:#666;">Organization</div>
+          </div>
+          <div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:6px;">
+            <div style="font-weight:bold;font-size:1.2em;color:${ev.experience >= 3 ? '#27ae60' : '#e74c3c'};">${ev.experience}</div>
+            <div style="font-size:0.8em;color:#666;">Experience</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0;">
+        <p style="margin:0 0 8px 0;"><strong>Student Suggestion:</strong></p>
+        <p style="margin:0;color:#666;font-style:italic;">${ev.suggestion || 'No suggestion provided'}</p>
+        <p style="margin:8px 0 0 0;"><strong>Would Recommend:</strong> 
+          <span style="color:${ev.recommend === 'Yes' ? '#27ae60' : '#e74c3c'};font-weight:bold;">
+            ${ev.recommend || 'Not specified'}
+          </span>
+        </p>
+      </div>
+      
+      ${ev.admin_suggestion ? `
+        <div style="background:#e8f5e8;border:1px solid #c3e6c3;border-radius:8px;padding:16px;margin:16px 0;">
+          <p style="margin:0 0 8px 0;"><strong>Admin Suggestion:</strong></p>
+          <p style="margin:0;color:#1B472B;">${ev.admin_suggestion.message}</p>
+          <p style="margin:8px 0 0 0;font-size:0.8em;color:#666;">
+            Sent by ${ev.admin_suggestion.admin} on ${new Date(ev.admin_suggestion.date).toLocaleDateString()}
+          </p>
+        </div>
+      ` : ''}
+      
+      <div style="margin-top:20px;text-align:center;display:flex;gap:8px;justify-content:center;">
+        ${!ev.reviewed ? `<button onclick="markReviewed(${ev.id}); document.getElementById('evaluationModal').style.display='none';" style="background:#28a745;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Mark as Reviewed</button>` : ''}
+        ${individualAvg < 2.5 && !ev.admin_suggestion ? `<button onclick="document.getElementById('evaluationModal').style.display='none'; addAdminSuggestion(${ev.id}, '${ev.program_name}');" style="background:#e74c3c;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Add Suggestion</button>` : ''}
+        <button onclick="document.getElementById('evaluationModal').style.display='none'" style="background:#6c757d;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Close</button>
       </div>
     </div>
   `;
   modal.style.display = 'flex';
 }
 
-// Dummy reply function
-function replyToEvaluation(id) {
-  alert('Reply functionality is not implemented in this demo.');
+// Helper functions
+function calculateProgramAverages(evaluations) {
+  const programMap = {};
+  evaluations.forEach(ev => {
+    if (!programMap[ev.program_name]) {
+      programMap[ev.program_name] = [];
+    }
+    const ratings = [ev.content, ev.facilitators, ev.relevance, ev.organization, ev.experience];
+    const avg = ratings.reduce((a, b) => a + Number(b), 0) / ratings.length;
+    programMap[ev.program_name].push(avg);
+  });
+  
+  const averages = {};
+  Object.keys(programMap).forEach(program => {
+    const ratings = programMap[program];
+    averages[program] = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+  });
+  
+  return averages;
 }
 
-// Initial load
+function addAdminSuggestionByProgram(programName) {
+  addAdminSuggestion(null, programName);
+}
+
+function downloadQualityReport() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  doc.setFontSize(18);
+  doc.text("Program Quality Assessment Report", 14, 20);
+  
+  doc.setFontSize(12);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 35);
+  
+  const programAverages = calculateProgramAverages(filteredEvaluations);
+  const poorPrograms = Object.entries(programAverages).filter(([_, avg]) => avg < 2.5);
+  
+  doc.text(`Total Programs Evaluated: ${Object.keys(programAverages).length}`, 14, 50);
+  doc.text(`Programs Needing Attention: ${poorPrograms.length}`, 14, 60);
+  
+  if (poorPrograms.length > 0) {
+    doc.setFontSize(14);
+    doc.text("Programs Requiring Improvement:", 14, 80);
+    
+    let yPos = 90;
+    doc.setFontSize(10);
+    poorPrograms.forEach(([name, avg]) => {
+      doc.text(`• ${name}: ${avg.toFixed(2)}/5.0`, 14, yPos);
+      yPos += 10;
+    });
+  }
+  
+  doc.save("quality_assessment_report.pdf");
+  document.getElementById('qualityReportModal').style.display = 'none';
+}
+
+// Initialize the application
 window.addEventListener('DOMContentLoaded', async () => {
-  allEvaluations = await fetchEvaluations();
-  filteredEvaluations = allEvaluations;
-  populateProgramFilter(allEvaluations);
-  renderEvaluationsTable(filteredEvaluations);
-  renderSummary(filteredEvaluations);
-  renderChart(filteredEvaluations);
+  try {
+    console.log('Starting evaluation dashboard initialization...');
+    
+    // Fetch evaluations
+    allEvaluations = await fetchEvaluations();
+    console.log('Fetched evaluations:', allEvaluations.length);
+    
+    filteredEvaluations = allEvaluations;
+    
+    // Populate program filter
+    await populateProgramFilter(allEvaluations);
+    console.log('Populated program filter');
+    
+    // Render components
+    renderEvaluationsTable(filteredEvaluations);
+    console.log('Rendered table');
+    
+    renderSummary(filteredEvaluations);
+    console.log('Rendered summary');
+    
+    renderRatingOverview(filteredEvaluations);
+    console.log('Rendered rating overview');
+    
+    renderChart(filteredEvaluations);
+    console.log('Rendered chart');
+    
+    console.log('Evaluation dashboard initialized successfully');
+  } catch (error) {
+    console.error('Error initializing evaluation dashboard:', error);
+    console.error('Error stack:', error.stack);
+    
+    // Show user-friendly error
+    const tbody = document.querySelector('.evaluation-table tbody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#e74c3c;padding:20px;">Error loading evaluation data. Please refresh the page.</td></tr>';
+    }
+    
+    // Also show error in summary
+    const summary = document.getElementById('evalSummary');
+    if (summary) {
+      summary.innerHTML = '<strong style="color:#e74c3c;">⚠️ Error loading evaluation data. Please refresh the page.</strong>';
+    }
+    
+    // Show toast notification
+    showToast('Failed to load evaluation data. Please refresh the page.', 'error');
+  }
 });
 </script>
 </body>

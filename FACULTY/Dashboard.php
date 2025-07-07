@@ -30,9 +30,11 @@ if ($stmt->fetch()) {
 }
 $stmt->close();
 
-// Get programs assigned to this faculty
+// Get programs assigned to this faculty with department info
 $programs = [];
-$stmt = $conn->prepare("SELECT id, program_name, status, start_date, end_date, max_students FROM programs WHERE faculty_id = ?");
+$stmt = $conn->prepare("SELECT id, program_name, status, start_date, end_date, max_students, 
+                       program_type, target_audience, dept_approval, priority, budget 
+                       FROM programs WHERE faculty_id = ?");
 $stmt->bind_param("i", $faculty_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -141,13 +143,15 @@ usort($upcoming_events, function($a, $b) {
           <li class="active"><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
+                    <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
+
           <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificate.php"><i class="fas fa-certificate"></i> Certificate</a></li>
           <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
-        <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
+      <div class="sign-out" style="position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center;">
           <a href="/register/index.html" style="color: inherit; text-decoration: none; display: block; padding: 12px 0;">Sign Out</a>
         </div>
       </nav>

@@ -6,6 +6,53 @@
   <title>eTracker Admin Dashboard</title>
   <link rel="stylesheet" href="Programs.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    .modal {
+      display: none !important;
+    }
+    .modal.show {
+      display: flex !important;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      margin: auto;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      z-index: 1002;
+    }
+    .close-modal:hover {
+      color: #333;
+    }
+    .error-message {
+      color: #dc3545;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .success-message {
+      color: #155724;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+  </style>
 
 </head>
 <body>
@@ -16,6 +63,7 @@
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
     <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
@@ -50,7 +98,6 @@
           <th>Location</th>
           <th>Capacity</th>
           <th>Status</th>
-          <th>Faculty</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -62,22 +109,40 @@
   </section>
 
   <!-- Program Details Modal -->
-  <div id="programDetailsModal" style="display:none;" class="modal" onclick="if(event.target===this)closeModal('programDetailsModal')"></div>
+  <div id="programDetailsModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;" class="modal" onclick="if(event.target===this)closeModal('programDetailsModal')"></div>
 
   <!-- Create/Edit Program Modal -->
-  <div id="programFormModal" style="display:none;" class="modal"></div>
+  <div id="programFormModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1001; align-items:center; justify-content:center;" class="modal"></div>
 </div>
 
 <script>
 // --- Utility functions ---
 function fetchPrograms() {
-  return fetch('/backend/get_programs.php').then(res => res.json());
+  return fetch('../backend/get_programs.php').then(res => {
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return res.json();
+  }).catch(err => {
+    console.error('Error fetching programs:', err);
+    return [];
+  });
 }
 function fetchFaculty() {
-  return fetch('/backend/get_faculty.php').then(res => res.json());
+  return fetch('../backend/get_faculty.php').then(res => {
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return res.json();
+  }).catch(err => {
+    console.error('Error fetching faculty:', err);
+    return [];
+  });
 }
 function fetchSessions(programId) {
-  return fetch(`/backend/get_sessions.php?program_id=${programId}`).then(res => res.json());
+  return fetch(`../backend/get_sessions.php?program_id=${programId}`).then(res => {
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return res.json();
+  }).catch(err => {
+    console.error('Error fetching sessions:', err);
+    return [];
+  });
 }
 
 // --- Render Stats ---
@@ -97,25 +162,38 @@ let facultyListData = [];
 let sessionsByProgramData = {};
 
 async function renderProgramsTable() {
-  const [programs, facultyList, allSessions] = await Promise.all([
-    fetchPrograms(),
-    fetchFaculty(),
-    fetch('/backend/get_all_sessions.php').then(res => res.json())
-  ]);
+  try {
+    const [programs, facultyList, allSessions] = await Promise.all([
+      fetchPrograms(),
+      fetchFaculty(),
+      fetch('../backend/get_all_sessions.php').then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      }).catch(err => {
+        console.error('Error fetching all sessions:', err);
+        return [];
+      })
+    ]);
 
-  // Save data for pagination
-  programsData = programs;
-  facultyListData = facultyList;
+    // Save data for pagination
+    programsData = programs;
+    facultyListData = facultyList;
 
-  // Group sessions by program_id
-  sessionsByProgramData = {};
-  allSessions.forEach(s => {
-    if (!sessionsByProgramData[s.program_id]) sessionsByProgramData[s.program_id] = [];
-    sessionsByProgramData[s.program_id].push(s);
-  });
+    // Group sessions by program_id
+    sessionsByProgramData = {};
+    allSessions.forEach(s => {
+      if (!sessionsByProgramData[s.program_id]) sessionsByProgramData[s.program_id] = [];
+      sessionsByProgramData[s.program_id].push(s);
+    });
 
-  renderStats(programs, allSessions);
-  renderProgramsPage();
+    renderStats(programs, allSessions);
+    renderProgramsPage();
+  } catch (error) {
+    console.error('Error rendering programs table:', error);
+    // Show error message to user
+    const tbody = document.querySelector('#programsTable tbody');
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#dc3545;">Error loading programs. Please refresh the page.</td></tr>';
+  }
 }
 
 function renderProgramsPage() {
@@ -127,7 +205,6 @@ function renderProgramsPage() {
   const pagePrograms = programsData.slice(startIdx, endIdx);
 
   pagePrograms.forEach(prog => {
-    const faculty = facultyListData.find(f => f.id === prog.faculty_id);
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${prog.program_name}</td>
@@ -136,7 +213,6 @@ function renderProgramsPage() {
       <td>${prog.location}</td>
       <td>${prog.max_students}</td>
       <td>${prog.status}</td>
-      <td>${faculty ? faculty.name : 'N/A'}</td>
       <td>
         <button onclick="showProgramDetails(${prog.id})">View</button>
         <button onclick="showEditProgramForm(${prog.id})">Edit</button>
@@ -180,7 +256,7 @@ function gotoPage(page) {
 // --- Program Details Modal ---
 async function showProgramDetails(programId) {
   const modal = document.getElementById('programDetailsModal');
-  modal.style.display = 'flex'; // Use flex for centering
+  modal.classList.add('show');
 
   const prog = programsData.find(p => p.id == programId);
   if (!prog) {
@@ -239,33 +315,204 @@ async function showProgramDetails(programId) {
 // --- Create/Edit Program Modal ---
 function showCreateProgramForm() {
   const modal = document.getElementById('programFormModal');
-  modal.style.display = 'block';
+  modal.classList.add('show');
   modal.innerHTML = `
-    <div class="modal-content">
-      <h2>Create Program</h2>
-      <form id="createProgramForm">
-        <input name="program_name" placeholder="Program Name" required />
-        <input name="department" placeholder="Department" required />
-        <input name="start_date" type="date" required />
-        <input name="end_date" type="date" required />
-        <input name="location" placeholder="Location" required />
-        <input name="max_students" type="number" placeholder="Capacity" required />
-        <select name="status" required>
-          <option value="ongoing">Ongoing</option>
-          <option value="ended">Ended</option>
-        </select>
-        <textarea name="description" placeholder="Description"></textarea>
-        <button type="submit">Create</button>
-        <button type="button" onclick="closeModal('programFormModal')">Cancel</button>
+    <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+      <h2>Create Department Program</h2>
+      <form id="createProgramForm" style="display: grid; gap: 15px;">
+        
+        <!-- Basic Information -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Program Information</strong></legend>
+          <input name="program_name" placeholder="Program Name *" required style="width: 100%; margin-bottom: 10px;" />
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <select name="department" id="departmentSelect" required style="width: 100%; border: 2px solid #007bff;">
+                <option value="">Select Department * (This will load faculty below)</option>
+            </select>
+            
+            <select name="program_type" required style="width: 100%;">
+              <option value="">Program Type *</option>
+              <option value="Extension Program">Extension Program</option>
+              <option value="Community Service">Community Service</option>
+              <option value="Training Workshop">Training Workshop</option>
+              <option value="Seminar">Seminar</option>
+              <option value="Outreach Program">Outreach Program</option>
+              <option value="Research Extension">Research Extension</option>
+            </select>
+          </div>
+          
+          <textarea name="description" placeholder="Program Description & Objectives *" required style="width: 100%; height: 100px; margin-bottom: 10px;"></textarea>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input name="location" placeholder="Program Location *" required style="width: 100%;" />
+            <select name="target_audience" required style="width: 100%;">
+              <option value="">Target Audience *</option>
+              <option value="Students">Students Only</option>
+              <option value="Faculty">Faculty Only</option>
+              <option value="Community">Community Members</option>
+              <option value="Students & Faculty">Students & Faculty</option>
+              <option value="Mixed Audience">Mixed Audience</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <!-- Dates -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Program Dates</strong></legend>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+            <div>
+              <label>Start Date *</label>
+              <input name="start_date" type="date" required style="width: 100%;" />
+            </div>
+            <div>
+              <label>Previous Date</label>
+              <input name="previous_date" type="date" style="width: 100%;" />
+            </div>
+            <div>
+              <label>End Date *</label>
+              <input name="end_date" type="date" required style="width: 100%;" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Program Capacity & Requirements -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Program Capacity & Requirements</strong></legend>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label>Maximum Participants (1-50) *</label>
+              <input name="max_students" type="number" min="1" max="50" required style="width: 100%;" />
+            </div>
+            <div>
+              <label>Target Male Count</label>
+              <input name="male_count" type="number" min="0" value="0" style="width: 100%;" />
+            </div>
+            <div>
+              <label>Target Female Count</label>
+              <input name="female_count" type="number" min="0" value="0" style="width: 100%;" />
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label>Prerequisites/Requirements</label>
+              <textarea name="requirements" placeholder="Enter any prerequisites or requirements for participants" style="width: 100%; height: 60px;"></textarea>
+            </div>
+            <div>
+              <label>Department Budget Allocation</label>
+              <input name="budget" type="number" placeholder="Budget (if applicable)" style="width: 100%;" step="0.01" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Project Titles -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Project Titles</strong></legend>
+          <input name="project_title_1" placeholder="Project Title 1" style="width: 100%; margin-bottom: 10px;" />
+          <input name="project_title_2" placeholder="Project Title 2" style="width: 100%; margin-bottom: 10px;" />
+          <input name="project_title_3" placeholder="Project Title 3" style="width: 100%;" />
+        </fieldset>
+
+        <!-- SDG Goals -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Sustainable Development Goals (SDGs)</strong></legend>
+          <div id="sdgContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+            <!-- SDG checkboxes will be populated here -->
+          </div>
+          <input type="hidden" name="selected_sdgs" id="selectedSDGs" value="[]" />
+        </fieldset>
+
+        <!-- Program Sessions -->
+        <fieldset style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+          <legend><strong>Program Sessions</strong></legend>
+          <div id="sessionsContainer">
+            <!-- Sessions will be added here -->
+          </div>
+          <button type="button" onclick="addSession()" style="margin-top: 10px; padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Add Session</button>
+        </fieldset>
+
+        <!-- Form Actions -->
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" onclick="closeModal('programFormModal')" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">Cancel</button>
+          <button type="submit" style="padding: 10px 20px; background-color: #1B472B; color: white; border: none; border-radius: 4px;">Create Department Program</button>
+        </div>
       </form>
     </div>
   `;
+  
+  // Initialize SDG checkboxes
+  initializeSDGs();
+  
+  // Load departments list first
+  loadDepartmentList();
+  
+  // Add initial session
+  addSession();
+  
+  // Handle form submission
   document.getElementById('createProgramForm').onsubmit = async function(e) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(this));
-    await fetch('/backend/create_program.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-    closeModal('programFormModal');
-    renderProgramsTable();
+    
+    try {
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+      
+      // Collect SDG selections
+      const selectedSDGs = [];
+      document.querySelectorAll('input[name="sdg"]:checked').forEach(checkbox => {
+        selectedSDGs.push(parseInt(checkbox.value));
+      });
+      data.selected_sdgs = JSON.stringify(selectedSDGs);
+      
+      // Collect session data
+      const sessions = [];
+      document.querySelectorAll('.session-row').forEach((row, index) => {
+        const dateInput = row.querySelector('input[type="date"]');
+        const startTimeInput = row.querySelector('input[type="time"]:nth-of-type(1)');
+        const endTimeInput = row.querySelector('input[type="time"]:nth-of-type(2)');
+        const titleInput = row.querySelector('input[type="text"]');
+        
+        if (dateInput && dateInput.value) {
+          sessions.push({
+            date: dateInput.value,
+            start_time: startTimeInput ? startTimeInput.value : '',
+            end_time: endTimeInput ? endTimeInput.value : '',
+            title: titleInput ? titleInput.value : ''
+          });
+        }
+      });
+      
+      // Add session data to form data
+      sessions.forEach((session, index) => {
+        data[`session_date[${index}]`] = session.date;
+        data[`session_start[${index}]`] = session.start_time;
+        data[`session_end[${index}]`] = session.end_time;
+        data[`session_title[${index}]`] = session.title;
+      });
+      
+      const response = await fetch('../backend/create_program.php', { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data) 
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        alert('Program created successfully!');
+        closeModal('programFormModal');
+        renderProgramsTable();
+      } else {
+        alert('Error: ' + result.message);
+      }
+    } catch (error) {
+      alert('Error creating program: ' + error.message);
+    }
   };
 }
 
@@ -273,7 +520,7 @@ function showCreateProgramForm() {
 async function showEditProgramForm(programId) {
   const prog = programsData.find(p => p.id == programId);
   const modal = document.getElementById('programFormModal');
-  modal.style.display = 'flex';
+  modal.classList.add('show');
   if (!prog) {
     modal.innerHTML = `<div class="modal-content"><p>Program not found.</p><button onclick="closeModal('programFormModal')" class="close-modal">&times;</button></div>`;
     return;
@@ -300,18 +547,53 @@ async function showEditProgramForm(programId) {
   `;
   document.getElementById('editProgramForm').onsubmit = async function(e) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(this));
-    await fetch(`/backend/update_program.php?id=${programId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-    closeModal('programFormModal');
-    renderProgramsTable();
+    try {
+      const data = Object.fromEntries(new FormData(this));
+      const response = await fetch(`../backend/update_program.php?id=${programId}`, { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data) 
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success !== false) {
+        closeModal('programFormModal');
+        renderProgramsTable();
+      } else {
+        alert('Error updating program: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error updating program:', error);
+      alert('Error updating program: ' + error.message);
+    }
   };
 }
 
 // --- Delete Program ---
 async function deleteProgram(programId) {
-  if (confirm('Delete this program?')) {
-    await fetch(`/backend/delete_program.php?id=${programId}`); // Use GET
-    renderProgramsTable();
+  if (confirm('Delete this program? This action cannot be undone.')) {
+    try {
+      const response = await fetch(`../backend/delete_program.php?id=${programId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success) {
+        alert('Program deleted successfully!');
+        renderProgramsTable();
+      } else {
+        alert('Error deleting program: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting program:', error);
+      alert('Error deleting program: ' + error.message);
+    }
   }
 }
 
@@ -319,7 +601,7 @@ async function deleteProgram(programId) {
 function showCreateSessionForm(programId) {
   closeModal('programDetailsModal');
   const modal = document.getElementById('programFormModal');
-  modal.style.display = 'flex';
+  modal.classList.add('show');
   modal.innerHTML = `
     <div class="modal-content">
       <h2>Add Session</h2>
@@ -336,11 +618,30 @@ function showCreateSessionForm(programId) {
   `;
   document.getElementById('createSessionForm').onsubmit = async function(e) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(this));
-    await fetch(`/backend/create_session.php?program_id=${programId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-    closeModal('programFormModal');
-    showProgramDetails(programId);
-    renderProgramsTable();
+    try {
+      const data = Object.fromEntries(new FormData(this));
+      const response = await fetch(`../backend/create_session.php?program_id=${programId}`, { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data) 
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success !== false) {
+        closeModal('programFormModal');
+        showProgramDetails(programId);
+        renderProgramsTable();
+      } else {
+        alert('Error creating session: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error creating session:', error);
+      alert('Error creating session: ' + error.message);
+    }
   };
 }
 
@@ -349,7 +650,7 @@ async function showEditSessionForm(sessionId, programId) {
   const session = (sessionsByProgramData[programId] || []).find(s => s.id == sessionId);
   const prog = programsData.find(p => p.id == programId);
   const modal = document.getElementById('programFormModal');
-  modal.style.display = 'flex';
+  modal.classList.add('show');
 
   if (!session) {
     modal.innerHTML = `<div class="modal-content"><p>Session not found.</p><button onclick="closeModal('programFormModal')" class="close-modal">&times;</button></div>`;
@@ -378,29 +679,226 @@ async function showEditSessionForm(sessionId, programId) {
   `;
   document.getElementById('editSessionForm').onsubmit = async function(e) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(this));
-    await fetch(`/backend/update_session.php?id=${sessionId}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-    closeModal('programFormModal');
-    showProgramDetails(programId);
-    renderProgramsTable();
+    try {
+      const data = Object.fromEntries(new FormData(this));
+      const response = await fetch(`../backend/update_session.php?id=${sessionId}`, { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data) 
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success !== false) {
+        closeModal('programFormModal');
+        showProgramDetails(programId);
+        renderProgramsTable();
+      } else {
+        alert('Error updating session: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error updating session:', error);
+      alert('Error updating session: ' + error.message);
+    }
   };
 }
 
 async function deleteSession(sessionId, programId) {
-  if (confirm('Delete this session?')) {
-    await fetch(`/backend/delete_session.php?id=${sessionId}`, { method: 'POST' });
-    showProgramDetails(programId);
-    renderProgramsTable();
+  if (confirm('Delete this session? This action cannot be undone.')) {
+    try {
+      const response = await fetch(`../backend/delete_session.php?id=${sessionId}`, { method: 'POST' });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success !== false) {
+        showProgramDetails(programId);
+        renderProgramsTable();
+      } else {
+        alert('Error deleting session: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      alert('Error deleting session: ' + error.message);
+    }
   }
 }
 
 // --- Modal Close Utility ---
 function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.remove('show');
+    // Clear modal content after animation
+    setTimeout(() => {
+      if (!modal.classList.contains('show')) {
+        modal.innerHTML = '';
+      }
+    }, 300);
+  }
+}
+
+// --- Helper Functions for Create Program Form ---
+
+function initializeSDGs() {
+  const sdgContainer = document.getElementById('sdgContainer');
+  const sdgGoals = [
+    'No Poverty', 'Zero Hunger', 'Good Health and Well-being', 'Quality Education',
+    'Gender Equality', 'Clean Water and Sanitation', 'Affordable and Clean Energy',
+    'Decent Work and Economic Growth', 'Industry, Innovation and Infrastructure',
+    'Reduced Inequality', 'Sustainable Cities and Communities', 'Responsible Consumption and Production',
+    'Climate Action', 'Life Below Water', 'Life on Land', 'Peace and Justice Strong Institutions',
+    'Partnerships to achieve the Goal'
+  ];
+  
+  sdgContainer.innerHTML = '';
+  sdgGoals.forEach((goal, index) => {
+    const sdgNumber = index + 1;
+    const div = document.createElement('div');
+    div.style.cssText = 'display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;';
+    div.innerHTML = `
+      <input type="checkbox" name="sdg" value="${sdgNumber}" id="sdg${sdgNumber}" />
+      <label for="sdg${sdgNumber}" style="font-size: 12px; cursor: pointer;">
+        <strong>SDG ${sdgNumber}:</strong> ${goal}
+      </label>
+    `;
+    sdgContainer.appendChild(div);
+  });
+}
+
+async function loadDepartmentList() {
+  try {
+    console.log('Loading departments...');
+    const response = await fetch('../backend/departments.php?action=options');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const departments = await response.json();
+    console.log('Departments response:', departments);
+    
+    const departmentSelect = document.getElementById('departmentSelect');
+    
+    if (!departmentSelect) {
+      console.error('Department select element not found!');
+      return;
+    }
+    
+    departmentSelect.innerHTML = '<option value="">Select Department *</option>';
+    
+    if (Array.isArray(departments) && departments.length > 0) {
+      departments.forEach(dept => {
+        const option = document.createElement('option');
+        option.value = dept.value || dept.id;
+        option.textContent = dept.text || dept.name;
+        if (dept.code) {
+          option.setAttribute('data-code', dept.code);
+        }
+        departmentSelect.appendChild(option);
+      });
+      console.log(`Loaded ${departments.length} departments`);
+    } else {
+      console.warn('No departments returned from API');
+      // Fallback to static departments
+      const fallbackDepts = [
+        {value: 1, text: 'Department of Hospitality Management'},
+        {value: 2, text: 'Department of Language and Mass Communication'},
+        {value: 3, text: 'Department of Physical Education'},
+        {value: 4, text: 'Department of Social Sciences and Humanities'},
+        {value: 5, text: 'Teacher Education Department'},
+        {value: 6, text: 'Department of Administration - ENTREP'},
+        {value: 7, text: 'Department of Administration - BSOA'},
+        {value: 8, text: 'Department of Administration - BM'},
+        {value: 9, text: 'Department of Computer Studies'}
+      ];
+      
+      fallbackDepts.forEach(dept => {
+        const option = document.createElement('option');
+        option.value = dept.value;
+        option.textContent = dept.text;
+        departmentSelect.appendChild(option);
+      });
+      console.log('Used fallback departments');
+    }
+    
+    // Add event listener for department change
+    departmentSelect.addEventListener('change', function() {
+      const selectedDeptId = this.value;
+      const selectedDeptText = this.selectedOptions[0] ? this.selectedOptions[0].textContent : '';
+      
+      console.log('Department selected - ID:', selectedDeptId, 'Name:', selectedDeptText);
+    });
+    
+  } catch (error) {
+    console.error('Error loading departments:', error);
+    
+    // Emergency fallback
+    const departmentSelect = document.getElementById('departmentSelect');
+    if (departmentSelect) {
+      departmentSelect.innerHTML = `
+        <option value="">Select Department *</option>
+        <option value="1">Department of Hospitality Management</option>
+        <option value="2">Department of Language and Mass Communication</option>
+        <option value="3">Department of Physical Education</option>
+        <option value="4">Department of Social Sciences and Humanities</option>
+        <option value="5">Teacher Education Department</option>
+        <option value="6">Department of Administration - ENTREP</option>
+        <option value="7">Department of Administration - BSOA</option>
+        <option value="8">Department of Administration - BM</option>
+        <option value="9">Department of Computer Studies</option>
+      `;
+      console.log('Used emergency fallback departments');
+    }
+  }
+}
+
+let sessionCounter = 0;
+
+function addSession() {
+  const sessionsContainer = document.getElementById('sessionsContainer');
+  sessionCounter++;
+  
+  const sessionDiv = document.createElement('div');
+  sessionDiv.className = 'session-row';
+  sessionDiv.style.cssText = 'display: grid; grid-template-columns: 1fr 100px 100px 1fr auto; gap: 10px; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px; background-color: #f9f9f9;';
+  
+  sessionDiv.innerHTML = `
+    <input type="date" placeholder="Session Date" style="width: 100%;" />
+    <input type="time" placeholder="Start Time" style="width: 100%;" />
+    <input type="time" placeholder="End Time" style="width: 100%;" />
+    <input type="text" placeholder="Session Title" style="width: 100%;" />
+    <button type="button" onclick="removeSession(this)" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer;">Remove</button>
+  `;
+  
+  sessionsContainer.appendChild(sessionDiv);
+}
+
+function removeSession(button) {
+  button.parentElement.remove();
 }
 
 // --- Initial Render ---
-renderProgramsTable();
+document.addEventListener('DOMContentLoaded', function() {
+  // Show loading indicator
+  const tbody = document.querySelector('#programsTable tbody');
+  if (tbody) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading programs...</td></tr>';
+  }
+  
+  // Load programs table
+  renderProgramsTable().catch(error => {
+    console.error('Failed to load programs:', error);
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#dc3545;padding:20px;">Failed to load programs. Please refresh the page.</td></tr>';
+    }
+  });
+});
 </script>
   
  

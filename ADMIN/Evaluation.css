@@ -104,4 +104,235 @@
     color: #888;
     font-style: italic;
   }
+
+  /* ====== RATING DASHBOARD ====== */
+  .rating-dashboard {
+    margin-bottom: 20px;
+  }
+
+  .rating-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .rating-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .rating-count {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .rating-label {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .rating-range {
+    font-size: 0.85em;
+    color: #666;
+  }
+
+  /* ====== MODAL STYLES ====== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30,41,59,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .modal-close:hover {
+    color: #333;
+  }
+
+  /* ====== TOAST NOTIFICATIONS ====== */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    z-index: 1001;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .toast.success {
+    background: #27ae60;
+    color: white;
+  }
+
+  .toast.error {
+    background: #e74c3c;
+    color: white;
+  }
+
+  .toast.warning {
+    background: #f39c12;
+    color: white;
+  }
+
+  .toast.info {
+    background: #3498db;
+    color: white;
+  }
+
+  /* ====== FILTER SECTION ====== */
+  .filter-section {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+  }
+
+  .filter-section h3 {
+    margin: 0 0 12px 0;
+    color: #1B472B;
+  }
+
+  .filter-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-controls select,
+  .filter-controls input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 150px;
+  }
+
+  /* ====== ACTION BUTTONS ====== */
+  .action-buttons {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-pdf {
+    background: #dc3545;
+    color: white;
+  }
+
+  .btn-excel {
+    background: #28a745;
+    color: white;
+  }
+
+  .btn-quality {
+    background: #17a2b8;
+    color: white;
+  }
+
+  .btn-bulk {
+    background: #ffc107;
+    color: #212529;
+  }
+
+  /* ====== TABLE ENHANCEMENTS ====== */
+  .evaluation-table tbody tr.needs-attention {
+    background-color: #fff5f5;
+    border-left: 4px solid #e74c3c;
+  }
+
+  .evaluation-table tbody tr.needs-attention:hover {
+    background-color: #ffeaea;
+  }
+
+  .rating-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .quality-status {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+
+  .admin-status {
+    font-weight: bold;
+  }
+
+  .admin-status.reviewed {
+    color: #27ae60;
+  }
+
+  .admin-status.pending {
+    color: #f39c12;
+  }
+
+  .admin-status.suggestion-sent {
+    color: #3498db;
+  }
+
+  /* ====== RESPONSIVE DESIGN ====== */
+  @media (max-width: 768px) {
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filter-controls select,
+    .filter-controls input {
+      min-width: auto;
+      width: 100%;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .rating-dashboard {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .modal-content {
+      width: 95%;
+      margin: 10px;
+    }
+  }
   

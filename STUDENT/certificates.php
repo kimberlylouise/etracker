@@ -15,6 +15,9 @@ if ($user_id) {
     $stmt->close();
 }
 
+// Check if a specific program_id is requested
+$filter_program_id = isset($_GET['program_id']) ? (int)$_GET['program_id'] : null;
+
 // Fetch certificates for this student
 $certificates = [];
 if ($user_id && $user) {
@@ -27,23 +30,37 @@ if ($user_id && $user) {
     $stmt->close();
     $student_name = trim($fn . ' ' . ($mi ? $mi . '. ' : '') . $ln);
 
+    // Query the participants table for certificates
+    $where_clause = "p.student_name = ? AND p.status = 'accepted'";
+    $params = [$student_name];
+    $param_types = "s";
+    
+    if ($filter_program_id) {
+        $where_clause .= " AND p.program_id = ?";
+        $params[] = $filter_program_id;
+        $param_types .= "i";
+    }
+    
     $stmt = $conn->prepare("
-        SELECT c.id, c.program_id, c.student_name, c.certificate_date, c.status, pr.program_name
-        FROM certificates c
-        JOIN programs pr ON c.program_id = pr.id
-        WHERE c.student_name = ?
-        ORDER BY c.certificate_date DESC
+        SELECT p.id, p.program_id, p.student_name, p.issued_on as certificate_date, 
+               CASE WHEN p.certificate_issued = 1 THEN 'generated' ELSE 'pending' END as status,
+               p.certificate_file, pr.program_name
+        FROM participants p
+        JOIN programs pr ON p.program_id = pr.id
+        WHERE $where_clause
+        ORDER BY p.issued_on DESC
     ");
     if (!$stmt) {
         die("SQL error: " . $conn->error);
     }
-    $stmt->bind_param("s", $student_name);
+    $stmt->bind_param($param_types, ...$params);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
-        // If you store the file path, add it here. Otherwise, set to null.
-        $row['certificate_file'] = "certificates/{$row['id']}.pdf";
-        $certificates[] = $row;
+        // Only show if certificate is issued or if there's a file
+        if ($row['status'] === 'generated' || !empty($row['certificate_file'])) {
+            $certificates[] = $row;
+        }
     }
     $stmt->close();
 }
@@ -228,6 +245,20 @@ if ($user_id && $user) {
         <h1>CVSU IMUS - EXTENSION SERVICES</h1>
       </header>
 
+      <?php if ($filter_program_id): ?>
+        <div style="background: #e8f5e8; padding: 15px; margin-bottom: 20px; border-radius: 8px; border-left: 4px solid #59a96a;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <i class="fas fa-filter"></i>
+              <strong>Showing certificates for a specific program</strong>
+            </div>
+            <a href="certificates.php" style="background: #59a96a; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 0.9em;">
+              <i class="fas fa-times"></i> Show All Certificates
+            </a>
+          </div>
+        </div>
+      <?php endif; ?>
+
       <section>
         <div class="cert-cards">
           <?php if (empty($certificates)): ?>
@@ -258,15 +289,21 @@ if ($user_id && $user) {
                     <?php echo htmlspecialchars(ucfirst($cert['status'])); ?>
                   </div>
                   <div class="cert-card-footer">
-                    <?php if (!empty($cert['certificate_file'])): ?>
+                    <?php if ($cert['status'] === 'generated' && !empty($cert['certificate_file'])): ?>
                       <a href="/<?php echo htmlspecialchars($cert['certificate_file']); ?>" class="cert-btn view-btn" target="_blank">
                         <i class="fas fa-eye"></i> View
                       </a>
                       <a href="/<?php echo htmlspecialchars($cert['certificate_file']); ?>" class="cert-btn download-btn" download>
                         <i class="fas fa-download"></i> Download
                       </a>
+                    <?php elseif ($cert['status'] === 'pending'): ?>
+                      <span class="not-available" style="color: #856404; font-style: italic;">
+                        <i class="fas fa-clock"></i> Certificate being processed
+                      </span>
                     <?php else: ?>
-                      <span class="not-available">Not available</span>
+                      <span class="not-available" style="color: #6c757d; font-style: italic;">
+                        <i class="fas fa-info-circle"></i> Not available
+                      </span>
                     <?php endif; ?>
                   </div>
                 </div>

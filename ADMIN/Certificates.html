@@ -20,7 +20,9 @@
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
-    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    
+        <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
+<a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
@@ -32,28 +34,32 @@
         <div class="section">
             <h2>Generate Certificates</h2>
             <p>Select a program and participant type to generate certificates.</p>
-            <label>Program:</label>
-            <select id="programs">
-              <option value="">-- Select Program --</option>
-            </select>
-            <button id="load-eligible" class="btn">Show Eligible Participants</button>
+            <div class="form-group">
+                <label>Program:</label>
+                <select id="programs">
+                  <option value="">-- Select Program --</option>
+                </select>
+                <button id="load-eligible" class="btn">Show Eligible Participants</button>
+            </div>
             
             <div class="section">
             <h2>Pending Certificates</h2>
-            <table id="pending-table">
-                <thead>
-                    <tr>
-                        <th>Participant Name</th>
-                        <th>Program</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Will be filled dynamically -->
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table id="pending-table">
+                    <thead>
+                        <tr>
+                            <th>Participant Name</th>
+                            <th>Program</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be filled dynamically -->
+                    </tbody>
+                </table>
+            </div>
           </div>
         
             </table>
@@ -62,40 +68,44 @@
          
           <div class="section">
             <h2>Certificate Records</h2>
-            <table id="records-table">
-  <thead>
-    <tr>
-      <th>Participant Name</th>
-      <th>Program</th>
-      <th>Issued On</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- This will be dynamically filled with JavaScript -->
-  </tbody>
-</table>
+            <div class="table-container">
+                <table id="records-table">
+      <thead>
+        <tr>
+          <th>Participant Name</th>
+          <th>Program</th>
+          <th>Issued On</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- This will be dynamically filled with JavaScript -->
+      </tbody>
+    </table>
+            </div>
           </div>
         
           
         
           <div class="section" id="eligible-section">
   <h2>Eligible Participants</h2>
-  <table id="eligible-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th>Issued On</th>
-        <th>Evaluated</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Will be filled dynamically -->
-    </tbody>
-  </table>
+  <div class="table-container">
+      <table id="eligible-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Issued On</th>
+            <th>Evaluated</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Will be filled dynamically -->
+        </tbody>
+      </table>
+  </div>
 </div>
       </div>
       
@@ -153,7 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td>${student.role}</td>
                             <td>${student.issued_on || ''}</td>
                             <td>${student.evaluated ? 'Yes' : 'No'}</td>
-                            <td><button onclick="issueCert(${student.cert_id},${student.program_id},this)">Issue Certificate</button></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn" onclick="issueCert(${student.cert_id},${student.program_id},this)">Issue Certificate</button>
+                                </div>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -172,7 +186,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td>${faculty.role}</td>
                             <td>${faculty.issued_on || ''}</td>
                             <td>${faculty.evaluated ? 'Yes' : 'No'}</td>
-                            <td><button onclick="issueFacultyCert(${faculty.program_id}, this)">Issue Certificate</button></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn" onclick="issueFacultyCert(${faculty.program_id}, this)">Issue Certificate</button>
+                                </div>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -223,15 +241,17 @@ function loadCertificates() {
                         <td>${cert.name}</td>
                         <td>${cert.program_name}</td>
                         <td>${cert.issued_on || ''}</td>
-                        <td>Issued</td>
+                        <td><span class="status-badge status-issued">Issued</span></td>
                         <td>
-                            <a href="/${certPath}" 
-                               class="btn" 
-                               target="_blank"
-                               onclick="return checkCertificateExists('${certPath}')">
-                                View Certificate
-                            </a>
-                            <button class="btn" onclick="regenerateCert(${cert.cert_id}, ${cert.program_id}, '${cert.type}', this)">Regenerate</button>
+                            <div class="action-buttons">
+                                <a href="/${certPath}" 
+                                   class="btn" 
+                                   target="_blank"
+                                   onclick="return checkCertificateExists('${certPath}')">
+                                    View Certificate
+                                </a>
+                                <button class="btn" onclick="regenerateCert(${cert.cert_id}, ${cert.program_id}, '${cert.type}', this)">Regenerate</button>
+                            </div>
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -305,13 +325,15 @@ function loadPendingCertificates() {
                     <td>${cert.name}</td>
                     <td>${cert.program_name}</td>
                     <td>${cert.type === 'faculty' ? 'Faculty' : 'Student'}</td>
-                    <td>Pending</td>
+                    <td><span class="status-badge status-pending">Pending</span></td>
                     <td>
-                        ${
-                            cert.type === 'faculty'
-                                ? `<button onclick="issueFacultyCert(${cert.program_id}, this)">Issue Certificate</button>`
-                                : `<button onclick="issueCert(${cert.cert_id},${cert.program_id},this)">Issue Certificate</button>`
-                        }
+                        <div class="action-buttons">
+                            ${
+                                cert.type === 'faculty'
+                                    ? `<button class="btn" onclick="issueFacultyCert(${cert.program_id}, this)">Issue Certificate</button>`
+                                    : `<button class="btn" onclick="issueCert(${cert.cert_id},${cert.program_id},this)">Issue Certificate</button>`
+                            }
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Evaluation - eTracker Admin</title>
+  <link rel="stylesheet" href="Programs.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    .evaluation-header {
+      background: linear-gradient(135deg, #1B472B 0%, #2D6A3D 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #1B472B;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+    
+    .project-card.program {
+      border-left-color: #2980b9;
+      background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    }
+    
+    .project-card.program_project {
+      border-left-color: #27ae60;
+      background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+    }
+    
+    .project-card.standalone_project {
+      border-left-color: #8e44ad;
+      background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%);
+    }
+    
+    .project-card.needs-evaluation {
+      border-left-color: #f39c12;
+      background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+    }
+    
+    .project-card.overdue {
+      border-left-color: #e74c3c;
+      background: linear-gradient(135deg, #ffeaea 0%, #ffffff 100%);
+    }
+    
+    .project-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .project-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1B472B;
+      margin-bottom: 0.5rem;
+    }
+    
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-needs-improvement {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .status-overdue {
+      background: #f5c6cb;
+      color: #721c24;
+      border: 1px solid #f1b0b7;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .rating-stars {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .star {
+      color: #ddd;
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: color 0.2s ease;
+    }
+    
+    .star.active {
+      color: #f39c12;
+    }
+    
+    .star:hover {
+      color: #f39c12;
+    }
+    
+    .evaluation-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background: white;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .evaluation-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      color: #1B472B;
+    }
+    
+    .criteria-group {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .criteria-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .criteria-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background: #1B472B;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2D6A3D;
+    }
+    
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .filter-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .filter-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #1B472B;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1001;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .toast.error {
+      background: #dc3545;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>eTracker Admin</h2>
+    <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="User.html"><i class="fas fa-users"></i> User Management</a>
+    <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+    <a href="ProjectEvaluation.html" class="active"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
+    <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
+    <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
+    <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
+    <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
+    <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+  </div>
+
+  <div class="main">
+    <div class="evaluation-header">
+      <h1><i class="fas fa-clipboard-check"></i> Program & Project Evaluation Dashboard</h1>
+      <p>Evaluate completed programs and their projects to assess impact, quality, and effectiveness. Provide comprehensive feedback to faculty for continuous improvement of extension services.</p>
+    </div>
+
+    <!-- Statistics Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalProjects">0</div>
+        <div class="stat-label">Total Programs & Projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pendingEvaluations">0</div>
+        <div class="stat-label">Pending Evaluations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="evaluatedProjects">0</div>
+        <div class="stat-label">Already Evaluated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="averageRating">0.0</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <h3><i class="fas fa-filter"></i> Filter & Search</h3>
+      <div class="filter-controls">
+        <select id="filterItemType">
+          <option value="">All Types</option>
+          <option value="program">📋 Programs</option>
+          <option value="program_project">🎯 Program Projects</option>
+          <option value="standalone_project">⚡ Standalone Projects</option>
+        </select>
+        <select id="filterStatus">
+          <option value="">All Statuses</option>
+          <option value="pending_evaluation">Pending Evaluation</option>
+          <option value="approved">Approved</option>
+          <option value="needs_improvement">Needs Improvement</option>
+          <option value="overdue">Overdue</option>
+        </select>
+        <select id="filterDepartment">
+          <option value="">All Departments</option>
+        </select>
+        <select id="filterRating">
+          <option value="">All Ratings</option>
+          <option value="excellent">Excellent (4.5+)</option>
+          <option value="good">Good (3.5-4.4)</option>
+          <option value="average">Average (2.5-3.4)</option>
+          <option value="poor">Poor (<2.5)</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search programs and projects...">
+      </div>
+    </div>
+
+    <!-- Projects List -->
+    <div id="projectsList">
+      <!-- Projects will be loaded here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <i class="fas fa-clipboard-list"></i>
+      <h3>No Programs or Projects Found</h3>
+      <p>No programs or projects match your current filters. Try adjusting your search criteria or check if there are completed programs available for evaluation.</p>
+    </div>
+  </div>
+
+  <!-- Evaluation Modal -->
+  <div id="evaluationModal" class="evaluation-modal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2><i class="fas fa-clipboard-check"></i> Program/Project Evaluation</h2>
+        <button onclick="closeEvaluationModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+      
+      <div id="projectInfo" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <!-- Project information will be populated here -->
+      </div>
+
+      <form id="evaluationForm" class="evaluation-form">
+        <input type="hidden" id="projectId" name="project_id">
+        
+        <!-- Core Criteria (Required) -->
+        <h3 style="color: #1B472B; border-bottom: 2px solid #1B472B; padding-bottom: 0.5rem;">Core Evaluation Criteria</h3>
+        
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Community Impact</label>
+            <span style="color: #e74c3c;">*Required</span>
+          </div>
+          <div class="criteria-description">
+            Assess the project's impact on the community and target beneficiaries. Consider reach, effectiveness, and measurable outcomes.
+          </div>
+          <div class="rating-stars" data-rating="impact_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="impact_rating" id="impact_rating" required>
+        </div>
+
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Implementation Quality</label>
+            <span style="color: #e74c3c;">*Required</span>
+          </div>
+          <div class="criteria-description">
+            Evaluate the overall quality of project implementation, deliverables, and adherence to professional standards.
+          </div>
+          <div class="rating-stars" data-rating="quality_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="quality_rating" id="quality_rating" required>
+        </div>
+
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Sustainability</label>
+            <span style="color: #e74c3c;">*Required</span>
+          </div>
+          <div class="criteria-description">
+            Assess project sustainability and long-term viability. Consider resource availability and continuation plans.
+          </div>
+          <div class="rating-stars" data-rating="sustainability_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="sustainability_rating" id="sustainability_rating" required>
+        </div>
+
+        <!-- Optional Criteria -->
+        <h3 style="color: #1B472B; border-bottom: 2px solid #1B472B; padding-bottom: 0.5rem; margin-top: 2rem;">Additional Criteria (Optional)</h3>
+        
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Innovation & Creativity</label>
+            <span style="color: #666;">Optional</span>
+          </div>
+          <div class="criteria-description">
+            Evaluate innovative approaches and creative solutions implemented in the project.
+          </div>
+          <div class="rating-stars" data-rating="innovation_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="innovation_rating" id="innovation_rating">
+        </div>
+
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Collaboration & Partnerships</label>
+            <span style="color: #666;">Optional</span>
+          </div>
+          <div class="criteria-description">
+            Assess stakeholder engagement and effectiveness of partnerships developed during the project.
+          </div>
+          <div class="rating-stars" data-rating="collaboration_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="collaboration_rating" id="collaboration_rating">
+        </div>
+
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Budget Efficiency</label>
+            <span style="color: #666;">Optional</span>
+          </div>
+          <div class="criteria-description">
+            Evaluate resource utilization and budget management effectiveness.
+          </div>
+          <div class="rating-stars" data-rating="budget_efficiency">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="budget_efficiency" id="budget_efficiency">
+        </div>
+
+        <div class="criteria-group">
+          <div class="criteria-header">
+            <label>Timeliness</label>
+            <span style="color: #666;">Optional</span>
+          </div>
+          <div class="criteria-description">
+            Assess project timeline adherence and milestone achievement.
+          </div>
+          <div class="rating-stars" data-rating="timeliness_rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" name="timeliness_rating" id="timeliness_rating">
+        </div>
+
+        <!-- Comments Section -->
+        <div class="form-group">
+          <label for="evaluation_comments">Evaluation Comments</label>
+          <textarea name="evaluation_comments" id="evaluation_comments" 
+                    placeholder="Provide detailed feedback on the project's strengths, areas for improvement, and overall assessment..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="recommendations">Recommendations for Future Projects</label>
+          <textarea name="recommendations" id="recommendations" 
+                    placeholder="Suggest improvements and recommendations for future similar projects..."></textarea>
+        </div>
+
+        <!-- Evaluation Decision -->
+        <div class="form-group">
+          <label for="evaluation_status">Evaluation Decision</label>
+          <select name="evaluation_status" id="evaluation_status" required>
+            <option value="approved">Approve Project</option>
+            <option value="needs_improvement">Needs Improvement</option>
+            <option value="pending_review">Pending Further Review</option>
+            <option value="rejected">Reject Project</option>
+          </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+          <button type="button" onclick="closeEvaluationModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+let allProjects = [];
+let filteredProjects = [];
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+  loadProjects();
+  setupEventListeners();
+});
+
+function setupEventListeners() {
+  // Filter event listeners
+  document.getElementById('filterItemType').addEventListener('change', applyFilters);
+  document.getElementById('filterStatus').addEventListener('change', applyFilters);
+  document.getElementById('filterDepartment').addEventListener('change', applyFilters);
+  document.getElementById('filterRating').addEventListener('change', applyFilters);
+  document.getElementById('searchInput').addEventListener('input', applyFilters);
+  
+  // Star rating event listeners
+  document.querySelectorAll('.rating-stars').forEach(starGroup => {
+    const stars = starGroup.querySelectorAll('.star');
+    const ratingName = starGroup.getAttribute('data-rating');
+    const hiddenInput = document.getElementById(ratingName);
+    
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        const rating = index + 1;
+        hiddenInput.value = rating;
+        
+        // Update visual state
+        stars.forEach((s, i) => {
+          s.classList.toggle('active', i < rating);
+        });
+      });
+      
+      star.addEventListener('mouseenter', () => {
+        stars.forEach((s, i) => {
+          s.style.color = i <= index ? '#f39c12' : '#ddd';
+        });
+      });
+    });
+    
+    starGroup.addEventListener('mouseleave', () => {
+      const currentRating = parseInt(hiddenInput.value) || 0;
+      stars.forEach((s, i) => {
+        s.style.color = i < currentRating ? '#f39c12' : '#ddd';
+      });
+    });
+  });
+  
+  // Form submission
+  document.getElementById('evaluationForm').addEventListener('submit', submitEvaluation);
+}
+
+async function loadProjects() {
+  try {
+    showLoading();
+    const response = await fetch('api_projects.php?action=get_projects_for_evaluation');
+    const result = await response.json();
+    
+    console.log('API Response:', result); // Debug log
+    
+    if (result.success) {
+      allProjects = result.data;
+      updateStatistics();
+      populateDepartmentFilter();
+      applyFilters();
+      
+      // Show debug info
+      if (result.debug) {
+        console.log('Debug info:', result.debug);
+      }
+    } else {
+      throw new Error(result.error || 'Failed to load projects');
+    }
+  } catch (error) {
+    console.error('Error loading projects:', error);
+    showToast('Error loading projects: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
+}
+
+function updateStatistics() {
+  const totalProjects = allProjects.length;
+  const pendingEvaluations = allProjects.filter(p => p.needs_evaluation).length;
+  const evaluatedProjects = allProjects.filter(p => p.overall_rating !== null).length;
+  const avgRating = evaluatedProjects > 0 ? 
+    (allProjects.filter(p => p.overall_rating !== null)
+      .reduce((sum, p) => sum + p.overall_rating, 0) / evaluatedProjects).toFixed(1) : '0.0';
+  
+  document.getElementById('totalProjects').textContent = totalProjects;
+  document.getElementById('pendingEvaluations').textContent = pendingEvaluations;
+  document.getElementById('evaluatedProjects').textContent = evaluatedProjects;
+  document.getElementById('averageRating').textContent = avgRating;
+}
+
+function populateDepartmentFilter() {
+  const departments = [...new Set(allProjects.map(p => p.department).filter(d => d))];
+  const select = document.getElementById('filterDepartment');
+  
+  // Clear existing options except the first one
+  select.innerHTML = '<option value="">All Departments</option>';
+  
+  departments.forEach(dept => {
+    const option = document.createElement('option');
+    option.value = dept;
+    option.textContent = dept;
+    select.appendChild(option);
+  });
+}
+
+function applyFilters() {
+  const itemTypeFilter = document.getElementById('filterItemType').value;
+  const statusFilter = document.getElementById('filterStatus').value;
+  const departmentFilter = document.getElementById('filterDepartment').value;
+  const ratingFilter = document.getElementById('filterRating').value;
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  
+  filteredProjects = allProjects.filter(project => {
+    // Item type filter
+    if (itemTypeFilter && project.item_type !== itemTypeFilter) return false;
+    
+    // Status filter
+    if (statusFilter) {
+      let projectStatus = 'pending_evaluation';
+      if (project.evaluation_status === 'approved') projectStatus = 'approved';
+      else if (project.evaluation_status === 'needs_improvement') projectStatus = 'needs_improvement';
+      else if (project.needs_evaluation && project.evaluation_overdue) projectStatus = 'overdue';
+      
+      if (projectStatus !== statusFilter) return false;
+    }
+    
+    // Department filter
+    if (departmentFilter && project.department !== departmentFilter) return false;
+    
+    // Rating filter
+    if (ratingFilter && project.overall_rating !== null) {
+      const rating = project.overall_rating;
+      switch (ratingFilter) {
+        case 'excellent': if (rating < 4.5) return false; break;
+        case 'good': if (rating < 3.5 || rating >= 4.5) return false; break;
+        case 'average': if (rating < 2.5 || rating >= 3.5) return false; break;
+        case 'poor': if (rating >= 2.5) return false; break;
+      }
+    }
+    
+    // Search filter
+    if (searchTerm) {
+      const searchableText = [
+        project.project_title,
+        project.program_name,
+        project.faculty_name,
+        project.department
+      ].join(' ').toLowerCase();
+      
+      if (!searchableText.includes(searchTerm)) return false;
+    }
+    
+    return true;
+  });
+  
+  renderProjects();
+}
+
+function renderProjects() {
+  const container = document.getElementById('projectsList');
+  const emptyState = document.getElementById('emptyState');
+  
+  if (filteredProjects.length === 0) {
+    container.innerHTML = '';
+    emptyState.style.display = 'block';
+    return;
+  }
+  
+  emptyState.style.display = 'none';
+  
+  container.innerHTML = filteredProjects.map(project => {
+    const statusClass = getStatusClass(project);
+    const statusText = getStatusText(project);
+    const statusBadge = getStatusBadge(project);
+    
+    return `
+      <div class="project-card ${statusClass}">
+        <div class="project-header">
+          <div>
+            <div class="project-title">${escapeHtml(project.project_title)}</div>
+            <div style="color: #666; font-size: 0.9rem;">
+              ${escapeHtml(project.program_name)} • ${escapeHtml(project.faculty_name)}
+            </div>
+          </div>
+          <div>
+            ${statusBadge}
+          </div>
+        </div>
+        
+        <div class="project-meta">
+          <div class="meta-item">
+            <i class="fas fa-building"></i>
+            <span>${escapeHtml(project.department || 'N/A')}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>${formatDate(project.project_end_date)}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-users"></i>
+            <span>${project.participants_count} participants</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-tasks"></i>
+            <span>${project.completed_objectives}/${project.total_objectives} objectives completed</span>
+          </div>
+          ${project.overall_rating ? `
+          <div class="meta-item">
+            <i class="fas fa-star"></i>
+            <span>${project.overall_rating}/5.0 rating</span>
+          </div>
+          ` : ''}
+        </div>
+        
+        ${project.project_description ? `
+        <div style="margin: 1rem 0; color: #666; font-size: 0.9rem;">
+          ${escapeHtml(project.project_description.substring(0, 200))}${project.project_description.length > 200 ? '...' : ''}
+        </div>
+        ` : ''}
+        
+        <div class="action-buttons">
+          ${project.needs_evaluation ? `
+            <button onclick="openEvaluationModal('${project.project_id}')" class="btn btn-primary">
+              <i class="fas fa-clipboard-check"></i> Evaluate Project
+            </button>
+          ` : `
+            <button onclick="viewEvaluation('${project.project_id}')" class="btn btn-secondary">
+              <i class="fas fa-eye"></i> View Evaluation
+            </button>
+          `}
+          <button onclick="viewProjectDetails('${project.project_id}')" class="btn btn-info">
+            <i class="fas fa-info-circle"></i> View Details
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getStatusClass(project) {
+  let classes = [];
+  
+  // Add item type class
+  if (project.item_type) {
+    classes.push(project.item_type);
+  }
+  
+  // Add status class
+  if (project.needs_evaluation) {
+    classes.push(project.evaluation_overdue ? 'overdue' : 'needs-evaluation');
+  }
+  
+  return classes.join(' ');
+}
+
+function getStatusText(project) {
+  if (project.needs_evaluation) {
+    return project.evaluation_overdue ? 'Evaluation Overdue' : 'Pending Evaluation';
+  }
+  if (project.evaluation_status === 'approved') return 'Approved';
+  if (project.evaluation_status === 'needs_improvement') return 'Needs Improvement';
+  if (project.evaluation_status === 'pending_review') return 'Pending Review';
+  return 'Evaluated';
+}
+
+function getStatusBadge(project) {
+  if (project.needs_evaluation) {
+    const badgeClass = project.evaluation_overdue ? 'status-overdue' : 'status-pending';
+    const text = project.evaluation_overdue ? 'Overdue' : 'Pending';
+    return `<span class="status-badge ${badgeClass}">${text}</span>`;
+  }
+  
+  let badgeClass = 'status-approved';
+  let text = 'Approved';
+  
+  if (project.evaluation_status === 'needs_improvement') {
+    badgeClass = 'status-needs-improvement';
+    text = 'Needs Improvement';
+  } else if (project.evaluation_status === 'pending_review') {
+    badgeClass = 'status-pending';
+    text = 'Pending Review';
+  }
+  
+  return `<span class="status-badge ${badgeClass}">${text}</span>`;
+}
+
+function openEvaluationModal(projectId) {
+  const project = allProjects.find(p => p.project_id === projectId);
+  if (!project) return;
+  
+  // Populate project information
+  document.getElementById('projectInfo').innerHTML = `
+    <h4>${escapeHtml(project.project_title)}</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div><strong>Program:</strong> ${escapeHtml(project.program_name)}</div>
+      <div><strong>Faculty:</strong> ${escapeHtml(project.faculty_name)}</div>
+      <div><strong>Department:</strong> ${escapeHtml(project.department || 'N/A')}</div>
+      <div><strong>Completion Date:</strong> ${formatDate(project.project_end_date)}</div>
+      <div><strong>Participants:</strong> ${project.participants_count}</div>
+      <div><strong>Objectives Completed:</strong> ${project.completed_objectives}/${project.total_objectives}</div>
+    </div>
+  `;
+  
+  // Set project ID
+  document.getElementById('projectId').value = projectId;
+  
+  // Reset form
+  document.getElementById('evaluationForm').reset();
+  document.getElementById('projectId').value = projectId;
+  
+  // Reset star ratings
+  document.querySelectorAll('.rating-stars').forEach(starGroup => {
+    const stars = starGroup.querySelectorAll('.star');
+    stars.forEach(star => star.classList.remove('active'));
+  });
+  
+  // Show modal
+  document.getElementById('evaluationModal').style.display = 'block';
+}
+
+function closeEvaluationModal() {
+  document.getElementById('evaluationModal').style.display = 'none';
+}
+
+async function submitEvaluation(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+  
+  // Validate required fields
+  if (!data.impact_rating || !data.quality_rating || !data.sustainability_rating) {
+    showToast('Please provide ratings for all required criteria', 'error');
+    return;
+  }
+  
+  try {
+    const response = await fetch('api_projects.php?action=submit_evaluation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      showToast('Evaluation submitted successfully!', 'success');
+      closeEvaluationModal();
+      loadProjects(); // Refresh the list
+    } else {
+      throw new Error(result.error || 'Failed to submit evaluation');
+    }
+  } catch (error) {
+    console.error('Error submitting evaluation:', error);
+    showToast('Error submitting evaluation: ' + error.message, 'error');
+  }
+}
+
+function viewEvaluation(projectId) {
+  // Implementation for viewing existing evaluation
+  const project = allProjects.find(p => p.project_id === projectId);
+  if (!project) return;
+  
+  showToast('View evaluation functionality to be implemented', 'info');
+}
+
+function viewProjectDetails(projectId) {
+  // Implementation for viewing project details
+  const project = allProjects.find(p => p.project_id === projectId);
+  if (!project) return;
+  
+  showToast('Project details view to be implemented', 'info');
+}
+
+function showLoading() {
+  document.getElementById('projectsList').innerHTML = `
+    <div style="text-align: center; padding: 3rem; color: #666;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+      <div>Loading projects...</div>
+    </div>
+  `;
+}
+
+function hideLoading() {
+  // Loading will be hidden when projects are rendered
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.classList.add('show'), 100);
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, 3000);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return 'N/A';
+  return new Date(dateString).toLocaleDateString();
+}
+
+// Close modal when clicking outside
+document.getElementById('evaluationModal').addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeEvaluationModal();
+  }
+});
+</script>
+
+</body>
+</html>

@@ -131,7 +131,7 @@ if ($user_id) {
       // Certificates Earned
       $certificates_earned = 0;
       if ($user_id) {
-          $stmt = $conn->prepare("SELECT COUNT(*) FROM certificates WHERE student_name = ?");
+          $stmt = $conn->prepare("SELECT COUNT(*) FROM participants WHERE student_name = ? AND certificate_issued = 1");
           $stmt->bind_param("s", $student_name);
           $stmt->execute();
           $stmt->bind_result($certificates_earned);

@@ -53,18 +53,35 @@ if (isset($data['user_id']) && isset($data['role'])) {
         }
 
         $stmt->close();
-    } elseif ($role === 'faculty' && isset($data['faculty_name']) && isset($data['faculty_id']) && isset($data['department']) && isset($data['position'])) {
+    } elseif ($role === 'faculty' && isset($data['faculty_name']) && isset($data['faculty_id']) && isset($data['department_id']) && isset($data['position'])) {
         $faculty_name = $data['faculty_name'];
         $faculty_id = $data['faculty_id'];
-        $department = $data['department'];
+        $department_id = intval($data['department_id']); // Use department_id instead of department text
         $position = $data['position'];
 
-        $sql = "INSERT INTO faculty (user_id, faculty_name, faculty_id, department, position) VALUES (?, ?, ?, ?, ?)";
+        // Get department name for backward compatibility (optional)
+        $dept_name = '';
+        $dept_sql = "SELECT name FROM departments WHERE id = ?";
+        $dept_stmt = $conn->prepare($dept_sql);
+        $dept_stmt->bind_param("i", $department_id);
+        $dept_stmt->execute();
+        $dept_result = $dept_stmt->get_result();
+        if ($dept_row = $dept_result->fetch_assoc()) {
+            $dept_name = $dept_row['name'];
+        }
+        $dept_stmt->close();
+
+        $sql = "INSERT INTO faculty (user_id, faculty_name, faculty_id, department, department_id, position) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("issss", $user_id, $faculty_name, $faculty_id, $department, $position);
+        $stmt->bind_param("isssis", $user_id, $faculty_name, $faculty_id, $dept_name, $department_id, $position);
 
         if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Faculty registration completed"]);
+            echo json_encode([
+                "status" => "success", 
+                "message" => "Faculty registration completed",
+                "department" => $dept_name,
+                "department_id" => $department_id
+            ]);
         } else {
             echo json_encode(["status" => "error", "message" => "Failed to register faculty details"]);
         }

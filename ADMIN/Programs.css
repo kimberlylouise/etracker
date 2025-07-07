@@ -291,23 +291,207 @@
 /* Modal styles */
 .modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
   background: rgba(30, 41, 59, 0.45);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .modal-content {
   background: #fff;
   border-radius: 10px;
   padding: 32px 28px 24px 28px;
-  max-width: 520px;
+  max-width: 900px;
   width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 8px 32px rgba(27,71,43,0.18);
   position: relative;
   animation: modalIn 0.18s;
+  margin: auto;
+}
+
+/* Enhanced modal content for create program form */
+.modal-content fieldset {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+}
+
+.modal-content fieldset legend {
+  font-weight: bold;
+  color: #1B472B;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #1B472B;
+  box-shadow: 0 0 0 2px rgba(27, 71, 43, 0.1);
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 13px;
+}
+
+/* SDG container grid styles */
+#sdgContainer {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: white;
+}
+
+#sdgContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s;
+}
+
+#sdgContainer > div:hover {
+  background-color: #f0f9ff;
+}
+
+#sdgContainer input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+#sdgContainer label {
+  margin: 0;
+  font-size: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* Session management styles */
+.session-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 100px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: #f8fafc;
+  transition: all 0.2s;
+}
+
+.session-row:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.session-row input {
+  margin: 0;
+}
+
+.session-row button {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.session-row button:hover {
+  background-color: #c82333;
+}
+
+/* Form action buttons */
+.modal-content .form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-content .form-actions button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.modal-content .form-actions button[type="submit"] {
+  background-color: #1B472B;
+  color: white;
+}
+
+.modal-content .form-actions button[type="submit"]:hover {
+  background-color: #134a1f;
+}
+
+.modal-content .form-actions button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-content .form-actions button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
+/* Add session button */
+.add-session-btn {
+  margin-top: 10px;
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.add-session-btn:hover {
+  background-color: #0056b3;
 }
 
 @keyframes modalIn {
@@ -318,6 +502,9 @@
 .modal-content h2 {
   margin-top: 0;
   color: #1B472B;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #D7A400;
 }
 
 .modal-content button.close-modal {
@@ -331,6 +518,7 @@
   cursor: pointer;
   transition: color 0.2s;
 }
+
 .modal-content button.close-modal:hover {
   color: #D7A400;
 }

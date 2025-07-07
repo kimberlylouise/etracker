@@ -1,0 +1,32 @@
+# Security configurations for eTracker
+Options -Indexes
+
+# Protect sensitive files
+<Files "*.sql">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.md">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Enable error reporting for debugging (remove in production)
+php_flag display_errors on
+php_value error_reporting E_ALL
+
+# Set default file
+DirectoryIndex index.php index.html
+
+# Enable URL rewriting (if needed)
+RewriteEngine On
+
+# Force HTTPS when available
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

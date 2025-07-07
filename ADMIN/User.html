@@ -16,6 +16,8 @@
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+        <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
+
     <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
@@ -26,72 +28,114 @@
 
   <div class="main">
     <div class="user-management">
-        <h1>User Management</h1>
-      
-        <!-- Student Section -->
-        <section class="user-section">
-          <h2>Students</h2>
-          <div class="user-actions">
-            <button class="btn-primary" onclick="openModal('add-student-modal')">
-                <i class="fas fa-user-plus"></i> Add Student
-              </button>
-                          <button class="btn-secondary"><i class="fas fa-download"></i> Export Students</button>
+        <!-- Header Section with Stats and Search -->
+        <div class="header-section">
+          <div class="page-title">
+            <h1><i class="fas fa-users"></i> User Management</h1>
+            <p>Manage students and faculty members efficiently</p>
           </div>
-      
-          <!-- Add Student -->
+          
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card students">
+              <div class="stat-icon">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="total-students">0</h3>
+                <p>Total Students</p>
+              </div>
+            </div>
+            <div class="stat-card faculty">
+              <div class="stat-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="total-faculty">0</h3>
+                <p>Total Faculty</p>
+              </div>
+            </div>
+            <div class="stat-card verified">
+              <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+              </div>
+              <div class="stat-info">
+                <h3 id="verified-users">0</h3>
+                <p>Verified Users</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
- 
-  
-          <div class="user-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>ID Number</th>
-                  <th>Course</th>
-                  <th>Contact</th>
-                  <th>Enrolled Programs</th>
-                  <th>Attendance %</th>
-                  <th>Evaluations</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Leave empty, JS will fill this -->
-              </tbody>
-            </table>
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+          <div class="search-container">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-users" placeholder="Search users by name, ID, or department...">
+            </div>
+            <div class="filter-controls">
+              <select id="role-filter">
+                <option value="all">All Roles</option>
+                <option value="student">Students</option>
+                <option value="faculty">Faculty</option>
+              </select>
+              <select id="department-filter">
+                <option value="all">All Departments</option>
+              </select>
+              <select id="status-filter">
+                <option value="all">All Status</option>
+                <option value="verified">Verified</option>
+                <option value="unverified">Unverified</option>
+              </select>
+            </div>
           </div>
-        </section>
-      
-        <!-- Faculty Section -->
-        <section class="user-section">
-          <h2>Faculty</h2>
-          <div class="user-actions">
+          <div class="action-buttons">
+            <button class="btn-primary" onclick="openModal('add-student-modal')">
+              <i class="fas fa-user-plus"></i> Add Student
+            </button>
             <button class="btn-primary" onclick="openModal('add-faculty-modal')">
-                <i class="fas fa-user-plus"></i> Add Faculty
-              </button>
-                          <button class="btn-secondary"><i class="fas fa-download"></i> Export Faculty</button>
+              <i class="fas fa-user-tie"></i> Add Faculty
+            </button>
+            <button class="btn-secondary" onclick="exportUsers()">
+              <i class="fas fa-download"></i> Export
+            </button>
           </div>
-      
-          <div class="user-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Department</th>
-                  <th>Email</th>
-                  <th>Programs Handled</th>
-                  <th>Students Enrolled</th>
-                  <th>Evaluations Given</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Leave empty, JS will fill this -->
-              </tbody>
-            </table>
+        </div>
+
+        <!-- Users Display Section -->
+        <div class="users-display-section">
+          <!-- Tab Navigation -->
+          <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('students')" id="students-tab">
+              <i class="fas fa-user-graduate"></i> Students
+            </button>
+            <button class="tab-btn" onclick="switchTab('faculty')" id="faculty-tab">
+              <i class="fas fa-chalkboard-teacher"></i> Faculty
+            </button>
           </div>
-        </section>
+
+          <!-- Students Section -->
+          <div id="students-content" class="tab-content active">
+            <div class="users-grid" id="students-grid">
+              <!-- Students will be loaded here -->
+            </div>
+          </div>
+
+          <!-- Faculty Section -->
+          <div id="faculty-content" class="tab-content">
+            <div class="users-grid" id="faculty-grid">
+              <!-- Faculty will be loaded here -->
+            </div>
+          </div>
+
+          <!-- No Results Message -->
+          <div id="no-results" class="no-results hidden">
+            <i class="fas fa-search"></i>
+            <h3>No users found</h3>
+            <p>Try adjusting your search criteria or filters</p>
+          </div>
+        </div>
       </div>
       
       <!-- Overlay -->
@@ -115,9 +159,6 @@
       <option value="" disabled selected>Select Communication Preference</option>
       <option value="email">Email</option>
       <option value="sms">SMS</option>
-    </select>
-    <select name="programs[]" id="add-programs" multiple required>
-      <!-- JS will populate options -->
     </select>
     <button type="submit" class="btn-primary full">Add Student</button>
   </form>
@@ -183,9 +224,6 @@
       <option value="student">Student</option>
       <option value="faculty">Faculty</option>
     </select>
-    <select name="programs[]" id="edit-programs" multiple required>
-      <!-- JS will populate options -->
-    </select>
     <button type="submit" class="btn-edit full">Save Changes</button>
   </form>
 </div>
@@ -203,9 +241,7 @@
       <p><strong>Course/Department:</strong> <span id="profile-dept">-</span></p>
       <p><strong>Email:</strong> <span id="profile-email">-</span></p>
       <p><strong>Phone:</strong> <span id="profile-phone">-</span></p>
-      <p><strong>Programs:</strong> <span id="profile-programs">-</span></p>
-      <p><strong>Attendance:</strong> <span id="profile-attendance">-</span></p>
-      <p><strong>Evaluations:</strong> <span id="profile-evaluations">-</span></p>
+      <p><strong>Status:</strong> <span id="profile-status">-</span></p>
     </div>
   </div>
   
@@ -232,10 +268,8 @@
     document.getElementById("profile-id").textContent = user.id;
     document.getElementById("profile-dept").textContent = user.department;
     document.getElementById("profile-email").textContent = user.email;
-    document.getElementById("profile-phone").textContent = user.phone;
-    document.getElementById("profile-programs").textContent = user.programs ? user.programs.join(", ") : "-";
-    document.getElementById("profile-attendance").textContent = user.attendance;
-    document.getElementById("profile-evaluations").textContent = user.evaluations;
+    document.getElementById("profile-phone").textContent = user.phone || '-';
+    document.getElementById("profile-status").textContent = user.verification || '-';
 
     openModal('view-profile-modal');
   }
@@ -246,42 +280,20 @@
 });
 
 
+// Global variables
+let allUsers = [];
+let currentTab = 'students';
+
 // Fetch and display students
 function loadStudents() {
   fetch('api_users.php?role=student')
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        const tbody = document.querySelector('.user-section:nth-of-type(1) tbody');
-        tbody.innerHTML = '';
-        data.data.forEach(user => {
-          tbody.innerHTML += `
-            <tr>
-              <td>${user.firstname} ${user.lastname}</td>
-              <td>${user.id}</td>
-              <td>${user.department}</td>
-              <td>${user.phone}</td>
-              <td>${user.programs ? user.programs.join(", ") : "-"}</td>
-              <td>-</td>
-              <td>-</td>
-              <td>
-                <button class="btn-view" onclick='openViewProfile({
-                  name: "${user.firstname} ${user.lastname}",
-                  role: "Student",
-                  id: "${user.id}",
-                  department: "${user.department}",
-                  email: "${user.email}",
-                  phone: "${user.phone}",
-                  programs: [],
-                  attendance: "-",
-                  evaluations: "-"
-                })'>View</button>
-                <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
-                <button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>
-              </td>
-            </tr>
-          `;
-        });
+        const studentUsers = data.data.map(user => ({...user, role: 'student'}));
+        allUsers = allUsers.filter(u => u.role !== 'student').concat(studentUsers);
+        displayUsers();
+        updateStats();
       }
     });
 }
@@ -292,43 +304,163 @@ function loadFaculty() {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        const tbody = document.querySelector('.user-section:nth-of-type(2) tbody');
-        tbody.innerHTML = '';
-        data.data.forEach(user => {
-          tbody.innerHTML += `
-            <tr>
-              <td>${user.firstname} ${user.lastname}</td>
-              <td>${user.department}</td>
-              <td>${user.email}</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>
-                <button class="btn-view" onclick='openViewProfile({
-                  name: "${user.firstname} ${user.lastname}",
-                  role: "Faculty",
-                  id: "${user.id}",
-                  department: "${user.department}",
-                  email: "${user.email}",
-                  phone: "${user.phone}",
-                  programs: [],
-                  attendance: "-",
-                  evaluations: "-"
-                })'>View</button>
-                <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
-                <button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>
-              </td>
-            </tr>
-          `;
-        });
+        const facultyUsers = data.data.map(user => ({...user, role: 'faculty'}));
+        allUsers = allUsers.filter(u => u.role !== 'faculty').concat(facultyUsers);
+        displayUsers();
+        updateStats();
       }
     });
+}
+
+// Create user card
+function createUserCard(user) {
+  const isVerified = user.verification_status === 'verified';
+  
+  return `
+    <div class="user-card" data-user-id="${user.id}" data-role="${user.role}">
+      <div class="user-avatar">
+        <img src="https://api.dicebear.com/7.x/initials/svg?seed=${user.firstname} ${user.lastname}" alt="Avatar">
+        <div class="status-indicator ${isVerified ? 'verified' : 'unverified'}"></div>
+      </div>
+      <div class="user-info">
+        <h3>${user.firstname} ${user.lastname}</h3>
+        <p class="user-id">${user.role === 'student' ? 'Student ID: ' + (user.student_id || user.id) : 'Faculty ID: ' + (user.faculty_id || user.id)}</p>
+        <p class="user-department">${user.department}</p>
+        <div class="user-contact">
+          <span><i class="fas fa-envelope"></i> ${user.email}</span>
+          ${user.phone ? `<span><i class="fas fa-phone"></i> ${user.phone}</span>` : ''}
+        </div>
+        <div class="verification-badge ${isVerified ? 'verified' : 'unverified'}">
+          <i class="fas ${isVerified ? 'fa-check-circle' : 'fa-clock'}"></i>
+          ${isVerified ? 'Verified' : 'Pending Verification'}
+        </div>
+      </div>
+      <div class="user-actions">
+        <button class="btn-view" onclick='openViewProfile({
+          name: "${user.firstname} ${user.lastname}",
+          role: "${user.role}",
+          id: "${user.id}",
+          department: "${user.department}",
+          email: "${user.email}",
+          phone: "${user.phone}",
+          verification: "${user.verification_status}",
+          comm_preference: "${user.comm_preference}"
+        })' title="View Details">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button class="btn-edit" onclick="editUser(${user.id})" title="Edit User">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-delete" onclick="deleteUser(${user.id})" title="Delete User">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Display users based on current filters
+function displayUsers() {
+  const searchTerm = document.getElementById('search-users').value.toLowerCase();
+  const roleFilter = document.getElementById('role-filter').value;
+  const departmentFilter = document.getElementById('department-filter').value;
+  const statusFilter = document.getElementById('status-filter').value;
+  
+  let filteredUsers = allUsers.filter(user => {
+    const matchesSearch = user.firstname.toLowerCase().includes(searchTerm) ||
+                         user.lastname.toLowerCase().includes(searchTerm) ||
+                         user.email.toLowerCase().includes(searchTerm) ||
+                         user.department.toLowerCase().includes(searchTerm) ||
+                         (user.id && user.id.toString().includes(searchTerm));
+    
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    const matchesDepartment = departmentFilter === 'all' || user.department === departmentFilter;
+    const matchesStatus = statusFilter === 'all' || user.verification_status === statusFilter;
+    
+    return matchesSearch && matchesRole && matchesDepartment && matchesStatus;
+  });
+
+  // Separate students and faculty
+  const students = filteredUsers.filter(user => user.role === 'student');
+  const faculty = filteredUsers.filter(user => user.role === 'faculty');
+
+  // Display students
+  const studentsGrid = document.getElementById('students-grid');
+  studentsGrid.innerHTML = students.length > 0 ? 
+    students.map(user => createUserCard(user)).join('') :
+    '<div class="empty-state"><i class="fas fa-user-graduate"></i><p>No students found</p></div>';
+
+  // Display faculty
+  const facultyGrid = document.getElementById('faculty-grid');
+  facultyGrid.innerHTML = faculty.length > 0 ? 
+    faculty.map(user => createUserCard(user)).join('') :
+    '<div class="empty-state"><i class="fas fa-chalkboard-teacher"></i><p>No faculty found</p></div>';
+
+  // Show/hide no results message
+  document.getElementById('no-results').classList.toggle('hidden', filteredUsers.length > 0);
+}
+
+// Update statistics
+function updateStats() {
+  const students = allUsers.filter(user => user.role === 'student');
+  const faculty = allUsers.filter(user => user.role === 'faculty');
+  const verifiedUsers = allUsers.filter(user => user.verification_status === 'verified');
+  
+  document.getElementById('total-students').textContent = students.length;
+  document.getElementById('total-faculty').textContent = faculty.length;
+  document.getElementById('verified-users').textContent = verifiedUsers.length;
+}
+
+// Switch between tabs
+function switchTab(tab) {
+  currentTab = tab;
+  
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tab + '-tab').classList.add('active');
+  
+  // Update tab content
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  document.getElementById(tab + '-content').classList.add('active');
+}
+
+// Export users function
+function exportUsers() {
+  const dataStr = JSON.stringify(allUsers, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'users_export.json';
+  link.click();
+}
+
+// Initialize search and filter functionality
+function initializeFilters() {
+  // Search functionality
+  document.getElementById('search-users').addEventListener('input', displayUsers);
+  document.getElementById('role-filter').addEventListener('change', displayUsers);
+  document.getElementById('department-filter').addEventListener('change', displayUsers);
+  document.getElementById('status-filter').addEventListener('change', displayUsers);
+  
+  // Populate department filter
+  const departments = [...new Set(allUsers.map(user => user.department))];
+  const departmentFilter = document.getElementById('department-filter');
+  departments.forEach(dept => {
+    const option = document.createElement('option');
+    option.value = dept;
+    option.textContent = dept;
+    departmentFilter.appendChild(option);
+  });
 }
 
 // Call on page load
 window.onload = function() {
   loadStudents();
   loadFaculty();
+  setTimeout(() => {
+    initializeFilters();
+  }, 1000); // Wait for data to load before initializing filters
 };
 
 // Add Student
@@ -346,7 +478,8 @@ function submitStudent(e) {
         loadStudents();
         form.reset();
       }
-    });
+    })
+    .catch(error => console.error('Error:', error));
   return false;
 }
 
@@ -365,12 +498,13 @@ function submitFaculty(e) {
         loadFaculty();
         form.reset();
       }
-    });
+    })
+    .catch(error => console.error('Error:', error));
   return false;
 }
 
 function editUser(id) {
-  // Fetch user data (including program IDs)
+  // Fetch user data
   fetch('api_users.php?id=' + id)
     .then(res => res.json())
     .then(data => {
@@ -379,41 +513,12 @@ function editUser(id) {
         document.getElementById('edit-id').value = user.id;
         document.getElementById('edit-firstname').value = user.firstname;
         document.getElementById('edit-lastname').value = user.lastname;
-        document.getElementById('edit-mi').value = user.mi;
+        document.getElementById('edit-mi').value = user.mi || '';
         document.getElementById('edit-email').value = user.email;
         document.getElementById('edit-department').value = user.department;
-        document.getElementById('edit-phone').value = user.phone;
+        document.getElementById('edit-phone').value = user.phone || '';
         document.getElementById('edit-comm_preference').value = user.comm_preference;
         document.getElementById('edit-role').value = user.role;
-
-        // Fetch all active programs and pre-select user's enrolled programs
-        fetch('api_users.php?action=get_programs')
-          .then(res => res.json())
-          .then(programData => {
-            if (programData.success) {
-              const select = document.getElementById('edit-programs');
-              select.innerHTML = '';
-              // user.programs should be an array of program names or IDs
-              // If you store names, you need to map names to IDs
-              // It's better to return IDs from your backend!
-              const userProgramNames = user.programs || [];
-              const userProgramIds = user.program_ids || [];
-              programData.data.forEach(program => {
-                const option = document.createElement('option');
-                option.value = program.id;
-                option.textContent = program.program_name;
-                // If your user.programs is an array of names:
-                if (userProgramNames.includes(program.program_name)) {
-                  option.selected = true;
-                }
-                // If your user.programs is an array of IDs, use:
-                if (userProgramIds.includes(program.id)) {
-                  option.selected = true;
-                }
-                select.appendChild(option);
-              });
-            }
-          });
 
         openModal('edit-user-modal');
       }
@@ -460,27 +565,9 @@ function submitEditUser(e) {
   return false;
 }
 
-function populatePrograms(selectId, selected = []) {
-  fetch('api_users.php?action=get_programs')
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        const select = document.getElementById(selectId);
-        select.innerHTML = '';
-        data.data.forEach(program => {
-          const option = document.createElement('option');
-          option.value = program.id;
-          option.textContent = program.program_name;
-          if (selected.includes(program.id)) option.selected = true;
-          select.appendChild(option);
-        });
-      }
-    });
-}
-
-// Call this when opening Add/Edit modals:
-populatePrograms('add-programs');
-populatePrograms('edit-programs', [/* array of selected program ids */]);
+// Load initial data
+loadStudents();
+loadFaculty();
   </script>
   
 </body>

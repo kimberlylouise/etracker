@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_personal']) && $
           <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li class="active"><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
+          <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
           <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>

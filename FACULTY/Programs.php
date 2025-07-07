@@ -89,7 +89,9 @@ if ($ended_page > $ended_total_pages && $ended_total_pages > 0) {
 $ended_offset = ($ended_page - 1) * $programs_per_page;
 
 // Fetch active programs with pagination and search
-$active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, COUNT(pt.id) AS enrolled
+$active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, 
+                  p.program_type, p.target_audience, p.dept_approval, p.priority, p.requirements, p.budget,
+                  COUNT(pt.id) AS enrolled
                  FROM programs p
                  LEFT JOIN participants pt ON p.id = pt.program_id
                  WHERE p.status = 'ongoing'
@@ -99,7 +101,10 @@ $active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end
                  ORDER BY p.start_date
                  LIMIT ? OFFSET ?";
 $active_stmt = $conn->prepare($active_query);
-$active_stmt->bind_param('siis', $search, $faculty_id, $programs_per_page, $active_offset);
+if ($active_stmt === false) {
+    die('MySQL prepare error: ' . $conn->error);
+}
+$active_stmt->bind_param('siii', $search, $faculty_id, $programs_per_page, $active_offset);
 $active_stmt->execute();
 $active_result = $active_stmt->get_result();
 $active_programs = [];
@@ -112,7 +117,9 @@ if ($active_result) {
 $active_stmt->close();
 
 // Fetch ended programs with pagination and search
-$ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, COUNT(pt.id) AS enrolled
+$ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students,
+                p.program_type, p.target_audience, p.dept_approval, p.priority, p.requirements, p.budget,
+                COUNT(pt.id) AS enrolled
                 FROM programs p
                 LEFT JOIN participants pt ON p.id = pt.program_id
                 WHERE p.status = 'ended' AND p.program_name LIKE ? AND p.faculty_id = ?
@@ -120,7 +127,10 @@ $ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_
                 ORDER BY p.start_date
                 LIMIT ? OFFSET ?";
 $ended_stmt = $conn->prepare($ended_query);
-$ended_stmt->bind_param('siis', $search, $faculty_id, $programs_per_page, $ended_offset);
+if ($ended_stmt === false) {
+    die('MySQL prepare error: ' . $conn->error);
+}
+$ended_stmt->bind_param('siii', $search, $faculty_id, $programs_per_page, $ended_offset);
 $ended_stmt->execute();
 $ended_result = $ended_stmt->get_result();
 $ended_programs = [];
@@ -364,6 +374,8 @@ foreach ($active_programs as $program) {
           <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li class="active"><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
+                    <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
+
           <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
           <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
@@ -409,9 +421,44 @@ foreach ($active_programs as $program) {
             <?php foreach ($active_programs as $program): ?>
               <div class="program-card" data-program-id="<?php echo htmlspecialchars($program['id']); ?>">
                 <div class="program-info">
-                  <h3><?php echo htmlspecialchars($program['program_name']); ?></h3>
+                  <div class="program-header">
+                    <h3><?php echo htmlspecialchars($program['program_name']); ?></h3>
+                    <div class="program-badges">
+                      <?php if (isset($program['program_type']) && $program['program_type']): ?>
+                        <span class="badge type-badge"><?php echo htmlspecialchars($program['program_type']); ?></span>
+                      <?php endif; ?>
+                      <?php if (isset($program['priority']) && $program['priority'] !== 'normal'): ?>
+                        <span class="badge priority-badge priority-<?php echo htmlspecialchars($program['priority']); ?>"><?php echo htmlspecialchars(ucfirst($program['priority'])); ?></span>
+                      <?php endif; ?>
+                      <?php if (isset($program['dept_approval'])): ?>
+                        <span class="badge approval-badge approval-<?php echo htmlspecialchars($program['dept_approval']); ?>"><?php echo htmlspecialchars(ucfirst($program['dept_approval'])); ?></span>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                  
                   <p><strong>Description:</strong> <?php echo htmlspecialchars($program['description'] ?: 'No description provided.'); ?></p>
-                  <p><strong>Dates:</strong> <?php echo htmlspecialchars(date('F j, Y', strtotime($program['start_date']))); ?> - <?php echo htmlspecialchars(date('F j, Y', strtotime($program['end_date']))); ?></p>
+                  
+                  <div class="program-details-grid">
+                    <div class="detail-item">
+                      <strong>Dates:</strong> <?php echo htmlspecialchars(date('F j, Y', strtotime($program['start_date']))); ?> - <?php echo htmlspecialchars(date('F j, Y', strtotime($program['end_date']))); ?>
+                    </div>
+                    <?php if (isset($program['target_audience']) && $program['target_audience']): ?>
+                    <div class="detail-item">
+                      <strong>Target Audience:</strong> <?php echo htmlspecialchars($program['target_audience']); ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (isset($program['requirements']) && $program['requirements']): ?>
+                    <div class="detail-item">
+                      <strong>Requirements:</strong> <?php echo htmlspecialchars($program['requirements']); ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (isset($program['budget']) && $program['budget'] > 0): ?>
+                    <div class="detail-item">
+                      <strong>Budget:</strong> ₱<?php echo number_format($program['budget'], 2); ?>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+                  
                   <p><strong>Schedule:</strong></p>
 <div class="sessions-list">
   <?php

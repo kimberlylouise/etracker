@@ -6,172 +6,515 @@
   <title>eTracker Admin Dashboard</title>
   <link rel="stylesheet" href="Document.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
 </head>
 <body>
-
-    
   <div class="sidebar">
     <h2>eTracker Admin</h2>
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+        <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
+
     <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-  
   </div>
 
-    <div class="main">
-        <h1>Document Management</h1>
-      
-        <section class="filter-section">
-          <h2>Filter Documents</h2>
-          <form>
-            <label for="docTypeFilter">Document Type</label>
-            <select id="docTypeFilter" name="docTypeFilter">
-              <option value="">-- All Types --</option>
-              <option value="proposal">Extension Activity Proposal</option>
-              <option value="report">Implementation Report</option>
-              <option value="attendance">Attendance Sheet</option>
-              <option value="evaluation">Evaluation Form</option>
-              <option value="photo">Photo Documentation</option>
-              <option value="certificate">Certificate</option>
-              <option value="other">Other Supporting Document</option>
-            </select>
-      
-            <label for="uploaderFilter">Submitted By</label>
-            <input type="text" id="uploaderFilter" name="uploaderFilter" placeholder="e.g., Dr. Santos">
-      
-            <button type="submit">Apply Filters</button>
-          </form>
-        </section>
-      
-        <section class="documents-table">
-          <h2>Submitted Documents</h2>
-          <table border="1" cellpadding="6" cellspacing="0">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Program ID</th>
-                <th>Faculty ID</th>
-                <th>Document Type</th>
-                <th>File Path</th>
-                <th>Original Filename</th>
-                <th>Upload Date</th>
-                <th>Status</th>
-                <th>Admin Remarks</th>
-                <th>Reviewed By</th>
-                <th>Reviewed At</th>
-                <th>Uploaded By</th>
-              </tr>
-            </thead>
-            <tbody id="documentsTableBody">
-              <!-- Rows will be inserted here by JavaScript -->
-            </tbody>
-          </table>
-        </section>
+  <div class="main">
+    <h1>Document Management</h1>
+    
+    <section class="filter-section">
+      <h2><i class="fas fa-filter"></i> Filter Documents</h2>
+      <div class="filter-form">
+        <div class="filter-group">
+          <label for="docTypeFilter">
+            <i class="fas fa-file-alt"></i>
+            Document Type
+          </label>
+          <select id="docTypeFilter" name="docTypeFilter">
+            <option value="">-- All Types --</option>
+            <option value="proposal">📋 Proposal</option>
+            <option value="report">📊 Report</option>
+            <option value="attendance">✅ Attendance</option>
+            <option value="photos">📷 Photos</option>
+            <option value="feedback">💬 Feedback</option>
+            <option value="workload">⚡ Workload</option>
+            <option value="accomplishments">🏆 Accomplishments</option>
+            <option value="other">📄 Other</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="statusFilter">
+            <i class="fas fa-check-circle"></i>
+            Status
+          </label>
+          <select id="statusFilter" name="statusFilter">
+            <option value="">-- All Status --</option>
+            <option value="pending">⏳ Pending</option>
+            <option value="approved">✅ Approved</option>
+            <option value="rejected">❌ Rejected</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="dateFilter">
+            <i class="fas fa-calendar"></i>
+            Upload Date
+          </label>
+          <input type="date" id="dateFilter" name="dateFilter">
+        </div>
+        
+        <div class="filter-group">
+          <div class="filter-buttons">
+            <button type="button" onclick="applyFilters()" class="filter-btn primary">
+              <i class="fas fa-search"></i>
+              Apply Filters
+            </button>
+            <button type="button" onclick="clearFilters()" class="filter-btn secondary">
+              <i class="fas fa-times"></i>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="documents-section">
+      <div class="section-header">
+        <h2><i class="fas fa-file-alt"></i> Submitted Documents</h2>
+        <div class="document-stats">
+          <span class="stat-item pending">Pending: <span id="pendingCount">0</span></span>
+          <span class="stat-item approved">Approved: <span id="approvedCount">0</span></span>
+          <span class="stat-item rejected">Rejected: <span id="rejectedCount">0</span></span>
+        </div>
       </div>
       
-      <script>
-async function fetchDocuments() {
-  const res = await fetch('/backend/get_documents.php');
-  const docs = await res.json();
-  return docs;
-}
+      <div class="table-container">
+        <table class="documents-table">
+          <thead>
+            <tr>
+              <th>DOCUMENT</th>
+              <th>TYPE</th>
+              <th>FACULTY</th>
+              <th>PROGRAM</th>
+              <th>UPLOAD DATE</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="documentsTableBody">
+            <tr>
+              <td colspan="7" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading documents...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 
-function renderDocumentsTable(docs) {
-  const tbody = document.getElementById('documentsTableBody');
-  tbody.innerHTML = '';
-  if (!docs.length) {
-    tbody.innerHTML = '<tr><td colspan="12">No documents found.</td></tr>';
-    return;
-  }
-  docs.forEach(doc => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${doc.id}</td>
-      <td>${doc.program_id}</td>
-      <td>${doc.faculty_id}</td>
-      <td>${doc.document_type}</td>
-      <td>${doc.file_path}</td>
-      <td>${doc.original_filename}</td>
-      <td>${doc.upload_date}</td>
-      <td>${doc.status}</td>
-      <td>${doc.admin_remarks || ''}</td>
-      <td>${doc.reviewed_by || ''}</td>
-      <td>${doc.reviewed_at || ''}</td>
-      <td>${doc.uploaded_by || ''}</td>
-    `;
-    tbody.appendChild(row);
-  });
-}
-
-document.querySelector('.filter-section form').onsubmit = async function(e) {
-  e.preventDefault();
-  const docs = await fetchDocuments();
-  renderDocumentsTable(docs);
-};
-
-// Initial load
-window.addEventListener('DOMContentLoaded', async () => {
-  const docs = await fetchDocuments();
-  console.log(docs); // Debug: See what is fetched
-  renderDocumentsTable(docs);
-});
-
-// View document (simple, for PDFs/images)
-function viewDocument(path) {
-  window.open(path, '_blank');
-}
-
-// Review modal (approve/reject)
-function showReviewModal(id) {
-  const modal = document.createElement('div');
-  modal.style.position = 'fixed';
-  modal.style.top = 0;
-  modal.style.left = 0;
-  modal.style.right = 0;
-  modal.style.bottom = 0;
-  modal.style.background = 'rgba(30,41,59,0.45)';
-  modal.style.display = 'flex';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
-  modal.style.zIndex = 1000;
-  modal.innerHTML = `
-    <div style="background:#fff;max-width:400px;width:95%;border-radius:10px;padding:24px 20px;position:relative;">
-      <button onclick="this.parentNode.parentNode.remove()" style="position:absolute;top:10px;right:16px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
-      <h2>Review Document</h2>
-      <textarea id="adminRemarks" placeholder="Remarks (optional)" style="width:100%;min-height:60px;"></textarea>
-      <div style="margin-top:12px;text-align:right;">
-        <button onclick="reviewDocument(${id},'approved')">Approve</button>
-        <button onclick="reviewDocument(${id},'rejected')">Reject</button>
+  <!-- Review Modal -->
+  <div id="reviewModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-clipboard-check"></i> Review Document</h3>
+        <button class="close-btn" onclick="closeReviewModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="document-info">
+          <p><strong>Document:</strong> <span id="modalDocName"></span></p>
+          <p><strong>Type:</strong> <span id="modalDocType"></span></p>
+          <p><strong>Faculty:</strong> <span id="modalFaculty"></span></p>
+        </div>
+        <div class="form-group">
+          <label for="adminRemarks">Admin Remarks:</label>
+          <textarea id="adminRemarks" placeholder="Enter your remarks here..." rows="4"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" onclick="reviewDocument('approved')">
+          <i class="fas fa-check"></i> Approve
+        </button>
+        <button class="btn btn-danger" onclick="reviewDocument('rejected')">
+          <i class="fas fa-times"></i> Reject
+        </button>
+        <button class="btn btn-secondary" onclick="closeReviewModal()">Cancel</button>
       </div>
     </div>
-  `;
-  document.body.appendChild(modal);
-}
+  </div>
 
-async function reviewDocument(id, status) {
-  const remarks = document.getElementById('adminRemarks').value;
-  await fetch(`/backend/review_document.php`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({id, status, remarks})
-  });
-  document.querySelectorAll('#adminRemarks').forEach(el => el.closest('div[style]').parentNode.remove());
-  const docs = await fetchDocuments();
-  renderDocumentsTable(docs);
-}
+  <script>
+    let allDocuments = [];
+    let currentDocumentId = null;
 
-async function deleteDocument(id) {
-  if (!confirm('Delete this document?')) return;
-  await fetch(`/backend/delete_document.php?id=${id}`, { method: 'POST' });
-  const docs = await fetchDocuments();
-  renderDocumentsTable(docs);
-}
-</script>
+    async function fetchDocuments() {
+      try {
+        console.log('Fetching documents...');
+        
+        const possiblePaths = [
+          '../backend/get_documents.php',
+          'get_documents.php',
+          '/backend/get_documents.php'
+        ];
+        
+        let docs = null;
+        let lastError = null;
+        
+        for (let path of possiblePaths) {
+          try {
+            const res = await fetch(path);
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            
+            const responseText = await res.text();
+            docs = JSON.parse(responseText);
+            break;
+          } catch (error) {
+            lastError = error;
+            continue;
+          }
+        }
+        
+        if (docs === null) {
+          throw lastError || new Error('Failed to fetch documents');
+        }
+        
+        allDocuments = docs;
+        return docs;
+      } catch (error) {
+        console.error('Error fetching documents:', error);
+        showErrorMessage('Failed to load documents. Please check your connection and try again.');
+        return [];
+      }
+    }
+
+    function renderDocumentsTable(docs) {
+      const tbody = document.getElementById('documentsTableBody');
+      tbody.innerHTML = '';
+      
+      if (!docs || docs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="no-data">
+              <i class="fas fa-folder-open"></i>
+              <p>No documents found</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      docs.forEach(doc => {
+        const row = document.createElement('tr');
+        row.className = `status-${doc.status}`;
+        
+        const uploadDate = new Date(doc.upload_date).toLocaleDateString();
+        const statusBadge = getStatusBadge(doc.status);
+        const typeBadge = getTypeBadge(doc.document_type);
+        
+        row.innerHTML = `
+          <td class="document-cell">
+            <div class="document-info">
+              <i class="fas fa-file-alt"></i>
+              <div>
+                <strong>${doc.original_filename || 'Unknown File'}</strong>
+                <small>ID: ${doc.id}</small>
+              </div>
+            </div>
+          </td>
+          <td>${typeBadge}</td>
+          <td>
+            <div class="faculty-info">
+              <i class="fas fa-user"></i>
+              Faculty ID: ${doc.faculty_id}
+            </div>
+          </td>
+          <td>
+            <div class="program-info">
+              <i class="fas fa-calendar"></i>
+              Program ID: ${doc.program_id}
+            </div>
+          </td>
+          <td>${uploadDate}</td>
+          <td>${statusBadge}</td>
+          <td class="actions-cell">
+            <button class="btn btn-sm btn-info" onclick="viewDocument('${doc.file_path}', ${doc.id})" title="View Document">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${doc.status === 'pending' ? `
+              <button class="btn btn-sm btn-warning" onclick="showReviewModal(${doc.id}, '${doc.original_filename}', '${doc.document_type}', ${doc.faculty_id})" title="Review">
+                <i class="fas fa-clipboard-check"></i>
+              </button>
+            ` : ''}
+            <button class="btn btn-sm btn-danger" onclick="deleteDocument(${doc.id})" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+      updateStats(docs);
+    }
+
+    function getStatusBadge(status) {
+      const badges = {
+        'pending': '<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>',
+        'approved': '<span class="badge badge-success"><i class="fas fa-check"></i> Approved</span>',
+        'rejected': '<span class="badge badge-danger"><i class="fas fa-times"></i> Rejected</span>'
+      };
+      return badges[status] || `<span class="badge badge-secondary">${status}</span>`;
+    }
+
+    function getTypeBadge(type) {
+      const badges = {
+        'proposal': '<span class="type-badge proposal">Proposal</span>',
+        'report': '<span class="type-badge report">Report</span>',
+        'attendance': '<span class="type-badge attendance">Attendance</span>',
+        'photos': '<span class="type-badge photos">Photos</span>',
+        'feedback': '<span class="type-badge feedback">Feedback</span>',
+        'workload': '<span class="type-badge workload">Workload</span>',
+        'accomplishments': '<span class="type-badge accomplishments">Accomplishments</span>',
+        'other': '<span class="type-badge other">Other</span>'
+      };
+      return badges[type] || `<span class="type-badge other">${type}</span>`;
+    }
+
+    function updateStats(docs) {
+      const stats = docs.reduce((acc, doc) => {
+        acc[doc.status] = (acc[doc.status] || 0) + 1;
+        return acc;
+      }, {});
+      
+      document.getElementById('pendingCount').textContent = stats.pending || 0;
+      document.getElementById('approvedCount').textContent = stats.approved || 0;
+      document.getElementById('rejectedCount').textContent = stats.rejected || 0;
+    }
+
+    function applyFilters() {
+      const typeFilter = document.getElementById('docTypeFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      const dateFilter = document.getElementById('dateFilter').value;
+      
+      let filteredDocs = allDocuments.filter(doc => {
+        if (typeFilter && doc.document_type !== typeFilter) return false;
+        if (statusFilter && doc.status !== statusFilter) return false;
+        if (dateFilter) {
+          const docDate = new Date(doc.upload_date).toDateString();
+          const filterDate = new Date(dateFilter).toDateString();
+          if (docDate !== filterDate) return false;
+        }
+        return true;
+      });
+      
+      renderDocumentsTable(filteredDocs);
+    }
+
+    function clearFilters() {
+      document.getElementById('docTypeFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('dateFilter').value = '';
+      renderDocumentsTable(allDocuments);
+    }
+
+    function showReviewModal(id, filename, type, facultyId) {
+      try {
+        currentDocumentId = id;
+        
+        // Sanitize the data to prevent XSS
+        const sanitizedFilename = filename ? filename.replace(/[<>"'&]/g, '') : 'Unknown Document';
+        const sanitizedType = type ? type.replace(/[<>"'&]/g, '') : 'Unknown Type';
+        const sanitizedFacultyId = facultyId || 'Unknown';
+        
+        document.getElementById('modalDocName').textContent = sanitizedFilename;
+        document.getElementById('modalDocType').textContent = sanitizedType;
+        document.getElementById('modalFaculty').textContent = `Faculty ID: ${sanitizedFacultyId}`;
+        document.getElementById('adminRemarks').value = '';
+        
+        const modal = document.getElementById('reviewModal');
+        if (modal) {
+          // Remove any existing show class first
+          modal.classList.remove('show');
+          // Force a reflow
+          modal.offsetHeight;
+          // Add show class to trigger display
+          modal.classList.add('show');
+          
+          // Focus on the textarea for better UX
+          setTimeout(() => {
+            document.getElementById('adminRemarks').focus();
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Error showing modal:', error);
+        showErrorMessage('Error opening review modal.');
+      }
+    }
+
+    function closeReviewModal() {
+      const modal = document.getElementById('reviewModal');
+      if (modal) {
+        modal.classList.remove('show');
+      }
+      currentDocumentId = null;
+      
+      // Clear the form
+      document.getElementById('adminRemarks').value = '';
+    }
+
+    async function reviewDocument(status) {
+      if (!currentDocumentId) return;
+      
+      const remarks = document.getElementById('adminRemarks').value;
+      
+      try {
+        const response = await fetch('../backend/review_document.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: currentDocumentId,
+            status: status,
+            remarks: remarks
+          })
+        });
+        
+        if (response.ok) {
+          closeReviewModal();
+          await loadDocuments();
+          showSuccessMessage(`Document ${status} successfully!`);
+        } else {
+          throw new Error('Failed to update document status');
+        }
+      } catch (error) {
+        console.error('Error reviewing document:', error);
+        showErrorMessage('Failed to update document status. Please try again.');
+      }
+    }
+
+    async function deleteDocument(id) {
+      if (!confirm('Are you sure you want to delete this document? This action cannot be undone.')) return;
+      
+      try {
+        const response = await fetch(`../backend/delete_document.php?id=${id}`, { 
+          method: 'POST' 
+        });
+        
+        if (response.ok) {
+          await loadDocuments();
+          showSuccessMessage('Document deleted successfully!');
+        } else {
+          throw new Error('Failed to delete document');
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        showErrorMessage('Failed to delete document. Please try again.');
+      }
+    }
+
+    function viewDocument(path, docId) {
+      if (!docId) {
+        // Extract docId from the current row if not provided
+        const rows = document.querySelectorAll('.documents-table tbody tr');
+        for (let row of rows) {
+          if (row.innerHTML.includes(path)) {
+            const idMatch = row.innerHTML.match(/ID: (\d+)/);
+            if (idMatch) {
+              docId = idMatch[1];
+              break;
+            }
+          }
+        }
+      }
+      
+      if (docId) {
+        // Use the dedicated view endpoint
+        const viewUrl = `view_document.php?id=${docId}`;
+        console.log('Opening document with ID:', docId);
+        window.open(viewUrl, '_blank');
+      } else if (path) {
+        console.log('Viewing document by path:', path);
+        
+        // Try different path combinations as fallback
+        const possiblePaths = [
+          path,
+          `../FACULTY/${path}`,
+          `../${path}`,
+          `/FACULTY/${path}`,
+          `/${path}`
+        ];
+        
+        // Try to open the first available path
+        let opened = false;
+        for (let tryPath of possiblePaths) {
+          try {
+            console.log('Trying path:', tryPath);
+            window.open(tryPath, '_blank');
+            opened = true;
+            break;
+          } catch (error) {
+            console.log('Failed to open:', tryPath, error);
+            continue;
+          }
+        }
+        
+        if (!opened) {
+          showErrorMessage('Unable to open document. File may not exist or path is incorrect.');
+        }
+      } else {
+        showErrorMessage('Document path not available.');
+      }
+    }
+
+    function showSuccessMessage(message) {
+      // You can implement a toast notification here
+      alert(message);
+    }
+
+    function showErrorMessage(message) {
+      // You can implement a toast notification here
+      alert(message);
+    }
+
+    async function loadDocuments() {
+      const docs = await fetchDocuments();
+      renderDocumentsTable(docs);
+    }
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', async () => {
+      console.log('Page loaded, initializing...');
+      
+      // Ensure modal is hidden on page load
+      const modal = document.getElementById('reviewModal');
+      if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none'; // Double ensure it's hidden
+      }
+      
+      // Load documents
+      await loadDocuments();
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('reviewModal');
+      if (e.target === modal) {
+        closeReviewModal();
+      }
+    });
+
+    // Close modal with Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('reviewModal');
+        if (modal && modal.classList.contains('show')) {
+          closeReviewModal();
+        }
+      }
+    });
+  </script>
 </body>
 </html>

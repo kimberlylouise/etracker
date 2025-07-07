@@ -161,6 +161,13 @@
     align-items: flex-start;
     gap: 10px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #1B472B;
+    transition: all 0.3s ease;
+  }
+  
+  .program-card:hover {
+    box-shadow: 0 4px 12px rgba(27, 71, 43, 0.15);
+    transform: translateY(-2px);
   }
   
   .program-info {
@@ -675,4 +682,91 @@
     color: #b30000;
     border: 1.5px dashed #b7e4c7;
     font-style: italic;
+  }
+  
+  /* Department Program Enhancement Styles */
+  .program-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+  
+  .program-header h3 {
+    flex: 1;
+    margin: 0;
+  }
+  
+  .program-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: 15px;
+  }
+  
+  .badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .type-badge {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+  }
+  
+  .priority-badge.priority-high {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffcc02;
+  }
+  
+  .priority-badge.priority-urgent {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+  }
+  
+  .approval-badge.approval-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+    border: 1px solid #ffecb3;
+  }
+  
+  .approval-badge.approval-approved {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+  
+  .approval-badge.approval-rejected {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+  }
+  
+  .program-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #1B472B;
+  }
+  
+  .detail-item {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  
+  .detail-item strong {
+    color: #1B472B;
+    display: block;
+    margin-bottom: 2px;
   }

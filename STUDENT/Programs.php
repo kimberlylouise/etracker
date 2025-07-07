@@ -91,17 +91,28 @@ if ($user_id) {
           <!-- MY PROGRAMS: Show enrolled, status, attendance, feedback -->
           <section class="tab-pane" id="my-programs">
             <h2>My Programs</h2>
+            
+            <!-- Mini Tabs for My Programs -->
+            <div class="my-programs-mini-tabs">
+              <button class="mini-tab active" data-filter="active">
+                <i class="fas fa-play-circle"></i> Active <span class="tab-count" id="active-count">0</span>
+              </button>
+              <button class="mini-tab" data-filter="pending">
+                <i class="fas fa-clock"></i> Pending <span class="tab-count" id="pending-count">0</span>
+              </button>
+              <button class="mini-tab" data-filter="completed">
+                <i class="fas fa-check-circle"></i> Completed <span class="tab-count" id="completed-count">0</span>
+              </button>
+            </div>
+            
             <div class="loading" id="my-programs-loading">
               <span class="spinner"></span> Loading Programs...
             </div>
-            <p id="no-programs-message" style="display: none;">Not enrolled in any programs</p>
+            <p id="no-programs-message" style="display: none;">No programs found in this category</p>
             <div class="my-programs-list" id="my-programs-list"></div>
           </section>
         </div>
       </div>
-
-      <!-- Mini Tabs for Program List -->
-      <div id="program-list"></div>
     </main>
   </div>
 
@@ -142,11 +153,11 @@ if ($user_id) {
     pagePrograms.forEach(program => {
       let enrollBtnHtml = '';
       if (enrolledPrograms[program.id] === 'approved') {
-        enrollBtnHtml = `<button class="enroll-btn" disabled>Enrolled</button>`;
+        enrollBtnHtml = `<button class="enroll-btn enrolled" disabled>✓ Enrolled</button>`;
       } else if (enrolledPrograms[program.id] === 'pending') {
-        enrollBtnHtml = `<button class="enroll-btn" disabled>Pending</button>`;
+        enrollBtnHtml = `<button class="enroll-btn pending" disabled>⏳ Pending Approval</button>`;
       } else {
-        enrollBtnHtml = `<button class="enroll-btn" data-id="${program.id}">Enroll</button>`;
+        enrollBtnHtml = `<button class="enroll-btn" data-id="${program.id}">Submit Enrollment</button>`;
       }
 
       const status = 'active';
@@ -199,7 +210,7 @@ if ($user_id) {
             <ul class="session-list">${(program.sessions || []).map(s =>
               `<li>${s.session_title} - ${s.session_date} (${s.session_start} to ${s.session_end}) @ ${s.location}</li>`
             ).join('') || '<li>No sessions listed.</li>'}</ul>
-            <div style="margin-top:1em; color:#d9534f;"><b>Are you sure you want to enroll in this program?</b></div>
+            <div style="margin-top:1em; color:#d9534f;"><b>Are you sure you want to submit your enrollment for this program?</b></div>
             <div id="modal-enroll-message" style="margin-top:0.5em; color:#28a745;"></div>
           `;
           modal.style.display = 'flex';
@@ -207,7 +218,16 @@ if ($user_id) {
           // Confirm button
           document.getElementById('confirm-enroll-btn').onclick = () => {
             const message = document.getElementById('modal-enroll-message');
-            message.textContent = 'Submitting...';
+            const confirmBtn = document.getElementById('confirm-enroll-btn');
+            const cancelBtn = document.getElementById('cancel-enroll-btn');
+            
+            // Disable buttons and show loading state
+            confirmBtn.disabled = true;
+            cancelBtn.disabled = true;
+            confirmBtn.textContent = 'Submitting...';
+            message.textContent = 'Processing your enrollment request...';
+            message.style.color = '#007bff';
+            
             fetch('/Student/enroll.php', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -215,24 +235,60 @@ if ($user_id) {
             })
               .then(response => response.json())
               .then(data => {
-                message.textContent = data.message;
                 if (data.status === 'success') {
+                  message.textContent = data.message;
+                  message.style.color = '#28a745';
                   // Update enrolledPrograms and re-render cards
                   enrolledPrograms[program.id] = 'pending';
                   setTimeout(() => {
                     modal.style.display = 'none';
                     renderDirectoryCards(directoryPrograms, directoryCurrentPage);
-                  }, 1200);
+                    // Reset button states for next use
+                    confirmBtn.disabled = false;
+                    cancelBtn.disabled = false;
+                    confirmBtn.textContent = 'Submit';
+                  }, 2000);
+                } else {
+                  message.textContent = data.message;
+                  message.style.color = '#dc3545';
+                  // Re-enable buttons
+                  confirmBtn.disabled = false;
+                  cancelBtn.disabled = false;
+                  confirmBtn.textContent = 'Submit';
                 }
               })
-              .catch(() => {
-                message.textContent = 'Error submitting enrollment';
+              .catch(error => {
+                message.textContent = 'Network error. Please check your connection and try again.';
+                message.style.color = '#dc3545';
+                // Re-enable buttons
+                confirmBtn.disabled = false;
+                cancelBtn.disabled = false;
+                confirmBtn.textContent = 'Submit';
+                console.error('Network error:', error);
               });
           };
-          // Cancel/close
-          document.getElementById('cancel-enroll-btn').onclick =
-          document.querySelector('.close-modal').onclick = () => {
+          // Cancel/close with state reset
+          const closeModal = () => {
             modal.style.display = 'none';
+            // Reset button states
+            const confirmBtn = document.getElementById('confirm-enroll-btn');
+            const cancelBtn = document.getElementById('cancel-enroll-btn');
+            const message = document.getElementById('modal-enroll-message');
+            
+            confirmBtn.disabled = false;
+            cancelBtn.disabled = false;
+            confirmBtn.textContent = 'Submit';
+            message.textContent = '';
+          };
+          
+          document.getElementById('cancel-enroll-btn').onclick = closeModal;
+          document.querySelector('.close-modal').onclick = closeModal;
+          
+          // Close modal when clicking outside
+          modal.onclick = (e) => {
+            if (e.target === modal) {
+              closeModal();
+            }
           };
         };
       }
@@ -307,92 +363,303 @@ if ($user_id) {
     };
   }
 
-  // --- MY PROGRAMS: Show enrolled, status, attendance, feedback ---
+  // --- MY PROGRAMS: Mini tabs with filtered program management ---
+  let allMyPrograms = []; // Store all programs
+  let currentMyProgramsFilter = 'active'; // Default filter
+
   function loadMyPrograms() {
-  const list = document.getElementById('my-programs-list');
-  const loading = document.getElementById('my-programs-loading');
-  const noProgramsMessage = document.getElementById('no-programs-message');
-  loading.style.display = 'block';
-  list.innerHTML = '';
-  noProgramsMessage.style.display = 'none';
+    const loading = document.getElementById('my-programs-loading');
+    const noProgramsMessage = document.getElementById('no-programs-message');
+    loading.style.display = 'block';
+    noProgramsMessage.style.display = 'none';
 
-  fetch('get_my_programs.php')
-    .then(response => response.json())
-    .then(data => {
-      loading.style.display = 'none';
-      if (data.status === 'success' && data.programs.length > 0) {
-        // Separate active and ended programs based on BOTH enrollment and program status
-        const active = data.programs.filter(
-          p => p.status === 'approved' && p.program_status === 'ongoing'
-        );
-        const ended = data.programs.filter(
-          p => p.status === 'approved' && p.program_status === 'ended'
-        );
-
-        if (active.length > 0) {
-          const activeHeader = document.createElement('h3');
-          activeHeader.textContent = 'Active Programs';
-          list.appendChild(activeHeader);
-          active.forEach(program => {
-            const card = createMyProgramCard(program);
-            list.appendChild(card);
-          });
+    fetch('get_my_programs.php')
+      .then(response => response.json())
+      .then(data => {
+        loading.style.display = 'none';
+        if (data.status === 'success') {
+          allMyPrograms = data.programs || [];
+          updateProgramCounts();
+          showMyProgramsTab(currentMyProgramsFilter);
+        } else {
+          showNoPrograms('Error loading programs');
         }
-
-        if (ended.length > 0) {
-          const endedHeader = document.createElement('h3');
-          endedHeader.textContent = 'Ended Programs';
-          endedHeader.style.marginTop = '2em';
-          list.appendChild(endedHeader);
-          ended.forEach(program => {
-            const card = createMyProgramCard(program);
-            list.appendChild(card);
-          });
-        }
-
-        if (active.length === 0 && ended.length === 0) {
-          noProgramsMessage.style.display = 'block';
-        }
-      } else {
-        noProgramsMessage.style.display = 'block';
-      }
-    })
-    .catch(error => {
-      loading.style.display = 'none';
-      noProgramsMessage.style.display = 'block';
-      console.error('Error:', error);
-    });
-}
-
-  // Helper function to create a program card (reuse your existing card code)
-  function createMyProgramCard(program) {
-  const card = document.createElement('div');
-  card.className = 'my-program-card';
-
-  // Determine display status and color
-  let displayStatus = '';
-  let statusClass = '';
-  if (program.program_status === 'ongoing') {
-    displayStatus = 'Active';
-    statusClass = 'status-active';
-  } else if (program.program_status === 'ended') {
-    displayStatus = 'Ended';
-    statusClass = 'status-ended';
-  } else {
-    displayStatus = program.program_status;
-    statusClass = '';
+      })
+      .catch(error => {
+        loading.style.display = 'none';
+        showNoPrograms('Network error. Please try again.');
+        console.error('Error:', error);
+      });
   }
 
-  card.innerHTML = `
-    <div class="card-title">${program.program_name}</div>
-    <div class="card-meta">
-      <span class="program-status ${statusClass}">${displayStatus}</span>
-      <br>
-      <span class="program-schedule">${program.start_date || ''} ${program.end_date ? ' - ' + program.end_date : ''}</span>
-    </div>
-  `;
-  return card;
-}
+  function updateProgramCounts() {
+    const active = allMyPrograms.filter(p => 
+      p.enrollment_status === 'approved' && p.program_status === 'ongoing'
+    ).length;
+    const pending = allMyPrograms.filter(p => 
+      p.enrollment_status === 'pending'
+    ).length;
+    const completed = allMyPrograms.filter(p => 
+      p.enrollment_status === 'approved' && p.program_status === 'ended'
+    ).length;
+
+    document.getElementById('active-count').textContent = active;
+    document.getElementById('pending-count').textContent = pending;
+    document.getElementById('completed-count').textContent = completed;
+  }
+
+  function showMyProgramsTab(filter) {
+    // Update active mini tab
+    document.querySelectorAll('.my-programs-mini-tabs .mini-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+
+    // Filter programs based on selected tab
+    let filteredPrograms = [];
+    if (filter === 'active') {
+      filteredPrograms = allMyPrograms.filter(p => 
+        p.enrollment_status === 'approved' && p.program_status === 'ongoing'
+      );
+    } else if (filter === 'pending') {
+      filteredPrograms = allMyPrograms.filter(p => 
+        p.enrollment_status === 'pending'
+      );
+    } else if (filter === 'completed') {
+      filteredPrograms = allMyPrograms.filter(p => 
+        p.enrollment_status === 'approved' && p.program_status === 'ended'
+      );
+    }
+
+    renderMyPrograms(filteredPrograms, filter);
+    currentMyProgramsFilter = filter;
+  }
+
+  function renderMyPrograms(programs, type) {
+    const list = document.getElementById('my-programs-list');
+    const noProgramsMessage = document.getElementById('no-programs-message');
+    
+    list.innerHTML = '';
+    
+    if (programs.length === 0) {
+      noProgramsMessage.style.display = 'block';
+      let message = 'No programs found';
+      if (type === 'active') message = 'No active programs';
+      else if (type === 'pending') message = 'No pending applications';
+      else if (type === 'completed') message = 'No completed programs';
+      noProgramsMessage.textContent = message;
+      return;
+    }
+
+    noProgramsMessage.style.display = 'none';
+    programs.forEach(program => {
+      const card = createEnhancedMyProgramCard(program, type);
+      list.appendChild(card);
+    });
+  }
+
+  function showNoPrograms(message) {
+    const list = document.getElementById('my-programs-list');
+    const noProgramsMessage = document.getElementById('no-programs-message');
+    list.innerHTML = '';
+    noProgramsMessage.textContent = message;
+    noProgramsMessage.style.display = 'block';
+  }
+
+  // Mini tab event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.my-programs-mini-tabs .mini-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.dataset.filter;
+        showMyProgramsTab(filter);
+      });
+    });
+  });
+
+  // Enhanced program card creation with comprehensive functionality
+  function createEnhancedMyProgramCard(program, type) {
+    const card = document.createElement('div');
+    card.className = `enhanced-program-card ${type}`;
+
+    // Format dates
+    const startDate = program.start_date ? new Date(program.start_date).toLocaleDateString() : 'TBA';
+    const endDate = program.end_date ? new Date(program.end_date).toLocaleDateString() : 'TBA';
+    const enrolledDate = program.enrollment_date ? new Date(program.enrollment_date).toLocaleDateString() : '';
+
+    // Determine status badge
+    let statusBadge = '';
+    if (type === 'active') {
+      statusBadge = `<span class="status-badge active"><i class="fas fa-play-circle"></i> Active</span>`;
+    } else if (type === 'pending') {
+      statusBadge = `<span class="status-badge pending"><i class="fas fa-clock"></i> Pending Approval</span>`;
+    } else if (type === 'completed') {
+      statusBadge = `<span class="status-badge completed"><i class="fas fa-check-circle"></i> Completed</span>`;
+    }
+
+    // Build attendance info for active/completed programs
+    let attendanceInfo = '';
+    if (type === 'active' || type === 'completed') {
+      const attendancePercentage = parseFloat(program.attendance_percentage) || 0;
+      const sessionsAttended = parseInt(program.sessions_attended) || 0;
+      const totalSessions = parseInt(program.total_sessions) || 0;
+      
+      let attendanceColor = 'low';
+      if (attendancePercentage >= 80) attendanceColor = 'high';
+      else if (attendancePercentage >= 60) attendanceColor = 'medium';
+
+      attendanceInfo = `
+        <div class="attendance-section">
+          <div class="attendance-header">
+            <span><i class="fas fa-calendar-check"></i> Attendance</span>
+            <span class="attendance-percentage">${attendancePercentage.toFixed(1)}%</span>
+          </div>
+          <div class="attendance-bar">
+            <div class="attendance-progress ${attendanceColor}" style="width: ${attendancePercentage}%"></div>
+          </div>
+          <span style="font-size: 0.8rem; color: #6c757d;">${sessionsAttended}/${totalSessions} sessions</span>
+        </div>
+      `;
+    }
+
+    // Build upcoming sessions for active programs
+    let upcomingSessions = '';
+    if (type === 'active' && program.upcoming_sessions && program.upcoming_sessions.length > 0) {
+      upcomingSessions = `
+        <div class="upcoming-sessions">
+          <h4><i class="fas fa-calendar-alt"></i> Upcoming Sessions</h4>
+          <ul>
+            ${program.upcoming_sessions.map(session => `
+              <li>
+                <strong>${session.session_title}</strong><br>
+                <span class="session-details">
+                  ${new Date(session.session_date).toLocaleDateString()} • 
+                  ${session.session_start} - ${session.session_end} • 
+                  ${session.location || 'TBA'}
+                </span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    // Build action buttons based on type
+    let actionButtons = '';
+    if (type === 'active') {
+      actionButtons = `
+        <div class="card-actions">
+          <button class="action-btn primary" onclick="viewProgramDetails(${program.id})">
+            <i class="fas fa-info-circle"></i> View Details
+          </button>
+          <button class="action-btn secondary" onclick="markAttendance(${program.id})">
+            <i class="fas fa-qr-code"></i> Mark Attendance
+          </button>
+        </div>
+      `;
+    } else if (type === 'completed') {
+      actionButtons = `
+        <div class="card-actions">
+          <button class="action-btn primary" onclick="viewProgramDetails(${program.id})">
+            <i class="fas fa-info-circle"></i> View Details
+          </button>
+          <button class="action-btn success" onclick="provideFeedback(${program.id})">
+            <i class="fas fa-comment-dots"></i> Provide Feedback
+          </button>
+          <button class="action-btn info" onclick="downloadCertificate(${program.id})">
+            <i class="fas fa-certificate"></i> Certificate
+          </button>
+        </div>
+      `;
+    } else if (type === 'pending') {
+      actionButtons = `
+        <div class="card-actions">
+          <button class="action-btn secondary" onclick="viewApplicationStatus(${program.id})">
+            <i class="fas fa-eye"></i> View Application
+          </button>
+          <span class="pending-note">
+            <i class="fas fa-info-circle"></i> 
+            Applied on ${enrolledDate}. Waiting for admin approval.
+          </span>
+        </div>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="program-title-section">
+          <h3 class="program-title">${program.program_name}</h3>
+          ${statusBadge}
+        </div>
+        <div class="program-meta">
+          <span class="faculty-info">
+            <i class="fas fa-user-tie"></i> ${program.faculty_name || 'TBA'}
+          </span>
+          <span class="schedule-info">
+            <i class="fas fa-calendar"></i> ${startDate} - ${endDate}
+          </span>
+          ${program.location ? `<span class="location-info"><i class="fas fa-map-marker-alt"></i> ${program.location}</span>` : ''}
+        </div>
+      </div>
+      
+      <div class="card-content">
+        ${program.description ? `<p class="program-description">${program.description}</p>` : ''}
+        
+        ${(attendanceInfo || upcomingSessions) ? `
+        <div class="content-grid">
+          ${attendanceInfo ? `<div>${attendanceInfo}</div>` : ''}
+          ${upcomingSessions ? `<div>${upcomingSessions}</div>` : ''}
+        </div>
+        ` : ''}
+      </div>
+      
+      ${actionButtons}
+    `;
+
+    return card;
+  }
+
+  // Supporting functions for enhanced My Programs functionality
+  function viewProgramDetails(programId) {
+    // Redirect to a detailed view or show modal with full program information
+    window.location.href = `program-details.php?id=${programId}`;
+  }
+
+  function markAttendance(programId) {
+    // Redirect to QR code attendance page
+    window.location.href = `qr_attendance.php?program_id=${programId}`;
+  }
+
+  function provideFeedback(programId) {
+    // Redirect to feedback page for the specific program
+    window.location.href = `Feedback.php?program_id=${programId}`;
+  }
+
+  function downloadCertificate(programId) {
+    // Download certificate for completed program
+    window.open(`certificates.php?program_id=${programId}`, '_blank');
+  }
+
+  function viewApplicationStatus(programId) {
+    // Show modal with application details
+    const modal = document.getElementById('application-status-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+      // Load application details
+      fetch(`get_application_status.php?program_id=${programId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            document.getElementById('application-details').innerHTML = `
+              <h3>Application Status</h3>
+              <p><strong>Program:</strong> ${data.application.program_name}</p>
+              <p><strong>Applied:</strong> ${data.application.enrollment_date}</p>
+              <p><strong>Status:</strong> <span class="status-${data.application.status}">${data.application.status}</span></p>
+              ${data.application.reason ? `<p><strong>Your Message:</strong> ${data.application.reason}</p>` : ''}
+            `;
+          }
+        });
+    }
+  }
 
   // --- ENROLL & USER INFO: as before ---
 
@@ -496,92 +763,6 @@ if ($user_id) {
   window.addEventListener('DOMContentLoaded', () => {
     loadProgramDirectory();
   });
-
-  // --- Mini Tabs Functionality ---
-  let allDirectoryPrograms = []; // Store all fetched programs
-
-function fetchDirectoryPrograms() {
-  fetch('get_all_programs.php')
-    .then(res => res.json())
-    .then(data => {
-      allDirectoryPrograms = data.programs || [];
-      showDirectoryTab('all');
-    });
-}
-
-function showDirectoryTab(tab) {
-  // Remove active class from all buttons
-  document.querySelectorAll('#directory-mini-tabs button').forEach(btn => btn.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-
-  let filtered = [];
-  if (tab === 'all') {
-    filtered = allDirectoryPrograms.filter(
-      p => p.program_status === 'ongoing' && p.enrollment_status === 'none'
-    );
-  } else if (tab === 'pending') {
-    filtered = allDirectoryPrograms.filter(
-      p => p.program_status === 'ongoing' && p.enrollment_status === 'pending'
-    );
-  } else if (tab === 'enrolled') {
-    filtered = allDirectoryPrograms.filter(
-      p => p.program_status === 'ongoing' && p.enrollment_status === 'enrolled'
-    );
-  }
-  renderProgramList(filtered);
-}
-
-function renderProgramList(programs) {
-  const list = document.getElementById('program-list');
-  list.innerHTML = '';
-  programs.forEach(program => {
-    const card = document.createElement('div');
-    card.className = 'program-card';
-    card.innerHTML = `
-      <div class="card-title">${program.program_name}</div>
-      <div class="card-meta">
-        <b>Department:</b> ${program.department}<br>
-        <b>Schedule:</b> ${program.start_date} to ${program.end_date}<br>
-        <b>Location:</b> ${program.location}<br>
-        <b>Faculty:</b> ${program.faculty_name}
-      </div>
-    `;
-    list.appendChild(card);
-  });
-}
-
-// Example card rendering (customize as needed)
-function renderDirectoryCard(program) {
-  const card = document.createElement('div');
-  card.className = 'program-card';
-  let actionHTML = '';
-  if (program.enrollment_status === 'none') {
-    actionHTML = `<button class="enroll-btn">Enroll</button>`;
-  } else if (program.enrollment_status === 'pending') {
-    actionHTML = `<span class="status-badge pending">Pending</span>`;
-  } else if (program.enrollment_status === 'enrolled') {
-    actionHTML = `<span class="status-badge enrolled">Enrolled</span>`;
-  }
-  card.innerHTML = `
-    <div class="card-title">${program.program_name}</div>
-    <div class="card-meta">
-      <b>Department:</b> ${program.department}<br>
-      <b>Schedule:</b> ${program.start_date} to ${program.end_date}
-    </div>
-    <div class="card-actions">
-      ${actionHTML}
-    </div>
-  `;
-  return card;
-}
-
-// Tab event listeners
-document.getElementById('tab-all').onclick = () => showDirectoryTab('all');
-document.getElementById('tab-pending').onclick = () => showDirectoryTab('pending');
-document.getElementById('tab-enrolled').onclick = () => showDirectoryTab('enrolled');
-
-// Fetch programs on page load
-window.addEventListener('DOMContentLoaded', fetchDirectoryPrograms);
   </script>
     <!-- Program Details Modal -->
   <div id="enroll-modal" class="modal-overlay" style="display:none;">
@@ -589,8 +770,19 @@ window.addEventListener('DOMContentLoaded', fetchDirectoryPrograms);
       <span class="close-modal">&times;</span>
       <div id="modal-program-details"></div>
       <div class="modal-actions">
-        <button id="confirm-enroll-btn" class="btn-confirm">Confirm Enrollment</button>
+        <button id="confirm-enroll-btn" class="btn-confirm">Submit</button>
         <button id="cancel-enroll-btn" class="btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Status Modal -->
+  <div id="application-status-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="document.getElementById('application-status-modal').style.display='none'">&times;</span>
+      <div id="application-details"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('application-status-modal').style.display='none'">Close</button>
       </div>
     </div>
   </div>

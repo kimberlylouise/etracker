@@ -6,188 +6,1467 @@
   <title>eTracker Admin Dashboard</title>
   <link rel="stylesheet" href="Reports.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
 </head>
 <body>
-
-    
   <div class="sidebar">
     <h2>eTracker Admin</h2>
     <a href="Dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="User.html"><i class="fas fa-users"></i> User Management</a>
     <a href="Programs.html"><i class="fas fa-calendar-alt"></i> Program Schedule</a>
+        <a href="ProjectEvaluation.html"><i class="fas fa-clipboard-check"></i> Project Evaluation</a>
+
     <a href="Attendance.html"><i class="fas fa-check-square"></i> Attendance Tracker</a>
     <a href="Evaluation.html"><i class="fas fa-poll"></i> Evaluation & Feedback</a>
     <a href="Reports.html"><i class="fas fa-chart-bar"></i> Reports & Analytics</a>
     <a href="Document.html"><i class="fas fa-folder"></i> Document Management</a>
     <a href="Certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
-
   </div>
 
-   
   <div class="main">
-    <h1>Reports & Analytics</h1>
-    <p class="subtitle">Visualize participation, attendance, feedback, and program performance.</p>
-  
-    <div class="report-layout">
-      <!-- LEFT COLUMN -->
-      <div class="report-left">
-        <section class="filters">
-          <h2>Generate Reports</h2>
-          <form id="reportForm">
-            <label for="reportType">Report Type</label>
-            <select id="reportType" name="reportType" required>
-              <option value="">-- Select Report Type --</option>
-              <option value="participation">Program Participation</option>
-              <option value="attendance">Attendance Summary</option>
-              <option value="feedback">Evaluation Feedback</option>
-              <option value="completion">Program Completion</option>
-              <option value="faculty">Faculty Performance</option>
-            </select>
-
-            <label for="startMonth">Date Range</label>
-            <input type="month" id="startMonth" name="startMonth" required>
-            <span style="margin: 0 5px;">to</span>
-            <input type="month" id="endMonth" name="endMonth" required>
-
-            <button type="submit">Generate</button>
-          </form>
-        </section>
-  
-        <section class="report-output">
-          <h2>Report Output</h2>
-          <div class="report-box" id="reportBox">
-            <p>Select a report type and date range, then click Generate.</p>
-          </div>
-          <div class="actions" id="reportActions" style="display:none;">
-            <button onclick="downloadReport('pdf')">Download PDF</button>
-            <button onclick="downloadReport('excel')">Export Excel</button>
-          </div>
-        </section>
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="page-title">
+        <h1><i class="fas fa-chart-bar"></i> Reports & Analytics</h1>
+        <p>Comprehensive insights into extension programs, participation, and performance</p>
       </div>
-  
-      <!-- RIGHT COLUMN -->
-      <div class="report-right">
-        <section class="chart-section">
-          <div class="chart-card">
-            <h3>Top Programs</h3>
-            <canvas id="topProgramsChart" width="300" height="200"></canvas>
+      
+      <!-- Quick Stats Dashboard -->
+      <div class="stats-grid">
+        <div class="stat-card total-programs">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-check"></i>
           </div>
-  
-          <div class="chart-card">
-            <h3>Attendance Trend</h3>
-            <canvas id="attendanceTrendChart" width="300" height="200"></canvas>
+          <div class="stat-info">
+            <h3 id="total-programs-stat">12</h3>
+            <p>Active Programs</p>
           </div>
-  
-          <div class="chart-card">
-            <h3>Feedback Ratings</h3>
-            <canvas id="feedbackRatingsChart" width="300" height="200"></canvas>
+        </div>
+        <div class="stat-card total-participants">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
           </div>
-        </section>
+          <div class="stat-info">
+            <h3 id="total-participants-stat">1,247</h3>
+            <p>Total Participants</p>
+          </div>
+        </div>
+        <div class="stat-card avg-attendance">
+          <div class="stat-icon">
+            <i class="fas fa-percentage"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="avg-attendance-stat">84%</h3>
+            <p>Average Attendance</p>
+          </div>
+        </div>
+        <div class="stat-card completion-rate">
+          <div class="stat-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="completion-rate-stat">76%</h3>
+            <p>Completion Rate</p>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Report Generation Section -->
+    <div class="report-generation-section">
+      <div class="section-header">
+        <h2><i class="fas fa-file-chart"></i> Generate Reports</h2>
+        <p>Create detailed reports for analysis and documentation</p>
+      </div>
+
+      <div class="report-cards-grid">
+        <!-- Program Participation Report -->
+        <div class="report-card">
+          <div class="report-icon participation">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="report-info">
+            <h3>Program Participation</h3>
+            <p>Track enrollment and engagement across all extension programs</p>
+            <ul class="report-features">
+              <li>Student enrollment per program</li>
+              <li>Participation trends over time</li>
+              <li>Popular program rankings</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('participation')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+
+        <!-- Attendance Analysis Report -->
+        <div class="report-card">
+          <div class="report-icon attendance">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="report-info">
+            <h3>Attendance Analysis</h3>
+            <p>Comprehensive attendance tracking and analysis</p>
+            <ul class="report-features">
+              <li>Session-wise attendance rates</li>
+              <li>Student attendance patterns</li>
+              <li>Low attendance alerts</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('attendance')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+
+        <!-- Student Performance Report -->
+        <div class="report-card">
+          <div class="report-icon performance">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="report-info">
+            <h3>Student Performance</h3>
+            <p>Detailed student evaluations and progress tracking</p>
+            <ul class="report-features">
+              <li>Individual student records</li>
+              <li>Performance metrics</li>
+              <li>Completion certificates</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('performance')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+
+        <!-- Evaluation & Feedback Report -->
+        <div class="report-card">
+          <div class="report-icon feedback">
+            <i class="fas fa-comments"></i>
+          </div>
+          <div class="report-info">
+            <h3>Evaluation & Feedback</h3>
+            <p>Program effectiveness and participant satisfaction</p>
+            <ul class="report-features">
+              <li>Program satisfaction ratings</li>
+              <li>Faculty performance reviews</li>
+              <li>Improvement suggestions</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('feedback')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+
+        <!-- Program Completion Report -->
+        <div class="report-card">
+          <div class="report-icon completion">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div class="report-info">
+            <h3>Program Completion</h3>
+            <p>Track program completion rates and certificate issuance</p>
+            <ul class="report-features">
+              <li>Completion statistics</li>
+              <li>Certificate tracking</li>
+              <li>Drop-out analysis</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('completion')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+
+        <!-- Faculty Performance Report -->
+        <div class="report-card">
+          <div class="report-icon faculty">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="report-info">
+            <h3>Faculty Performance</h3>
+            <p>Faculty engagement and program management effectiveness</p>
+            <ul class="report-features">
+              <li>Programs handled per faculty</li>
+              <li>Student feedback on faculty</li>
+              <li>Program success rates</li>
+            </ul>
+          </div>
+          <button class="generate-btn" onclick="generateReport('faculty')">
+            <i class="fas fa-play"></i> Generate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Dashboard -->
+    <div class="analytics-section">
+      <div class="section-header">
+        <h2><i class="fas fa-chart-pie"></i> Analytics Dashboard</h2>
+        <p>Visual insights and data trends</p>
+      </div>
+
+      <div class="charts-grid">
+        <!-- Program Popularity Chart -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Program Popularity</h3>
+            <div class="chart-controls">
+              <select id="period-filter">
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          </div>
+          <canvas id="programPopularityChart"></canvas>
+        </div>
+
+        <!-- Attendance Trends Chart -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Attendance Trends</h3>
+            <div class="chart-controls">
+              <select id="attendance-period">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+          <canvas id="attendanceTrendsChart"></canvas>
+        </div>
+
+        <!-- Feedback Ratings Distribution -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Feedback Ratings</h3>
+            <div class="chart-controls">
+              <span class="chart-legend">
+                <span class="legend-item excellent">■ Excellent (4.5-5.0)</span>
+                <span class="legend-item good">■ Good (3.5-4.4)</span>
+                <span class="legend-item average">■ Average (2.5-3.4)</span>
+                <span class="legend-item poor">■ Poor (1.0-2.4)</span>
+              </span>
+            </div>
+          </div>
+          <canvas id="feedbackRatingsChart"></canvas>
+        </div>
+
+        <!-- Department Participation Chart -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Department Participation</h3>
+            <div class="chart-controls">
+              <button class="view-toggle active" data-view="students">Students</button>
+              <button class="view-toggle" data-view="faculty">Faculty</button>
+            </div>
+          </div>
+          <canvas id="departmentChart"></canvas>
+        </div>
+
+        <!-- Monthly Program Performance -->
+        <div class="chart-container wide">
+          <div class="chart-header">
+            <h3>Monthly Program Performance</h3>
+            <div class="chart-controls">
+              <select id="year-filter">
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
+          </div>
+          <canvas id="monthlyPerformanceChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Output Modal -->
+    <div id="report-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Report Generated</h2>
+          <span class="close-modal" onclick="closeReportModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="report-filters">
+            <div class="filter-group">
+              <label for="date-range">Date Range:</label>
+              <input type="date" id="start-date" name="start-date">
+              <span>to</span>
+              <input type="date" id="end-date" name="end-date">
+            </div>
+            <div class="filter-group">
+              <label for="program-filter">Program:</label>
+              <select id="program-filter">
+                <option value="all">All Programs</option>
+                <!-- Programs will be loaded dynamically -->
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="department-filter">Department:</label>
+              <select id="department-filter-modal">
+                <option value="all">All Departments</option>
+                <!-- Departments will be loaded dynamically -->
+              </select>
+            </div>
+            <button class="apply-filters-btn" onclick="applyReportFilters()">
+              <i class="fas fa-filter"></i> Apply Filters
+            </button>
+          </div>
+          
+          <div id="report-content">
+            <!-- Report content will be loaded here -->
+          </div>
+          
+          <div class="export-actions">
+            <button class="export-btn excel" onclick="exportReport('excel')">
+              <i class="fas fa-file-excel"></i> Export Excel
+            </button>
+            <button class="export-btn pdf" onclick="exportReport('pdf')">
+              <i class="fas fa-file-pdf"></i> Export PDF
+            </button>
+            <button class="export-btn print" onclick="printReport()">
+              <i class="fas fa-print"></i> Print Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden"></div>
   </div>
   
   <script>
-    // Bar Chart: Top Programs
-    const topProgramsChart = new Chart(document.getElementById('topProgramsChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Financial Literacy', 'Urban Gardening', 'Mental Health', 'Digital Literacy', 'Women Empowerment'],
-        datasets: [{
-          label: 'Enrollment',
-          data: [180, 155, 132, 121, 109],
-          backgroundColor: '#1B472B'
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
+    // Global variables for charts
+    let charts = {};
+
+    // Initialize Dashboard and Charts
+    async function initializeDashboard() {
+      await loadDashboardStats();
+      await loadFilterOptions();
+      await initializeCharts();
+    }
+
+    // Load dynamic filter options
+    async function loadFilterOptions() {
+      try {
+        // Load programs
+        const programsResponse = await fetch('api_reports.php?action=get_programs');
+        const programsResult = await programsResponse.json();
+        
+        if (programsResult.success) {
+          const programSelect = document.getElementById('program-filter');
+          programsResult.data.forEach(program => {
+            const option = document.createElement('option');
+            option.value = program.id;
+            option.textContent = program.program_name;
+            programSelect.appendChild(option);
+          });
         }
-      }
-    });
-  
-    // Line Chart: Monthly Attendance
-    const attendanceTrendChart = new Chart(document.getElementById('attendanceTrendChart'), {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        datasets: [{
-          label: 'Attendance %',
-          data: [65, 72, 81, 86, 78],
-          fill: false,
-          borderColor: '#1B472B',
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true, max: 100 }
+
+        // Load departments
+        const deptResponse = await fetch('api_reports.php?action=get_departments');
+        const deptResult = await deptResponse.json();
+        
+        if (deptResult.success) {
+          const deptSelect = document.getElementById('department-filter-modal');
+          deptResult.data.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept;
+            option.textContent = dept;
+            deptSelect.appendChild(option);
+          });
         }
+      } catch (error) {
+        console.error('Error loading filter options:', error);
       }
+    }
+
+    // Load Dashboard Statistics
+    async function loadDashboardStats() {
+      try {
+        const response = await fetch('api_reports.php?action=dashboard_stats');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          const data = result.data;
+          document.getElementById('total-programs-stat').textContent = data.total_programs || '0';
+          document.getElementById('total-participants-stat').textContent = (data.total_participants || 0).toLocaleString();
+          document.getElementById('avg-attendance-stat').textContent = (data.avg_attendance || 0) + '%';
+          document.getElementById('completion-rate-stat').textContent = (data.completion_rate || 0) + '%';
+        } else {
+          console.warn('Dashboard stats response:', result);
+          // Keep default values if API fails
+          document.getElementById('total-programs-stat').textContent = '0';
+          document.getElementById('total-participants-stat').textContent = '0';
+          document.getElementById('avg-attendance-stat').textContent = '0%';
+          document.getElementById('completion-rate-stat').textContent = '0%';
+        }
+      } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+        // Set default values on error
+        document.getElementById('total-programs-stat').textContent = '0';
+        document.getElementById('total-participants-stat').textContent = '0';
+        document.getElementById('avg-attendance-stat').textContent = '0%';
+        document.getElementById('completion-rate-stat').textContent = '0%';
+      }
+    }
+
+    // Initialize Charts with Real Data
+    async function initializeCharts() {
+      try {
+        // Program Popularity Chart
+        const popularityData = await fetchChartData('program_popularity');
+        if (popularityData.success && popularityData.data && popularityData.data.length > 0) {
+          const data = popularityData.data;
+          charts.programPopularity = new Chart(document.getElementById('programPopularityChart'), {
+            type: 'bar',
+            data: {
+              labels: data.map(item => item.program_name || 'Unknown'),
+              datasets: [{
+                label: 'Participants',
+                data: data.map(item => item.participants || 0),
+                backgroundColor: [
+                  '#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#052e16'
+                ],
+                borderRadius: 6,
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        // Attendance Trends Chart
+        const attendanceData = await fetchChartData('attendance_trends');
+        if (attendanceData.success && attendanceData.data && attendanceData.data.length > 0) {
+          const data = attendanceData.data;
+          charts.attendanceTrends = new Chart(document.getElementById('attendanceTrendsChart'), {
+            type: 'line',
+            data: {
+              labels: data.map(item => item.week_label || `Week ${item.week_num || 'N/A'}`),
+              datasets: [{
+                label: 'Attendance Rate (%)',
+                data: data.map(item => item.attendance_rate || 0),
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#10b981',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' } },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        // Feedback Ratings Chart
+        const feedbackData = await fetchChartData('feedback_ratings');
+        if (feedbackData.success) {
+          const data = feedbackData.data;
+          charts.feedbackRatings = new Chart(document.getElementById('feedbackRatingsChart'), {
+            type: 'doughnut',
+            data: {
+              labels: data.map(item => item.rating_category),
+              datasets: [{
+                data: data.map(item => item.count),
+                backgroundColor: ['#10b981', '#34d399', '#fbbf24', '#ef4444'],
+                borderWidth: 0,
+                cutout: '60%'
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: { padding: 20, usePointStyle: true }
+                }
+              }
+            }
+          });
+        }
+
+        // Department Participation Chart
+        const deptData = await fetchChartData('department_participation');
+        if (deptData.success) {
+          const data = deptData.data;
+          charts.department = new Chart(document.getElementById('departmentChart'), {
+            type: 'bar',
+            data: {
+              labels: data.map(item => item.department),
+              datasets: [{
+                label: 'Students',
+                data: data.map(item => item.student_count),
+                backgroundColor: '#10b981',
+                borderRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: 'y',
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { display: false } },
+                x: { beginAtZero: true, grid: { color: '#f1f5f9' } }
+              }
+            }
+          });
+        }
+
+        // Monthly Performance Chart
+        const monthlyData = await fetchChartData('monthly_performance');
+        if (monthlyData.success) {
+          const data = monthlyData.data;
+          charts.monthlyPerformance = new Chart(document.getElementById('monthlyPerformanceChart'), {
+            type: 'line',
+            data: {
+              labels: data.map(item => item.month_name),
+              datasets: [
+                {
+                  label: 'Programs Conducted',
+                  data: data.map(item => item.programs_conducted),
+                  borderColor: '#10b981',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  yAxisID: 'y'
+                },
+                {
+                  label: 'Completion Rate (%)',
+                  data: data.map(item => item.completion_rate || 0),
+                  borderColor: '#059669',
+                  backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                  yAxisID: 'y1'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              scales: {
+                x: { display: true, grid: { display: false } },
+                y: { type: 'linear', display: true, position: 'left', beginAtZero: true, grid: { color: '#f1f5f9' } },
+                y1: { type: 'linear', display: true, position: 'right', beginAtZero: true, max: 100, grid: { drawOnChartArea: false } }
+              }
+            }
+          });
+        }
+
+      } catch (error) {
+        console.error('Error initializing charts:', error);
+      }
+    }
+
+    // Fetch Chart Data from API
+    async function fetchChartData(chartType) {
+      try {
+        const response = await fetch(`api_reports.php?action=chart_data&chart_type=${chartType}`);
+        return await response.json();
+      } catch (error) {
+        console.error(`Error fetching ${chartType} data:`, error);
+        return { success: false };
+      }
+    }
+
+    // Report Generation Functions
+    async function generateReport(reportType) {
+      // Set current date as default
+      const today = new Date();
+      const currentDate = today.toISOString().split('T')[0];
+      const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()).toISOString().split('T')[0];
+      
+      document.getElementById('start-date').value = lastMonth;
+      document.getElementById('end-date').value = currentDate;
+      
+      // Show modal
+      document.getElementById('modal-overlay').classList.remove('hidden');
+      document.getElementById('report-modal').classList.remove('hidden');
+      
+      // Set modal title based on report type
+      const titles = {
+        'participation': 'Program Participation Report',
+        'attendance': 'Attendance Analysis Report',
+        'performance': 'Student Performance Report',
+        'feedback': 'Evaluation & Feedback Report',
+        'completion': 'Program Completion Report',
+        'faculty': 'Faculty Performance Report'
+      };
+      
+      document.getElementById('modal-title').textContent = titles[reportType] || 'Report Generated';
+      
+      // Store report type for filtering
+      document.getElementById('report-modal').setAttribute('data-report-type', reportType);
+      
+      // Load real report data
+      await loadReportData(reportType, lastMonth, currentDate);
+    }
+
+    async function loadReportData(reportType, startDate, endDate) {
+      const reportContent = document.getElementById('report-content');
+      reportContent.innerHTML = '<div class="loading">Loading report data...</div>';
+
+      try {
+        const response = await fetch(`api_reports.php?action=${reportType}&start_date=${startDate}&end_date=${endDate}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+          reportContent.innerHTML = formatReportData(reportType, result.data);
+        } else {
+          reportContent.innerHTML = '<div class="no-data">No data available for the selected criteria.</div>';
+        }
+      } catch (error) {
+        console.error('Error loading report data:', error);
+        reportContent.innerHTML = '<div class="error-message">Error loading report data. Please check your connection and try again.</div>';
+      }
+    }
+
+    function formatReportData(reportType, data) {
+      if (!data || data.length === 0) {
+        return '<p class="no-data">No data found for the selected criteria.</p>';
+      }
+
+      switch (reportType) {
+        case 'participation':
+        case 'program_participation':
+          return formatParticipationReport(data);
+        case 'attendance':
+        case 'attendance_analysis':
+          return formatAttendanceReport(data);
+        case 'performance':
+        case 'student_performance':
+          return formatPerformanceReport(data);
+        case 'feedback':
+        case 'evaluation':
+        case 'evaluation_feedback':
+          return formatFeedbackReport(data);
+        case 'completion':
+        case 'program_completion':
+          return formatCompletionReport(data);
+        case 'faculty':
+        case 'faculty_performance':
+          return formatFacultyReport(data);
+        default:
+          return '<p class="error-message">Report format not implemented.</p>';
+      }
+    }
+
+    function formatParticipationReport(data) {
+      const totalPrograms = data.length;
+      const totalEnrolled = data.reduce((sum, item) => sum + parseInt(item.enrolled_count || 0), 0);
+      const totalAccepted = data.reduce((sum, item) => sum + parseInt(item.accepted_count || 0), 0);
+      const avgEnrollment = data.length > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.enrollment_rate || 0), 0) / data.length).toFixed(1) : 0;
+
+      return `
+        <div class="report-summary">
+          <h3>Participation Summary</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Programs</h4>
+              <span class="number">${totalPrograms}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Total Enrolled</h4>
+              <span class="number">${totalEnrolled}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Accepted Participants</h4>
+              <span class="number">${totalAccepted}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Avg Enrollment Rate</h4>
+              <span class="number">${avgEnrollment}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Program Name</th>
+                <th>Department</th>
+                <th>Enrolled</th>
+                <th>Accepted</th>
+                <th>Max Students</th>
+                <th>Enrollment Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.program_name || 'N/A'}</td>
+                  <td>${item.department || 'N/A'}</td>
+                  <td>${item.enrolled_count || 0}</td>
+                  <td>${item.accepted_count || 0}</td>
+                  <td>${item.max_students || 0}</td>
+                  <td>${item.enrollment_rate || 0}%</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function formatAttendanceReport(data) {
+      const totalStudents = data.length;
+      const avgAttendance = totalStudents > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.attendance_rate || 0), 0) / totalStudents).toFixed(1) : 0;
+      const perfectAttendance = data.filter(item => parseFloat(item.attendance_rate) === 100).length;
+      const totalSessions = data.reduce((sum, item) => sum + parseInt(item.total_sessions || 0), 0);
+
+      return `
+        <div class="report-summary">
+          <h3>Attendance Analysis</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Students</h4>
+              <span class="number">${totalStudents}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Overall Attendance</h4>
+              <span class="number">${avgAttendance}%</span>
+            </div>
+            <div class="summary-card">
+              <h4>Perfect Attendance</h4>
+              <span class="number">${perfectAttendance}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Total Sessions</h4>
+              <span class="number">${totalSessions}</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Program</th>
+                <th>Total Sessions</th>
+                <th>Present</th>
+                <th>Late</th>
+                <th>Absent</th>
+                <th>Attendance Rate</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.student_name || 'N/A'}</td>
+                  <td>${item.program_name || 'N/A'}</td>
+                  <td>${item.total_sessions || 0}</td>
+                  <td>${item.present_count || 0}</td>
+                  <td>${item.late_count || 0}</td>
+                  <td>${item.absent_count || 0}</td>
+                  <td>${item.attendance_rate || 0}%</td>
+                  <td><span class="status ${getAttendanceStatus(item.attendance_rate)}">${getAttendanceStatus(item.attendance_rate)}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function getAttendanceStatus(rate) {
+      if (rate >= 90) return 'excellent';
+      if (rate >= 80) return 'good';
+      if (rate >= 70) return 'warning';
+      return 'poor';
+    }
+
+    // Add similar formatting functions for other report types...
+    function formatPerformanceReport(data) {
+      const totalStudents = data.length;
+      const certifiedStudents = data.filter(item => item.certificate_issued == 1).length;
+      const avgOverallScore = totalStudents > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.overall_score || 0), 0) / totalStudents).toFixed(1) : 0;
+
+      return `
+        <div class="report-summary">
+          <h3>Student Performance Summary</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Students</h4>
+              <span class="number">${totalStudents}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Certified Students</h4>
+              <span class="number">${certifiedStudents}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Certification Rate</h4>
+              <span class="number">${totalStudents > 0 ? ((certifiedStudents / totalStudents) * 100).toFixed(1) : 0}%</span>
+            </div>
+            <div class="summary-card">
+              <h4>Avg Performance</h4>
+              <span class="number">${avgOverallScore}/5.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Program</th>
+                <th>Department</th>
+                <th>Overall Score</th>
+                <th>Status</th>
+                <th>Certificate</th>
+                <th>Issue Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.student_name || 'N/A'}</td>
+                  <td>${item.program_name || 'N/A'}</td>
+                  <td>${item.department || 'N/A'}</td>
+                  <td>${item.overall_score ? parseFloat(item.overall_score).toFixed(1) : '0.0'}/5</td>
+                  <td><span class="status ${item.status ? item.status.toLowerCase().replace(' ', '-') : 'pending'}">${item.status || 'Pending'}</span></td>
+                  <td>
+                    <span class="status ${item.certificate_issued == 1 ? 'excellent' : 'warning'}">
+                      ${item.certificate_issued == 1 ? 'Issued' : 'Pending'}
+                    </span>
+                  </td>
+                  <td>${item.issued_on || 'N/A'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function formatFeedbackReport(data) {
+      const totalEvaluations = data.length;
+      const avgOverallRating = totalEvaluations > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.overall_rating || 0), 0) / totalEvaluations).toFixed(1) : 0;
+      const recommendCount = data.filter(item => item.recommend === 'Yes' || item.recommend === '1').length;
+      const recommendPercentage = totalEvaluations > 0 ? ((recommendCount / totalEvaluations) * 100).toFixed(1) : 0;
+
+      return `
+        <div class="report-summary">
+          <h3>Evaluation & Feedback Summary</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Evaluations</h4>
+              <span class="number">${totalEvaluations}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Overall Rating</h4>
+              <span class="number">${avgOverallRating}/5.0</span>
+            </div>
+            <div class="summary-card">
+              <h4>Recommend Rate</h4>
+              <span class="number">${recommendPercentage}%</span>
+            </div>
+            <div class="summary-card">
+              <h4>Programs Evaluated</h4>
+              <span class="number">${[...new Set(data.map(item => item.program_name))].length}</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Program</th>
+                <th>Content</th>
+                <th>Facilitators</th>
+                <th>Relevance</th>
+                <th>Organization</th>
+                <th>Experience</th>
+                <th>Overall Rating</th>
+                <th>Recommend</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.student_name || 'N/A'}</td>
+                  <td>${item.program_name || 'N/A'}</td>
+                  <td>${item.content || 0}/5</td>
+                  <td>${item.facilitators || 0}/5</td>
+                  <td>${item.relevance || 0}/5</td>
+                  <td>${item.organization || 0}/5</td>
+                  <td>${item.experience || 0}/5</td>
+                  <td><strong>${item.overall_rating || 0}/5</strong></td>
+                  <td>
+                    <span class="status ${(item.recommend === 'Yes' || item.recommend === '1') ? 'excellent' : 'warning'}">
+                      ${(item.recommend === 'Yes' || item.recommend === '1') ? 'Yes' : 'No'}
+                    </span>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function formatCompletionReport(data) {
+      const totalPrograms = data.length;
+      const totalEnrolled = data.reduce((sum, item) => sum + parseInt(item.total_enrolled || 0), 0);
+      const totalCompleted = data.reduce((sum, item) => sum + parseInt(item.completed_count || 0), 0);
+      const avgCompletionRate = totalPrograms > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.completion_rate || 0), 0) / totalPrograms).toFixed(1) : 0;
+
+      return `
+        <div class="report-summary">
+          <h3>Program Completion Summary</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Programs</h4>
+              <span class="number">${totalPrograms}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Total Enrolled</h4>
+              <span class="number">${totalEnrolled}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Total Completed</h4>
+              <span class="number">${totalCompleted}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Avg Completion Rate</h4>
+              <span class="number">${avgCompletionRate}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Department</th>
+                <th>Enrolled</th>
+                <th>Completed</th>
+                <th>In Progress</th>
+                <th>Completion Rate</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.program_name || 'N/A'}</td>
+                  <td>${item.department || 'N/A'}</td>
+                  <td>${item.total_enrolled || 0}</td>
+                  <td>${item.completed_count || 0}</td>
+                  <td>${item.incomplete_count || 0}</td>
+                  <td>${item.completion_rate || 0}%</td>
+                  <td><span class="status ${item.program_status ? item.program_status.toLowerCase() : 'pending'}">${item.program_status || 'Pending'}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function formatFacultyReport(data) {
+      const totalFaculty = data.length;
+      const totalPrograms = data.reduce((sum, item) => sum + parseInt(item.programs_managed || 0), 0);
+      const totalParticipants = data.reduce((sum, item) => sum + parseInt(item.total_participants || 0), 0);
+      const avgRating = totalFaculty > 0 ? (data.reduce((sum, item) => sum + parseFloat(item.overall_rating || 0), 0) / totalFaculty).toFixed(1) : 0;
+
+      return `
+        <div class="report-summary">
+          <h3>Faculty Performance Summary</h3>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h4>Total Faculty</h4>
+              <span class="number">${totalFaculty}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Programs Managed</h4>
+              <span class="number">${totalPrograms}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Total Participants</h4>
+              <span class="number">${totalParticipants}</span>
+            </div>
+            <div class="summary-card">
+              <h4>Avg Rating</h4>
+              <span class="number">${avgRating}/5.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="report-table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Faculty Name</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Programs</th>
+                <th>Participants</th>
+                <th>Content Rating</th>
+                <th>Facilitator Rating</th>
+                <th>Overall Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(item => `
+                <tr>
+                  <td>${item.faculty_name || 'N/A'}</td>
+                  <td>${item.department || 'N/A'}</td>
+                  <td>${item.position || 'N/A'}</td>
+                  <td>${item.programs_managed || 0}</td>
+                  <td>${item.total_participants || 0}</td>
+                  <td>${parseFloat(item.avg_content_rating || 0).toFixed(1)}/5</td>
+                  <td>${parseFloat(item.avg_facilitator_rating || 0).toFixed(1)}/5</td>
+                  <td><strong>${parseFloat(item.overall_rating || 0).toFixed(1)}/5</strong></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function closeReportModal() {
+      document.getElementById('modal-overlay').classList.add('hidden');
+      document.getElementById('report-modal').classList.add('hidden');
+    }
+
+    async function applyReportFilters() {
+      const startDate = document.getElementById('start-date').value;
+      const endDate = document.getElementById('end-date').value;
+      const modal = document.getElementById('report-modal');
+      const reportType = modal.getAttribute('data-report-type');
+      
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates.');
+        return;
+      }
+      
+      if (new Date(startDate) > new Date(endDate)) {
+        alert('Start date must be before end date.');
+        return;
+      }
+      
+      await loadReportData(reportType, startDate, endDate);
+    }
+
+    function exportReport(format) {
+      const reportContent = document.getElementById('report-content');
+      const hasData = reportContent && !reportContent.querySelector('.no-data') && !reportContent.querySelector('.error-message');
+      
+      if (!hasData) {
+        alert('No data available to export. Please generate a report first.');
+        return;
+      }
+
+      const reportModal = document.getElementById('report-modal');
+      const reportType = reportModal.getAttribute('data-report-type');
+      const modalTitle = document.getElementById('modal-title').textContent;
+      
+      switch (format.toLowerCase()) {
+        case 'excel':
+          exportToExcel(modalTitle, reportType);
+          break;
+        case 'pdf':
+          exportToPDF(modalTitle, reportType);
+          break;
+        default:
+          alert('Export format not supported.');
+      }
+    }
+
+    function exportToExcel(title, reportType) {
+      // For Excel export, we'll use CSV format with .xls extension
+      // This provides basic Excel compatibility
+      const table = document.querySelector('#report-content .report-table');
+      if (!table) {
+        alert('No table data found to export.');
+        return;
+      }
+
+      let content = '';
+      
+      // Add title and date
+      content += `${title}\n`;
+      content += `Generated on: ${new Date().toLocaleDateString()}\n\n`;
+      
+      // Extract table headers
+      const headers = table.querySelectorAll('thead th');
+      const headerRow = Array.from(headers).map(header => header.textContent.trim()).join('\t');
+      content += headerRow + '\n';
+      
+      // Extract table rows
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+        content += rowData + '\n';
+      });
+
+      // Create and download file
+      const blob = new Blob([content], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.xls`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportToPDF(title, reportType) {
+      // Create a professional PDF layout using browser print with enhanced styling
+      const reportContent = document.getElementById('report-content');
+      const summaryCards = reportContent.querySelector('.report-summary');
+      const table = reportContent.querySelector('.report-table');
+      
+      if (!table) {
+        alert('No table data found to export.');
+        return;
+      }
+      
+      const printWindow = window.open('', '_blank');
+      
+      // Get current date and time for the report
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      const timeStr = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
+      
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${title} - eTracker System</title>
+            <style>
+              @page {
+                size: A4;
+                margin: 1in;
+              }
+              
+              * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+              }
+              
+              body {
+                font-family: 'Arial', 'Helvetica', sans-serif;
+                line-height: 1.4;
+                color: #333;
+                background: white;
+              }
+              
+              .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 3px solid #10b981;
+                padding-bottom: 20px;
+                margin-bottom: 30px;
+              }
+              
+              .logo-section {
+                flex: 1;
+              }
+              
+              .logo-section h1 {
+                color: #1B472B;
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 5px;
+              }
+              
+              .logo-section p {
+                color: #666;
+                font-size: 12px;
+              }
+              
+              .report-info {
+                text-align: right;
+                flex: 1;
+              }
+              
+              .report-info h2 {
+                color: #10b981;
+                font-size: 20px;
+                margin-bottom: 10px;
+              }
+              
+              .report-info .meta {
+                font-size: 11px;
+                color: #666;
+                line-height: 1.3;
+              }
+              
+              .summary-section {
+                background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+                border: 1px solid #bbf7d0;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 30px;
+              }
+              
+              .summary-section h3 {
+                color: #065f46;
+                font-size: 16px;
+                margin-bottom: 15px;
+                text-align: center;
+              }
+              
+              .summary-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+              }
+              
+              .summary-card {
+                background: white;
+                border: 1px solid #d1fae5;
+                border-radius: 6px;
+                padding: 12px;
+                text-align: center;
+              }
+              
+              .summary-card h4 {
+                color: #047857;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 8px;
+              }
+              
+              .summary-card .number {
+                color: #065f46;
+                font-size: 18px;
+                font-weight: bold;
+              }
+              
+              .data-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 11px;
+              }
+              
+              .data-table thead {
+                background: #10b981;
+                color: white;
+              }
+              
+              .data-table th,
+              .data-table td {
+                padding: 8px 6px;
+                text-align: left;
+                border: 1px solid #d1d5db;
+                vertical-align: top;
+              }
+              
+              .data-table th {
+                font-weight: 600;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+              }
+              
+              .data-table tbody tr:nth-child(even) {
+                background: #f8fafc;
+              }
+              
+              .data-table tbody tr:hover {
+                background: #f0fdf4;
+              }
+              
+              .status-badge {
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 9px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+              }
+              
+              .status-badge.excellent,
+              .status-badge.accepted,
+              .status-badge.present,
+              .status-badge.issued {
+                background: #d1fae5;
+                color: #065f46;
+              }
+              
+              .status-badge.good,
+              .status-badge.pending,
+              .status-badge.late {
+                background: #fef3c7;
+                color: #92400e;
+              }
+              
+              .status-badge.warning,
+              .status-badge.absent,
+              .status-badge.rejected {
+                background: #fee2e2;
+                color: #991b1b;
+              }
+              
+              .status-badge.ongoing {
+                background: #dbeafe;
+                color: #1e40af;
+              }
+              
+              .footer {
+                position: fixed;
+                bottom: 0.5in;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 10px;
+                color: #666;
+                border-top: 1px solid #e5e7eb;
+                padding-top: 10px;
+              }
+              
+              @media print {
+                .no-print {
+                  display: none !important;
+                }
+                
+                body {
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="logo-section">
+                <h1>eTracker System</h1>
+                <p>Extension Program Management & Tracking</p>
+              </div>
+              <div class="report-info">
+                <h2>${title}</h2>
+                <div class="meta">
+                  <div><strong>Generated:</strong> ${dateStr} at ${timeStr}</div>
+                  <div><strong>Report Type:</strong> ${reportType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                </div>
+              </div>
+            </div>
+            
+            ${summaryCards ? `
+            <div class="summary-section">
+              <h3>Report Summary</h3>
+              <div class="summary-grid">
+                ${Array.from(summaryCards.querySelectorAll('.summary-card')).map(card => `
+                  <div class="summary-card">
+                    <h4>${card.querySelector('h4').textContent}</h4>
+                    <div class="number">${card.querySelector('.number').textContent}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+            
+            <table class="data-table">
+              ${table.outerHTML.replace(/class="report-table"/g, 'class="data-table"')}
+            </table>
+            
+            <div class="footer">
+              <div>eTracker System - Extension Program Management Platform</div>
+              <div>This report contains confidential information. Handle with appropriate care.</div>
+            </div>
+          </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+      
+      // Wait for content to load, then print
+      printWindow.onload = function() {
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.onafterprint = function() {
+            printWindow.close();
+          };
+        }, 500);
+      };
+    }
+
+    function printReport() {
+      const reportContent = document.getElementById('report-content');
+      const modalTitle = document.getElementById('modal-title').textContent;
+      const reportModal = document.getElementById('report-modal');
+      const reportType = reportModal.getAttribute('data-report-type');
+      
+      if (!reportContent || reportContent.querySelector('.no-data') || reportContent.querySelector('.error-message')) {
+        alert('No data available to print. Please generate a report first.');
+        return;
+      }
+      
+      // Use the same enhanced PDF styling for printing
+      exportToPDF(modalTitle, reportType);
+    }
+
+    // Chart control functions
+    document.querySelectorAll('.view-toggle').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('.view-toggle').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        // Refresh department chart with new data
+        // Implementation depends on specific requirements
+      });
     });
-  
-    // Doughnut Chart: Feedback Ratings
-    const feedbackRatingsChart = new Chart(document.getElementById('feedbackRatingsChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Excellent', 'Good', 'Average', 'Poor'],
-        datasets: [{
-          data: [60, 30, 8, 2],
-          backgroundColor: ['#1B472B', '#65a30d', '#facc15', '#ef4444']
-        }]
-      },
-      options: {
-        responsive: true,
-        cutout: '65%'
+
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ensure modal is hidden on page load
+      const modalOverlay = document.getElementById('modal-overlay');
+      const reportModal = document.getElementById('report-modal');
+      
+      if (modalOverlay) modalOverlay.classList.add('hidden');
+      if (reportModal) reportModal.classList.add('hidden');
+      
+      // Initialize the dashboard
+      initializeDashboard();
+      
+      // Close modal when clicking overlay
+      if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeReportModal);
       }
     });
   </script>
-  <script>
-document.getElementById('reportForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const type = document.getElementById('reportType').value;
-  const start = document.getElementById('startMonth').value + '-01';
-  const endMonth = document.getElementById('endMonth').value;
-  const end = endMonth ? endMonth + '-31' : '';
-  const box = document.getElementById('reportBox');
-  const actions = document.getElementById('reportActions');
-  box.innerHTML = '<em>Loading...</em>';
-  actions.style.display = 'none';
-
-  const res = await fetch(`/backend/reports_api.php?type=${type}&start=${start}&end=${end}`);
-  const data = await res.json();
-
-  if (!data.length) {
-    box.innerHTML = '<em>No data found for this selection.</em>';
-    return;
-  }
-
-  // Render table based on report type
-  let html = '<table class="report-table"><thead><tr>';
-  let fields = Object.keys(data[0]);
-  fields.forEach(f => html += `<th>${f.replace(/_/g, ' ').toUpperCase()}</th>`);
-  html += '</tr></thead><tbody>';
-  data.forEach(row => {
-    html += '<tr>';
-    fields.forEach(f => html += `<td>${row[f]}</td>`);
-    html += '</tr>';
-  });
-  html += '</tbody></table>';
-  box.innerHTML = html;
-  actions.style.display = '';
-});
-
-// Dummy download functions
-function downloadReport(type) {
-  alert('Export functionality coming soon!');
-}
-</script>
-    
-  
 </body>
 </html>

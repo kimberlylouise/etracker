@@ -145,82 +145,184 @@ if ($action === 'issue_certificate' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Generate PDF
     require_once __DIR__ . '/fpdf186/fpdf.php';
 
-    // Create landscape A4 PDF
-
+    // Create portrait A4 PDF (single page)
     $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->AddPage();
+    $pdf->SetAutoPageBreak(false); // Disable automatic page breaks
 
-    // Add border
+    // Elegant outer border with shadow effect
+    $pdf->SetLineWidth(2.0);
+    $pdf->SetDrawColor(27, 71, 43); // Deep green
+    $pdf->Rect(12, 12, 186, 273, 'D');
+    
+    // Inner decorative border
+    $pdf->SetLineWidth(0.8);
+    $pdf->SetDrawColor(184, 134, 11); // Gold
+    $pdf->Rect(18, 18, 174, 261, 'D');
+    
+    // Subtle inner frame
     $pdf->SetLineWidth(0.3);
-    $pdf->Rect(10, 10, 277, 190, 'D');
+    $pdf->SetDrawColor(100, 100, 100); // Gray
+    $pdf->Rect(22, 22, 166, 253, 'D');
 
-    // Header
-    $pdf->SetFont('Arial', 'B', 18);
-    $pdf->Cell(0, 12, 'CAVITE STATE UNIVERSITY - IMUS CAMPUS', 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 14);
-    $pdf->Cell(0, 8, 'Extension Services Office', 0, 1, 'C');
+    // Header background rectangle
+    $pdf->SetFillColor(27, 71, 43); // Green background
+    $pdf->Rect(22, 22, 166, 35, 'F');
+
+    // Add logo if exists
+    if (file_exists(__DIR__ . '/logo.png')) {
+        $pdf->Image(__DIR__ . '/logo.png', 27, 27, 25); // left, top, width
+    }
+
+    // University header in white on green background
+    $pdf->SetY(30);
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->SetTextColor(255, 255, 255); // White text
+    $pdf->Cell(0, 8, 'CAVITE STATE UNIVERSITY - IMUS CAMPUS', 0, 1, 'C');
+    
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 6, 'Extension Services Office', 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0); // Reset to black
+    $pdf->Ln(15);
+
+    // Elegant title with gold background
+    $pdf->SetFillColor(248, 243, 227); // Light gold background
+    $pdf->Rect(50, $pdf->GetY() - 3, 110, 20, 'F');
+    
+    $pdf->SetFont('Arial', 'B', 26);
+    $pdf->SetTextColor(184, 134, 11); // Gold text
+    $pdf->Cell(0, 12, 'CERTIFICATION', 0, 1, 'C');
+    
+    // Decorative ornamental line
+    $pdf->SetLineWidth(1.5);
+    $pdf->SetDrawColor(184, 134, 11);
+    $pdf->Line(70, $pdf->GetY() + 2, 140, $pdf->GetY() + 2);
+    // Small decorative diamonds
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetXY(66, $pdf->GetY() - 1);
+    $pdf->Cell(4, 4, '♦', 0, 0, 'C');
+    $pdf->SetXY(140, $pdf->GetY());
+    $pdf->Cell(4, 4, '♦', 0, 0, 'C');
+    
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', 'I', 12);
+    $pdf->SetTextColor(80, 80, 80); // Dark gray
+    $pdf->Cell(0, 6, 'Summary of Extension Workload Hours Accomplished', 0, 1, 'C');
+    $pdf->Ln(12);
+
+    // Ornamental flourish before main text
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 8, '⬥ ⬥ ⬥', 0, 1, 'C');
     $pdf->Ln(5);
 
-    // Title
-    $pdf->SetFont('Arial', 'B', 22);
-    $pdf->Cell(0, 15, 'CERTIFICATION', 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 14);
-    $pdf->Cell(0, 10, 'Summary of Extension Workload Hours Accomplished', 0, 1, 'C');
+    // Main body text with better typography
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(0, 6, "This is to certify that", 0, 1, 'C');
+    $pdf->Ln(6);
+    
+    // Student name with elegant styling
+    $pdf->SetFillColor(240, 248, 255); // Very light blue
+    $pdf->Rect(30, $pdf->GetY() - 2, 150, 12, 'F');
+    $pdf->SetFont('Arial', 'B', 18);
+    $pdf->SetTextColor(27, 71, 43); // Green
+    $pdf->Cell(0, 10, strtoupper($student_name), 0, 1, 'C');
+    $pdf->Ln(4);
+    
+    // Body text continuation
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(60, 60, 60); // Dark gray
+    $pdf->Cell(0, 5, "from the Department of Computer Studies, Cavite State University – Imus Campus,", 0, 1, 'C');
+    $pdf->Cell(0, 5, "has actively participated in and accomplished the required Extension workload hours", 0, 1, 'C');
+    $pdf->Cell(0, 5, "in the officially recognized Extension activities/programs/projects as detailed below:", 0, 1, 'C');
+    $pdf->Ln(10);
+
+    // Program information in elegant box
+    $pdf->SetFillColor(250, 250, 250); // Very light gray
+    $pdf->SetDrawColor(200, 200, 200); // Light gray border
+    $pdf->Rect(35, $pdf->GetY(), 140, 25, 'DF');
+    
+    $pdf->SetFont('Arial', 'B', 11);
+    $pdf->SetTextColor(27, 71, 43);
+    $pdf->Cell(0, 8, "Program Title:", 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(0, 6, $program_name, 0, 1, 'C');
+    $pdf->Ln(2);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(100, 100, 100);
+    $pdf->Cell(0, 5, "Period: From _______________  To _______________", 0, 1, 'C');
+    $pdf->Ln(12);
+
+    // Elegant table design
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->SetFillColor(27, 71, 43); // Green header
+    $pdf->SetTextColor(255, 255, 255); // White text
+    $pdf->SetDrawColor(27, 71, 43);
+    $pdf->SetLineWidth(0.5);
+    
+    // Table header with proper spacing
+    $pdf->Cell(55, 10, 'Student Name', 1, 0, 'C', true);
+    $pdf->Cell(55, 10, 'Program Title', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Role', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Hours', 1, 1, 'C', true);
+
+    // Table content with alternating colors
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetFillColor(248, 250, 252); // Very light blue
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(55, 10, $student_name, 1, 0, 'C', true);
+    $pdf->Cell(55, 10, $program_name, 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Participant', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, '40', 1, 1, 'C', true);
+
+    $pdf->Ln(10);
+
+    // Total hours with decorative styling
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetTextColor(27, 71, 43);
+    $pdf->Cell(0, 8, 'Total Department Extension Hours Rendered: ________________', 0, 1, 'C');
+    $pdf->Ln(12);
+
+    // Certification statement in justified format
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(60, 60, 60);
+    $pdf->Cell(0, 5, "This certification is issued for record purposes and submission to the Office of the", 0, 1, 'C');
+    $pdf->Cell(0, 5, "Extension Services and the Campus Extension Coordinator.", 0, 1, 'C');
+    $pdf->Ln(8);
+    
+    // Current date with proper formatting
+    $current_date = date('jS \d\a\y \o\f F, Y');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, "Issued this {$current_date} at Cavite State University – Imus Campus, Imus City, Cavite.", 0, 1, 'C');
+
+    // Decorative bottom flourish
+    $pdf->SetY(-80);
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 6, '⬥ ⬥ ⬥', 0, 1, 'C');
     $pdf->Ln(8);
 
-    // Body (centered, line by line)
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 8, "This is to certify that", 0, 1, 'C');
-    $pdf->SetFont('Arial', 'B', 13);
-    $pdf->Cell(0, 8, "{$student_name}", 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 8, "from the Department of Computer Studies, Cavite State University – Imus Campus,", 0, 1, 'C');
-    $pdf->Cell(0, 8, "has actively participated in and accomplished the required Extension workload hours", 0, 1, 'C');
-    $pdf->Cell(0, 8, "in the officially recognized Extension activities/programs/projects as detailed below:", 0, 1, 'C');
-    $pdf->Ln(4);
-    $pdf->Cell(0, 8, "Program Title: {$program_name}", 0, 1, 'C');
-    $pdf->Cell(0, 8, "Period: From _______________    To _______________", 0, 1, 'C');
-    $pdf->Ln(4);
-
-    // Table header (centered)
-    $pdf->SetFillColor(220, 220, 220);
-    $pdf->SetFont('Arial', 'B', 11);
-    $pdf->Cell(80, 8, 'Student Name', 1, 0, 'C', true);
-    $pdf->Cell(80, 8, 'Program Title', 1, 0, 'C', true);
-    $pdf->Cell(40, 8, 'Role', 1, 0, 'C', true);
-    $pdf->Cell(40, 8, 'No. of Hours', 1, 0, 'C', true);
-    $pdf->Cell(37, 8, 'Dates of Participation', 1, 1, 'C', true);
-
-    // Table row (centered)
+    // Signature section with elegant formatting
     $pdf->SetFont('Arial', '', 11);
-    $pdf->Cell(80, 8, $student_name, 1, 0, 'C');
-    $pdf->Cell(80, 8, $program_name, 1, 0, 'C');
-    $pdf->Cell(40, 8, 'Participant', 1, 0, 'C');
-    $pdf->Cell(40, 8, '40', 1, 0, 'C');
-    $pdf->Cell(37, 8, 'Jan 10 - Feb 20, 2025', 1, 1, 'C');
-
-    $pdf->Ln(6);
-
-    // Total Hours (centered and bold)
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 8, 'Total Department Extension Hours Rendered: ________________', 0, 1, 'C');
-    $pdf->Ln(6);
-
-    // Certification statement (centered)
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 8, "This certification is issued for record purposes and submission to the Office of the Extension Services and the Campus Extension Coordinator.", 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(0, 6, 'Certified by:', 0, 1, 'C');
+    $pdf->Ln(18);
+    
+    // Elegant signature line
+    $pdf->SetLineWidth(0.8);
+    $pdf->SetDrawColor(27, 71, 43);
+    $pdf->Line(75, $pdf->GetY(), 135, $pdf->GetY());
     $pdf->Ln(4);
-    $pdf->Cell(0, 8, "Issued this _____ day of _______________, 2025 at Cavite State University – Imus Campus, Imus City, Cavite.", 0, 1, 'C');
-
-    // Signature at the bottom
-    $pdf->SetY(-45);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 8, 'Certified by:', 0, 1, 'C');
-    $pdf->Ln(12);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 8, 'GRACE S. IBAÑEZ', 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 8, 'Chair, Department of Computer Studies', 0, 1, 'C');
+    
+    $pdf->SetFont('Arial', 'B', 13);
+    $pdf->SetTextColor(27, 71, 43);
+    $pdf->Cell(0, 6, 'GRACE S. IBAÑEZ', 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(80, 80, 80);
+    $pdf->Cell(0, 5, 'Chair, Department of Computer Studies', 0, 1, 'C');
 
     // Save PDF
     $certDir = __DIR__ . '/../certificates/';
@@ -271,74 +373,173 @@ if ($action === 'issue_faculty_certificate' && $_SERVER['REQUEST_METHOD'] === 'P
     require_once __DIR__ . '/fpdf186/fpdf.php';
     $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->AddPage();
+    $pdf->SetAutoPageBreak(false); // Disable automatic page breaks
 
-    // Add border
-    $pdf->SetLineWidth(0.5);
-    $pdf->Rect(10, 10, 277, 190, 'D');
+    // Elegant outer border with shadow effect
+    $pdf->SetLineWidth(2.0);
+    $pdf->SetDrawColor(27, 71, 43); // Deep green
+    $pdf->Rect(12, 12, 186, 273, 'D');
+    
+    // Inner decorative border
+    $pdf->SetLineWidth(0.8);
+    $pdf->SetDrawColor(184, 134, 11); // Gold
+    $pdf->Rect(18, 18, 174, 261, 'D');
+    
+    // Subtle inner frame
+    $pdf->SetLineWidth(0.3);
+    $pdf->SetDrawColor(100, 100, 100); // Gray
+    $pdf->Rect(22, 22, 166, 253, 'D');
 
-    // Add logo (adjust path and size as needed)
-    $pdf->Image(__DIR__ . '/logo.png', 20, 15, 40); // left, top, width
+    // Header background rectangle
+    $pdf->SetFillColor(27, 71, 43); // Green background
+    $pdf->Rect(22, 22, 166, 35, 'F');
 
-    // Header
-    $pdf->SetFont('Arial', 'B', 20);
-    $pdf->SetTextColor(0, 51, 102);
-    $pdf->Cell(0, 18, 'CAVITE STATE UNIVERSITY - IMUS CAMPUS', 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 14);
-    $pdf->SetTextColor(0,0,0);
-    $pdf->Cell(0, 10, 'Extension Services Office', 0, 1, 'C');
+    // Add logo if exists
+    if (file_exists(__DIR__ . '/logo.png')) {
+        $pdf->Image(__DIR__ . '/logo.png', 27, 27, 25); // left, top, width
+    }
+
+    // University header in white on green background
+    $pdf->SetY(30);
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->SetTextColor(255, 255, 255); // White text
+    $pdf->Cell(0, 8, 'CAVITE STATE UNIVERSITY - IMUS CAMPUS', 0, 1, 'C');
+    
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 6, 'Extension Services Office', 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0); // Reset to black
+    $pdf->Ln(15);
+
+    // Elegant title with gold background
+    $pdf->SetFillColor(248, 243, 227); // Light gold background
+    $pdf->Rect(50, $pdf->GetY() - 3, 110, 20, 'F');
+    
+    $pdf->SetFont('Arial', 'B', 26);
+    $pdf->SetTextColor(184, 134, 11); // Gold text
+    $pdf->Cell(0, 12, 'CERTIFICATION', 0, 1, 'C');
+    
+    // Decorative ornamental line
+    $pdf->SetLineWidth(1.5);
+    $pdf->SetDrawColor(184, 134, 11);
+    $pdf->Line(70, $pdf->GetY() + 2, 140, $pdf->GetY() + 2);
+    // Small decorative diamonds
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetXY(66, $pdf->GetY() - 1);
+    $pdf->Cell(4, 4, '♦', 0, 0, 'C');
+    $pdf->SetXY(140, $pdf->GetY());
+    $pdf->Cell(4, 4, '♦', 0, 0, 'C');
+    
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', 'I', 12);
+    $pdf->SetTextColor(80, 80, 80); // Dark gray
+    $pdf->Cell(0, 6, 'Summary of Extension Workload Hours Accomplished', 0, 1, 'C');
+    $pdf->Ln(10);
+
+    // Ornamental flourish before main text
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 8, '⬥ ⬥ ⬥', 0, 1, 'C');
     $pdf->Ln(5);
 
-    // Title
-    $pdf->SetFont('Arial', 'B', 28);
-    $pdf->SetTextColor(34, 139, 34);
-    $pdf->Cell(0, 20, 'CERTIFICATION', 0, 1, 'C');
-    $pdf->SetFont('Arial', '', 16);
-    $pdf->SetTextColor(0,0,0);
-    $pdf->Cell(0, 12, 'Summary of Extension Workload Hours Accomplished', 0, 1, 'C');
+    // Body text with better typography
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(60, 60, 60); // Dark gray
+    $pdf->Cell(0, 5, "This is to certify that the faculty members listed below from the Department of Computer Studies,", 0, 1, 'C');
+    $pdf->Cell(0, 5, "Cavite State University – Imus Campus, have participated in and accomplished the corresponding", 0, 1, 'C');
+    $pdf->Cell(0, 5, "number of Extension workload hours rendered in the officially recognized Extension", 0, 1, 'C');
+    $pdf->Cell(0, 5, "activities/programs/projects for the period:", 0, 1, 'C');
     $pdf->Ln(8);
 
-    // Body
-    $pdf->SetFont('Arial', '', 13);
-    $pdf->MultiCell(0, 8, "This is to certify that the faculty members listed below from the Department of Computer Studies, Cavite State University – Imus Campus, have participated in and accomplished the corresponding number of Extension workload hours rendered in the officially recognized Extension activities/programs/projects for the period:\n\nFrom: _____________    To: _______________", 0, 'L');
-    $pdf->Ln(4);
+    // Faculty name with elegant styling
+    $pdf->SetFillColor(240, 248, 255); // Very light blue
+    $pdf->Rect(30, $pdf->GetY() - 2, 150, 12, 'DF');
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->SetTextColor(27, 71, 43); // Green
+    $pdf->Cell(0, 10, strtoupper($faculty_name), 0, 1, 'C');
+    $pdf->Ln(8);
 
-    // Table header
-    $pdf->SetFillColor(220, 230, 241);
+    // Period info in elegant box
+    $pdf->SetFillColor(250, 250, 250); // Very light gray
+    $pdf->SetDrawColor(200, 200, 200); // Light gray border
+    $pdf->Rect(50, $pdf->GetY(), 110, 15, 'DF');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(100, 100, 100);
+    $pdf->Cell(0, 8, "From: _____________  To: _______________", 0, 1, 'C');
+    $pdf->Ln(10);
+
+    // Elegant table header
+    $pdf->SetFont('Arial', 'B', 9);
+    $pdf->SetFillColor(27, 71, 43); // Green header
+    $pdf->SetTextColor(255, 255, 255); // White text
+    $pdf->SetDrawColor(27, 71, 43);
+    $pdf->SetLineWidth(0.5);
+    
+    $pdf->Cell(50, 10, 'Faculty Member', 1, 0, 'C', true);
+    $pdf->Cell(50, 10, 'Extension Activity/Project', 1, 0, 'C', true);
+    $pdf->Cell(35, 10, 'Role/Designation', 1, 0, 'C', true);
+    $pdf->Cell(35, 10, 'Hours Rendered', 1, 1, 'C', true);
+
+    // Table content with alternating colors
+    $pdf->SetFont('Arial', '', 9);
+    $pdf->SetFillColor(248, 250, 252); // Very light blue
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(50, 10, $faculty_name, 1, 0, 'C', true);
+    $pdf->Cell(50, 10, $program_name, 1, 0, 'C', true);
+    $pdf->Cell(35, 10, 'Coordinator', 1, 0, 'C', true);
+    $pdf->Cell(35, 10, '40 Hours', 1, 1, 'C', true);
+
+    $pdf->Ln(10);
+
+    // Total hours with decorative styling
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(60, 9, 'Name of Faculty Member', 1, 0, 'C', true);
-    $pdf->Cell(60, 9, 'Extension Activity/Project Title', 1, 0, 'C', true);
-    $pdf->Cell(40, 9, 'Role/Designation', 1, 0, 'C', true);
-    $pdf->Cell(35, 9, 'No. of Hours Rendered', 1, 0, 'C', true);
-    $pdf->Cell(60, 9, 'Dates of Implementation', 1, 1, 'C', true);
+    $pdf->SetTextColor(27, 71, 43);
+    $pdf->Cell(0, 8, 'Total Department Extension Hours Rendered: ________________', 0, 1, 'C');
+    $pdf->Ln(10);
 
-    // Table rows (example, replace with your data loop)
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(60, 9, $faculty_name, 1, 0, 'C');
-    $pdf->Cell(60, 9, $program_name, 1, 0, 'C');
-    $pdf->Cell(40, 9, 'Coordinator', 1, 0, 'C');
-    $pdf->Cell(35, 9, '40', 1, 0, 'C');
-    $pdf->Cell(60, 9, 'Jan 10 - Feb 20, 2025', 1, 1, 'C');
+    // Certification statement
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(60, 60, 60);
+    $pdf->Cell(0, 5, "This certification is issued for record purposes and submission to the Office of the Extension", 0, 1, 'C');
+    $pdf->Cell(0, 5, "Services and the Campus Extension Coordinator.", 0, 1, 'C');
+    $pdf->Ln(8);
+    
+    // Current date with proper formatting
+    $current_date = date('jS \d\a\y \o\f F, Y');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, "Issued this {$current_date} at Cavite State University - Imus Campus, Imus City, Cavite.", 0, 1, 'C');
 
+    // Decorative bottom flourish
+    $pdf->SetY(-80);
+    $pdf->SetTextColor(184, 134, 11);
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 6, '⬥ ⬥ ⬥', 0, 1, 'C');
+    $pdf->Ln(8);
+
+    // Signature section with elegant formatting
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->Cell(0, 6, 'Certified by:', 0, 1, 'C');
+    $pdf->Ln(18);
+    
+    // Elegant signature line
+    $pdf->SetLineWidth(0.8);
+    $pdf->SetDrawColor(27, 71, 43);
+    $pdf->Line(75, $pdf->GetY(), 135, $pdf->GetY());
     $pdf->Ln(4);
+    
     $pdf->SetFont('Arial', 'B', 13);
-    $pdf->Cell(0, 9, 'Total Department Extension Hours Rendered: ________________', 0, 1, 'L');
-    $pdf->Ln(6);
-
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->MultiCell(0, 8, "This certification is issued for record purposes and submission to the Office of the Extension Services and the Campus Extension Coordinator.", 0, 'L');
-    $pdf->Ln(4);
-
-    $pdf->Cell(0, 8, "Issued this _____ day of _______________, 2025 at Cavite State University - Imus Campus, Imus City, Cavite.", 0, 1, 'L');
-
-    // Move to bottom for signature
-    $pdf->SetY(-45);
+    $pdf->SetTextColor(27, 71, 43);
+    $pdf->Cell(0, 6, 'GRACE S. IBAÑEZ', 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetTextColor(80, 80, 80);
+    $pdf->Cell(0, 5, 'Chair, Department of Computer Studies', 0, 1, 'C');
+    $pdf->Ln(3);
+    
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 8, 'Certified by:', 0, 1, 'L');
-    $pdf->Ln(12);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 8, 'GRACE S. IBAÑEZ', 0, 1, 'L');
-    $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 8, 'Chair, Department of Computer Studies', 0, 1, 'L');
+    $pdf->Cell(0, 6, 'GRACE S. IBAÑEZ', 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 5, 'Chair, Department of Computer Studies', 0, 1, 'C');
 
     // Save PDF with unique name per program
     $certDir = __DIR__ . '/../certificates/';
