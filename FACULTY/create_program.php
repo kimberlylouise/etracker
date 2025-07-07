@@ -134,14 +134,8 @@ try {
         faculty_id,
         user_id,
         status,
-        faculty_certificate_issued,
-        program_type,
-        target_audience,
-        requirements,
-        budget,
-        dept_approval,
-        priority
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'department', 'extension', ?, ?, ?, NOW(), ?, ?, 'planning', 0, ?, ?, ?, ?, ?, ?)";
+        faculty_certificate_issued
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'department', 'extension', ?, ?, ?, NOW(), ?, ?, 'planning', 0)";
     
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -149,7 +143,7 @@ try {
     }
     
     $stmt->bind_param(
-        "ssssssiisssssiissssss",
+        "ssssssiisssssii",
         $program_name,
         $department,
         $start_date,
@@ -164,13 +158,7 @@ try {
         $sessions_json,
         $sdg_goals_json,
         $faculty_id,
-        $user_id,
-        $program_type,
-        $target_audience,
-        $requirements,
-        $budget,
-        $dept_approval,
-        $priority
+        $user_id
     );
     
     if (!$stmt->execute()) {

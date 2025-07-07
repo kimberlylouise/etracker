@@ -32,16 +32,24 @@ $stmt->close();
 
 // Get programs assigned to this faculty with department info
 $programs = [];
-$stmt = $conn->prepare("SELECT id, program_name, status, start_date, end_date, max_students, 
-                       program_type, target_audience, dept_approval, priority, budget 
-                       FROM programs WHERE faculty_id = ?");
-$stmt->bind_param("i", $faculty_id);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_assoc()) {
-    $programs[] = $row;
+$stmt = $conn->prepare("SELECT p.id, p.program_name, p.status, p.start_date, p.end_date, 
+                       p.max_students, d.dept_name 
+                       FROM programs p 
+                       LEFT JOIN departments d ON p.department_id = d.id 
+                       WHERE p.faculty_id = ?");
+if ($stmt) {
+    $stmt->bind_param("i", $faculty_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $programs[] = $row;
+    }
+    $stmt->close();
+} else {
+    // Handle prepare error
+    error_log("Database prepare error: " . $conn->error);
+    $programs = [];
 }
-$stmt->close();
 
 // Get analytics snapshot
 $active_programs = 0;

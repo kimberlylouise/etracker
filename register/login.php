@@ -13,6 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Check for admin credentials first
+    if ($email === 'admin' && $password === 'admin') {
+        $_SESSION['user_id'] = 'admin';
+        $_SESSION['role'] = 'admin';
+        error_log("Admin login successful");
+        echo json_encode(['status' => 'success', 'redirect_url' => '../ADMIN/Dashboard.html']);
+        exit;
+    }
+
     $stmt = $conn->prepare("SELECT id, password, role FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();

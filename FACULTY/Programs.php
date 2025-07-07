@@ -90,7 +90,6 @@ $ended_offset = ($ended_page - 1) * $programs_per_page;
 
 // Fetch active programs with pagination and search
 $active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, 
-                  p.program_type, p.target_audience, p.dept_approval, p.priority, p.requirements, p.budget,
                   COUNT(pt.id) AS enrolled
                  FROM programs p
                  LEFT JOIN participants pt ON p.id = pt.program_id
@@ -118,7 +117,6 @@ $active_stmt->close();
 
 // Fetch ended programs with pagination and search
 $ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students,
-                p.program_type, p.target_audience, p.dept_approval, p.priority, p.requirements, p.budget,
                 COUNT(pt.id) AS enrolled
                 FROM programs p
                 LEFT JOIN participants pt ON p.id = pt.program_id
@@ -424,15 +422,7 @@ foreach ($active_programs as $program) {
                   <div class="program-header">
                     <h3><?php echo htmlspecialchars($program['program_name']); ?></h3>
                     <div class="program-badges">
-                      <?php if (isset($program['program_type']) && $program['program_type']): ?>
-                        <span class="badge type-badge"><?php echo htmlspecialchars($program['program_type']); ?></span>
-                      <?php endif; ?>
-                      <?php if (isset($program['priority']) && $program['priority'] !== 'normal'): ?>
-                        <span class="badge priority-badge priority-<?php echo htmlspecialchars($program['priority']); ?>"><?php echo htmlspecialchars(ucfirst($program['priority'])); ?></span>
-                      <?php endif; ?>
-                      <?php if (isset($program['dept_approval'])): ?>
-                        <span class="badge approval-badge approval-<?php echo htmlspecialchars($program['dept_approval']); ?>"><?php echo htmlspecialchars(ucfirst($program['dept_approval'])); ?></span>
-                      <?php endif; ?>
+                      <!-- Badges removed since columns don't exist in database -->
                     </div>
                   </div>
                   
@@ -442,21 +432,6 @@ foreach ($active_programs as $program) {
                     <div class="detail-item">
                       <strong>Dates:</strong> <?php echo htmlspecialchars(date('F j, Y', strtotime($program['start_date']))); ?> - <?php echo htmlspecialchars(date('F j, Y', strtotime($program['end_date']))); ?>
                     </div>
-                    <?php if (isset($program['target_audience']) && $program['target_audience']): ?>
-                    <div class="detail-item">
-                      <strong>Target Audience:</strong> <?php echo htmlspecialchars($program['target_audience']); ?>
-                    </div>
-                    <?php endif; ?>
-                    <?php if (isset($program['requirements']) && $program['requirements']): ?>
-                    <div class="detail-item">
-                      <strong>Requirements:</strong> <?php echo htmlspecialchars($program['requirements']); ?>
-                    </div>
-                    <?php endif; ?>
-                    <?php if (isset($program['budget']) && $program['budget'] > 0): ?>
-                    <div class="detail-item">
-                      <strong>Budget:</strong> ₱<?php echo number_format($program['budget'], 2); ?>
-                    </div>
-                    <?php endif; ?>
                   </div>
                   
                   <p><strong>Schedule:</strong></p>
