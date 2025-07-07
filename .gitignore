@@ -1,0 +1,10 @@
+# Files to ignore during deployment
+node_modules/
+.env
+*.log
+*.md
+*.txt
+*.docx
+.git/
+.vscode/
+Learning Journal (OJT 2025).docx
