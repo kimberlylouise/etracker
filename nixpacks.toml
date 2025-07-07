@@ -3,7 +3,7 @@
 providers = ["php"]
 
 [phases.setup]
-nixPkgs = ["php81", "php81Packages.composer"]
+nixPkgs = ["php82", "php82Packages.composer"]
 
 [phases.build]
 cmds = ["composer install --no-dev --optimize-autoloader"]
