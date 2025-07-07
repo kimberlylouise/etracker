@@ -1,11 +1,2 @@
-# Railway configuration for PHP 8.2
+# Simple auto-detection for Railway
 providers = ["php"]
-
-[phases.setup]
-nixPkgs = ["php82", "php82Packages.composer"]
-
-[phases.build]
-cmds = ["composer install --no-dev --optimize-autoloader"]
-
-[start]
-cmd = "php -S 0.0.0.0:$PORT -t ."
