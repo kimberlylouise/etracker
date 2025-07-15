@@ -4,16 +4,19 @@ session_start();
 
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
-    header('Location: login.php');
+    header('Location: ../register/login.php');
     exit();
 }
 
-// Get faculty info
+// Get faculty info (profile.php/reports.php logic)
 $faculty_id = null;
-$stmt = $conn->prepare("SELECT id, department FROM faculty WHERE user_id = ?");
+$faculty_department = '';
+$faculty_name = '';
+$faculty_position = '';
+$stmt = $conn->prepare("SELECT id, faculty_name, department, position FROM faculty WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$stmt->bind_result($faculty_id, $faculty_department);
+$stmt->bind_result($faculty_id, $faculty_name, $faculty_department, $faculty_position);
 $stmt->fetch();
 $stmt->close();
 
@@ -32,12 +35,13 @@ $stmt->close();
 
 // Get programs assigned to this faculty with department info
 $programs = [];
-$stmt = $conn->prepare("SELECT p.id, p.program_name, p.status, p.start_date, p.end_date, 
-                       p.max_students, d.dept_name 
-                       FROM programs p 
-                       LEFT JOIN departments d ON p.department_id = d.id 
-                       WHERE p.faculty_id = ?");
-if ($stmt) {
+if ($faculty_id) {
+    $stmt = $conn->prepare("SELECT id, program_name, status, start_date, end_date, max_students 
+                            FROM programs 
+                            WHERE faculty_id = ?");
+    if ($stmt === false) {
+        die("Prepare failed: " . $conn->error);
+    }
     $stmt->bind_param("i", $faculty_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -46,8 +50,8 @@ if ($stmt) {
     }
     $stmt->close();
 } else {
-    // Handle prepare error
-    error_log("Database prepare error: " . $conn->error);
+    // Handle missing faculty_id
+    error_log("Faculty ID not found for user_id: " . $user_id);
     $programs = [];
 }
 
@@ -56,32 +60,42 @@ $active_programs = 0;
 $total_certificates = 0;
 $total_attendance = 0;
 $total_present = 0;
+
+// Count active programs
 foreach ($programs as $program) {
-    if ($program['status'] === 'active') $active_programs++;
+    if ($program['status'] === 'ongoing') $active_programs++;
+}
+
+// Get certificate count for all programs at once
+if (!empty($programs)) {
+    $program_ids = array_column($programs, 'id');
+    $in_clause = str_repeat('?,', count($program_ids) - 1) . '?';
+    
     // Certificates
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM certificates WHERE program_id = ?");
-    $stmt->bind_param("i", $program['id']);
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM certificates WHERE program_id IN ($in_clause)");
+    $stmt->bind_param(str_repeat('i', count($program_ids)), ...$program_ids);
     $stmt->execute();
-    $stmt->bind_result($cert_count);
+    $stmt->bind_result($total_certificates);
     $stmt->fetch();
-    $total_certificates += $cert_count;
     $stmt->close();
-    // Attendance
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id = ?");
-    $stmt->bind_param("i", $program['id']);
+    
+    // Attendance total
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id IN ($in_clause)");
+    $stmt->bind_param(str_repeat('i', count($program_ids)), ...$program_ids);
     $stmt->execute();
-    $stmt->bind_result($att_count);
+    $stmt->bind_result($total_attendance);
     $stmt->fetch();
-    $total_attendance += $att_count;
     $stmt->close();
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id = ? AND status = 'Present'");
-    $stmt->bind_param("i", $program['id']);
+    
+    // Attendance present
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id IN ($in_clause) AND status = 'Present'");
+    $stmt->bind_param(str_repeat('i', count($program_ids)), ...$program_ids);
     $stmt->execute();
-    $stmt->bind_result($present_count);
+    $stmt->bind_result($total_present);
     $stmt->fetch();
-    $total_present += $present_count;
     $stmt->close();
 }
+
 $avg_attendance = $total_attendance > 0 ? round(($total_present / $total_attendance) * 100) : 0;
 
 // Get notifications (deadlines, reminders)
@@ -128,6 +142,22 @@ while ($row = $res->fetch_assoc()) {
 usort($upcoming_events, function($a, $b) {
     return strtotime($a['date']) - strtotime($b['date']);
 });
+
+// Group programs by status
+$program_groups = [
+  'Active' => [],
+  'Ended' => [],
+  'Upcoming' => []
+];
+foreach ($programs as $program) {
+  if ($program['status'] === 'ongoing') {
+    $program_groups['Active'][] = $program;
+  } elseif ($program['status'] === 'ended') {
+    $program_groups['Ended'][] = $program;
+  } else {
+    $program_groups['Upcoming'][] = $program;
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,14 +178,14 @@ usort($upcoming_events, function($a, $b) {
       </div>
       <nav>
         <ul>
-          <li class="active"><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li class="active"><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
                     <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
 
-          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
-          <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
-          <li><a href="certificate.php"><i class="fas fa-certificate"></i> Certificate</a></li>
+          <li><a href="Attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li><a href="Evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
           <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
         </ul>
@@ -179,55 +209,43 @@ usort($upcoming_events, function($a, $b) {
           <div class="overview-box">
             <div class="quick-actions">
               <button class="quick-btn" onclick="window.location.href='Create.php'">Create New Program</button>
-              <button class="quick-btn" onclick="window.location.href='attendance.php'">Mark Attendance</button>
+              <button class="quick-btn" onclick="window.location.href='Attendance.php'">Mark Attendance</button>
             </div>
 
             <div class="cards">
 
-              <!-- My Programs -->
+              <!-- My Programs with status tabs -->
               <div class="card">
                 <h3><i class="fas fa-chalkboard-teacher"></i> My Programs</h3>
-                <ul>
-                  <?php foreach ($programs as $program): ?>
-                  <li>
-                    <strong><?php echo htmlspecialchars($program['program_name']); ?></strong>
-                    <span style="color:<?php echo $program['status'] === 'active' ? 'green' : 'gray'; ?>">
-                      (<?php echo ucfirst($program['status']); ?>)
-                    </span><br>
-                    <small>
-                      <?php
-                        // Get enrolled count
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM enrollments WHERE program_id = ?");
-                        $stmt->bind_param("i", $program['id']);
-                        $stmt->execute();
-                        $stmt->bind_result($enrolled);
-                        $stmt->fetch();
-                        $stmt->close();
-                        echo "Enrolled: $enrolled/" . $program['max_students'];
-                        // Get attendance rate
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id = ? AND status = 'Present'");
-                        $stmt->bind_param("i", $program['id']);
-                        $stmt->execute();
-                        $stmt->bind_result($present);
-                        $stmt->fetch();
-                        $stmt->close();
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM attendance WHERE program_id = ?");
-                        $stmt->bind_param("i", $program['id']);
-                        $stmt->execute();
-                        $stmt->bind_result($total_att);
-                        $stmt->fetch();
-                        $stmt->close();
-                        $att_rate = $total_att > 0 ? round(($present / $total_att) * 100) : 0;
-                        echo " | Attendance: $att_rate%";
-                      ?>
-                    </small>
-                    <div>
-                      <button onclick="window.location.href='Programs.php?id=<?php echo $program['id']; ?>'">Manage</button>
-                      <button onclick="window.location.href='get_participants.php?id=<?php echo $program['id']; ?>'">View Students</button>
-                    </div>
-                  </li>
+                <div class="status-tabs">
+                  <?php $statuses = array_keys($program_groups); ?>
+                  <?php foreach ($statuses as $i => $status): ?>
+                    <button class="tab-btn<?php echo $i === 0 ? ' active' : ''; ?>" onclick="showStatusTab(<?php echo $i; ?>)">
+                      <?php echo $status; ?>
+                    </button>
                   <?php endforeach; ?>
-                </ul>
+                </div>
+                <?php foreach ($statuses as $i => $status): ?>
+                  <div class="tab-content" id="status-tab-<?php echo $i; ?>" style="<?php echo $i === 0 ? '' : 'display:none;'; ?>">
+                    <?php if (empty($program_groups[$status])): ?>
+                      <div style="padding:12px; color:#888;">No <?php echo strtolower($status); ?> programs.</div>
+                    <?php else: ?>
+                      <ul style="margin:0; padding-left:0;">
+                        <?php foreach ($program_groups[$status] as $program): ?>
+                          <li style="margin-bottom:10px; list-style:none; border-bottom:1px solid #eee; padding-bottom:8px;">
+                            <strong><?php echo htmlspecialchars($program['program_name']); ?></strong>
+                            <br>
+                            <div>
+                              <button onclick="window.location.href='Programs.php?id=<?php echo $program['id']; ?>'">Manage</button>
+                              <button onclick="showParticipants(<?php echo $program['id']; ?>)">View Students</button>
+                            </div>
+                            <div id="participants-<?php echo $program['id']; ?>" class="participants-list" style="display:none; margin-top:8px;"></div>
+                          </li>
+                        <?php endforeach; ?>
+                      </ul>
+                    <?php endif; ?>
+                  </div>
+                <?php endforeach; ?>
               </div>
 
               <!-- Analytics Snapshot -->
@@ -310,5 +328,37 @@ usort($upcoming_events, function($a, $b) {
       </div>
     </div>
   </div>
+  <script>
+  function showStatusTab(idx) {
+    document.querySelectorAll('.status-tabs .tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.card .tab-content').forEach((tab, i) => {
+      tab.style.display = i === idx ? '' : 'none';
+    });
+  }
+  function showParticipants(programId) {
+    const container = document.getElementById('participants-' + programId);
+    container.innerHTML = '<span style="color:gray;">Loading...</span>';
+    container.style.display = 'block';
+    fetch('get_participants.php?id=' + programId)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
+          let html = '<ul style="margin:0; padding-left:18px;">';
+          data.data.forEach(p => {
+            html += `<li>${p.firstname} ${p.lastname} (${p.email})</li>`;
+          });
+          html += '</ul>';
+          container.innerHTML = html;
+        } else {
+          container.innerHTML = '<span style="color:#e53935;">No students enrolled.</span>';
+        }
+      })
+      .catch(() => {
+        container.innerHTML = '<span style="color:#e53935;">Error loading students.</span>';
+      });
+  }
+  </script>
 </body>
 </html>

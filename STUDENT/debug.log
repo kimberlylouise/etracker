@@ -4640,3 +4640,13 @@ Programs array: Array
 
 enroll.php called at 2025-06-17 08:24:48
 Enrollment successful: user_id=1, program_id=35
+enroll.php called at 2025-07-14 15:17:12
+Enrollment successful: user_id=1, program_id=36
+enroll.php called at 2025-07-14 19:51:55
+Enrollment successful: user_id=1, program_id=38
+enroll.php called at 2025-07-14 19:57:49
+Enrollment successful: user_id=1, program_id=38
+enroll.php called at 2025-07-14 19:57:57
+Enrollment successful: user_id=1, program_id=36
+enroll.php called at 2025-07-14 19:58:05
+Enrollment successful: user_id=1, program_id=37

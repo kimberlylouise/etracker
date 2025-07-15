@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../register/login.php');
     exit();
 }
 
@@ -114,12 +114,12 @@ if ($notifications_result) {
         <span class="logo-text">eTRACKER</span>
       </div>      <nav>
         <ul>
-          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
           <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
-          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
-          <li class="active"><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="Attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li class="active"><a href="Evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
            <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
@@ -141,7 +141,7 @@ if ($notifications_result) {
         <!-- Program Selection -->
         <div class="program-selection">
           <label for="program-select">Select Program</label>
-          <select id="program-select" name="program_id" onchange="window.location.href='evaluation.php?program_id=' + this.value">
+          <select id="program-select" name="program_id" onchange="window.location.href='Evaluation.php?program_id=' + this.value">
             <option value="all" <?php echo ($selected_program_id == 'all') ? 'selected' : ''; ?>>All Programs</option>
             <?php foreach ($programs as $program): ?>
               <option value="<?php echo htmlspecialchars($program['id']); ?>" <?php echo ($selected_program_id == $program['id']) ? 'selected' : ''; ?>>

@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../register/login.php');
     exit();
 }
 
@@ -25,7 +25,7 @@ if ($user_row = $user_result->fetch_assoc()) {
 $user_stmt->close();
 
 // Fetch faculty_id and department from faculty table
-$faculty_id = '';
+$faculty_id = null;
 $faculty_department = '';
 $faculty_sql = "SELECT id, department FROM faculty WHERE user_id = ?";
 $faculty_stmt = $conn->prepare($faculty_sql);
@@ -33,10 +33,16 @@ $faculty_stmt->bind_param("i", $user_id);
 $faculty_stmt->execute();
 $faculty_result = $faculty_stmt->get_result();
 if ($faculty_row = $faculty_result->fetch_assoc()) {
-    $faculty_id = $faculty_row['id'];
+    $faculty_id = (int)$faculty_row['id'];
     $faculty_department = $faculty_row['department'];
 }
 $faculty_stmt->close();
+
+// Debug: Check if faculty_id is found
+if (!$faculty_id) {
+    error_log("Attendance.php: No faculty_id found for user_id: " . $user_id);
+    die("Error: Faculty record not found for this user. Please contact administrator.");
+}
 
 $program_query = "SELECT id, program_name, start_date 
                   FROM programs 
@@ -110,7 +116,7 @@ if (isset($_POST['submit_manual_attendance'])) {
     $insert_stmt->close();
 
     // Redirect to refresh with "all" programs
-    header("Location: attendance.php?program_id=all");
+    header("Location: Attendance.php?program_id=all");
     exit;
 }
 
@@ -169,7 +175,7 @@ if ($selected_program_id != 'all') {
 // Fetch enrolled students for the selected program
 $enrolled_students = [];
 if ($selected_program_id != 'all') {
-    $enrolled_query = "SELECT student_name FROM participants WHERE program_id = ? AND status = 'accepted'";
+    $enrolled_query = "SELECT CONCAT(u.firstname, ' ', u.lastname) as student_name FROM enrollments e JOIN users u ON e.user_id = u.id WHERE e.program_id = ? AND e.status = 'approved'";
     $enrolled_stmt = $conn->prepare($enrolled_query);
     $enrolled_stmt->bind_param("i", $selected_program_id);
     $enrolled_stmt->execute();
@@ -200,12 +206,12 @@ if ($selected_program_id != 'all') {
       </div>
       <nav>
         <ul>
-          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
                     <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
-          <li class="active"><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
-          <li ><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li class="active"><a href="Attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li ><a href="Evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
           <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.PHP"><i class="fas fa-chart-line"></i> Reports</a></li>
@@ -227,7 +233,7 @@ if ($selected_program_id != 'all') {
         <!-- Program Selection and Attendance Controls -->
         <div class="program-selection">
           <label for="program-select">Select Program</label>
-          <select id="program-select" name="program_id" onchange="window.location.href='attendance.php?program_id=' + this.value">
+          <select id="program-select" name="program_id" onchange="window.location.href='Attendance.php?program_id=' + this.value">
             <option value="all" <?php echo ($selected_program_id == 'all') ? 'selected' : ''; ?>>All Programs</option>
             <?php foreach ($programs as $program): ?>
               <option value="<?php echo htmlspecialchars($program['id']); ?>" <?php echo ($selected_program_id == $program['id']) ? 'selected' : ''; ?>>
@@ -346,7 +352,7 @@ if ($selected_program_id != 'all') {
     <div class="modal-content">
       <span class="close" onclick="closeManualAttendanceModal()">×</span>
       <h2>Mark Attendance Manually</h2>
-      <form action="attendance.php" method="POST">
+      <form action="Attendance.php" method="POST">
         <input type="hidden" name="program_id" value="<?php echo htmlspecialchars($selected_program_id != 'all' ? $selected_program_id : (empty($programs) ? '' : $programs[0]['id'])); ?>">
         <div class="form-group">
           <label for="student_name">Student Name</label>

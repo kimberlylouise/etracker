@@ -3,7 +3,7 @@ require_once 'db.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && $_SESSION['role'] === 'faculty') {
-    $user_id = $_POST['user_id'];
+    $user_id = $_SESSION['user_id']; // Use session user_id for security
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $mi = $_POST['mi'];

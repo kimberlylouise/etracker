@@ -1,4 +1,3 @@
-
 .participants-modal {
   display: none;
   position: fixed;
@@ -92,6 +91,102 @@
 
 .close-participants:hover {
   background-color: #5a6268;
+}
+
+/* Add or update these styles for action buttons and dropdown in pending requests modal */
+#pending-table td {
+  vertical-align: middle;
+  min-width: 120px;
+  max-width: 180px;
+  word-break: break-word;
+  padding: 12px 8px;
+}
+
+.pending-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  min-width: 120px;
+}
+
+.pending-actions .approve-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pending-actions .approve-btn:hover {
+  background-color: #218838;
+}
+
+.pending-actions .reject-btn {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pending-actions .reject-btn:hover {
+  background-color: #b71c1c;
+}
+
+.pending-actions .confirm-reject-btn,
+.pending-actions .cancel-reject-btn {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.pending-actions .reject-reason {
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  background: #fff;
+  min-width: 140px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Responsive: stack actions vertically on small screens and prevent overflow */
+@media (max-width: 900px) {
+  .participants-modal-content {
+    max-width: 98vw;
+    min-width: 0;
+    padding: 10px;
+  }
+  #pending-table th, #pending-table td {
+    font-size: 13px;
+    padding: 8px 4px;
+  }
+  .pending-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    min-width: 100px;
+  }
+}
+
+/* Hide horizontal scrollbar for modal */
+.participants-modal-content {
+  overflow-x: auto;
 }
 
 @keyframes fadeIn {

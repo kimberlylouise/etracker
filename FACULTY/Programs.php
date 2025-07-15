@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../register/login.php');
     exit();
 }
 
@@ -25,7 +25,7 @@ if ($user_row = $user_result->fetch_assoc()) {
 $user_stmt->close();
 
 // Fetch faculty department
-$faculty_id = '';
+$faculty_id = null;
 $faculty_department = '';
 $faculty_sql = "SELECT id, department FROM faculty WHERE user_id = ?";
 $faculty_stmt = $conn->prepare($faculty_sql);
@@ -33,13 +33,25 @@ $faculty_stmt->bind_param("i", $user_id);
 $faculty_stmt->execute();
 $faculty_result = $faculty_stmt->get_result();
 if ($faculty_row = $faculty_result->fetch_assoc()) {
-    $faculty_id = $faculty_row['id'];
+    $faculty_id = (int)$faculty_row['id'];
     $faculty_department = $faculty_row['department'];
 }
 $faculty_stmt->close();
 
+// Check if faculty_id is found
+if (!$faculty_id) {
+    die("Error: Faculty record not found for this user. Please contact administrator.");
+}
+
 // Search handling
 $search = isset($_GET['search']) ? '%' . $conn->real_escape_string(trim($_GET['search'])) . '%' : '%';
+
+// Update program statuses if end date has passed
+$today = date('Y-m-d');
+$update_stmt = $conn->prepare("UPDATE programs SET status = 'ended' WHERE end_date < ? AND status = 'ongoing'");
+$update_stmt->bind_param("s", $today);
+$update_stmt->execute();
+$update_stmt->close();
 
 // Pagination settings
 $programs_per_page = 5;
@@ -90,9 +102,9 @@ $ended_offset = ($ended_page - 1) * $programs_per_page;
 
 // Fetch active programs with pagination and search
 $active_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students, 
-                  COUNT(pt.id) AS enrolled
+                  COUNT(e.id) AS enrolled
                  FROM programs p
-                 LEFT JOIN participants pt ON p.id = pt.program_id
+                 LEFT JOIN enrollments e ON p.id = e.program_id AND e.status = 'approved'
                  WHERE p.status = 'ongoing'
                    AND p.program_name LIKE ?
                    AND p.faculty_id = ?
@@ -117,9 +129,9 @@ $active_stmt->close();
 
 // Fetch ended programs with pagination and search
 $ended_query = "SELECT p.id, p.program_name, p.description, p.start_date, p.end_date, p.max_students,
-                COUNT(pt.id) AS enrolled
+                COUNT(e.id) AS enrolled
                 FROM programs p
-                LEFT JOIN participants pt ON p.id = pt.program_id
+                LEFT JOIN enrollments e ON p.id = e.program_id AND e.status = 'approved'
                 WHERE p.status = 'ended' AND p.program_name LIKE ? AND p.faculty_id = ?
                 GROUP BY p.id
                 ORDER BY p.start_date
@@ -153,17 +165,6 @@ if ($notifications_result) {
         $notifications[] = $row;
     }
     $notifications_result->free();
-}
-
-// After fetching active programs, update status if needed
-foreach ($active_programs as $program) {
-    if (strtotime($program['end_date']) < strtotime(date('Y-m-d'))) {
-        // Update status in DB
-        $update_stmt = $conn->prepare("UPDATE programs SET status = 'ended' WHERE id = ?");
-        $update_stmt->bind_param("i", $program['id']);
-        $update_stmt->execute();
-        $update_stmt->close();
-    }
 }
 ?>
 
@@ -240,7 +241,7 @@ foreach ($active_programs as $program) {
 }
 .create-btn {
   padding: 10px 24px;
-  background-color:rgb(50, 175, 66);
+  background-color: rgb(50, 175, 66);
   color: white;
   border: none;
   border-radius: 8px;
@@ -250,7 +251,7 @@ foreach ($active_programs as $program) {
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 .create-btn:hover {
-  background-color:rgb(109, 239, 107);
+  background-color: rgb(109, 239, 107);
 }
 .create-btn:active {
   transform: scale(0.98);
@@ -284,8 +285,8 @@ foreach ($active_programs as $program) {
       transition: all 0.3s ease;
     }
     .tab.active {
-      color:rgb(76, 221, 107);
-      border-bottom: 3px solidrgb(59, 213, 87);
+      color: rgb(76, 221, 107);
+      border-bottom: 3px solid rgb(59, 213, 87);
     }
     .tab:hover {
       background-color: #f5f5f5;
@@ -306,13 +307,13 @@ foreach ($active_programs as $program) {
     .pagination button {
       padding: 8px 16px;
       border: 1px solid #ddd;
-      background-color:rgb(26, 68, 19);
+      background-color: rgb(26, 68, 19);
       cursor: pointer;
       border-radius: 4px;
       transition: background-color 0.3s;
     }
     .pagination button:hover {
-      background-color:rgb(62, 154, 94);
+      background-color: rgb(62, 154, 94);
       color: white;
     }
     .pagination button:disabled {
@@ -369,13 +370,13 @@ foreach ($active_programs as $program) {
       </div>
       <nav>
         <ul>
-          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li class="active"><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
                     <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
 
-          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
-          <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="Attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li><a href="Evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
           <li><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
@@ -838,62 +839,63 @@ foreach ($active_programs as $program) {
       document.getElementById('pending-table-body').innerHTML = '';
     }
 
+    // Show pending enrollments for a program
+    function showPendingEnrollments(programId) {
+      fetch(`get_pending_enrollments.php?id=${programId}`)
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('pending-table-body');
+          const noPendingMessage = document.getElementById('no-pending-message');
+          tableBody.innerHTML = '';
+          if (data.status === 'success' && data.data.length > 0) {
+            data.data.forEach(enrollment => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${enrollment.student_name}</td>
+                <td>${enrollment.student_email}</td>
+                <td>${new Date(enrollment.enrollment_date).toLocaleDateString()}</td>
+                <td>
+                  <div class="pending-actions">
+                    <button class="approve-btn" onclick="updateEnrollmentStatus(${enrollment.id}, 'approved', this)">Approve</button>
 
-
-
-
-
-// Show pending enrollments for a program
-function showPendingEnrollments(programId) {
-  fetch(`get_pending_enrollments.php?id=${programId}`)
-    .then(response => response.json())
-    .then(data => {
-      const tableBody = document.getElementById('pending-table-body');
-      const noPendingMessage = document.getElementById('no-pending-message');
-      tableBody.innerHTML = '';
-      if (data.status === 'success' && data.data.length > 0) {
-        data.data.forEach(enrollment => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${enrollment.student_name}</td>
-            <td>${enrollment.student_email}</td>
-            <td>${new Date(enrollment.enrollment_date).toLocaleDateString()}</td>
-            <td>
-              <button onclick="updateEnrollmentStatus(${enrollment.id}, 'approved', ${programId})">Accept</button>
-              <button onclick="updateEnrollmentStatus(${enrollment.id}, 'rejected', ${programId})">Reject</button>
-            </td>
-          `;
-          tableBody.appendChild(row);
+                    <button class="reject-btn" onclick="showRejectDropdown(this, ${enrollment.id})">Reject</button>
+                  </div>
+                </td>
+              `;
+              tableBody.appendChild(row);
+            });
+            tableBody.parentElement.style.display = 'table';
+            noPendingMessage.style.display = 'none';
+          } else {
+            tableBody.parentElement.style.display = 'none';
+            noPendingMessage.style.display = 'block';
+          }
+          document.getElementById('pendingModal').style.display = 'flex';
+        })
+        .catch(error => {
+          alert('Error fetching pending enrollments: ' + error.message);
         });
-        tableBody.parentElement.style.display = 'table';
-        noPendingMessage.style.display = 'none';
-      } else {
-        tableBody.parentElement.style.display = 'none';
-        noPendingMessage.style.display = 'block';
-      }
-      document.getElementById('pendingModal').style.display = 'flex';
-    })
-    .catch(error => {
-      alert('Error fetching pending enrollments: ' + error.message);
-    });
-}
+    }
 
-// Approve or reject an enrollment
-function updateEnrollmentStatus(enrollmentId, status, programId) {
+    // Approve or reject an enrollment
+    function updateEnrollmentStatus(enrollmentId, status, btn) {
+  let reason = '';
+  if (status === 'rejected') {
+    reason = btn.previousElementSibling.value;
+    if (!reason) {
+      alert('Please select a reason for rejection.');
+      return;
+    }
+  }
   fetch('update_enrollment_status.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: enrollmentId, status: status })
+    body: JSON.stringify({ id: enrollmentId, status: status, reason: reason })
   })
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
     alert(data.message);
-    if (data.status === 'success') {
-      showPendingEnrollments(programId); // Refresh the list
-    }
-  })
-  .catch(error => {
-    alert('Error updating status: ' + error.message);
+    // Optionally refresh the list here
   });
 }
 
@@ -958,24 +960,67 @@ function updateEnrollmentStatus(enrollmentId, status, programId) {
         closePendingModal();
       }
     });
+    
     document.getElementById('edit-add-session-btn').addEventListener('click', function() {
-  const container = document.getElementById('edit-sessions-container');
-  const row = document.createElement('div');
-  row.className = 'session-row';
-  row.innerHTML = `
-    <input type="hidden" name="session_id[]" value="">
-    <input type="text" name="session_title[]" placeholder="Session Title">
-    <input type="date" name="session_date[]">
-    <input type="time" name="session_start[]">
-    <input type="time" name="session_end[]">
-    <button type="button" class="remove-session" onclick="this.parentElement.remove()">Remove</button>
+      const container = document.getElementById('edit-sessions-container');
+      const row = document.createElement('div');
+      row.className = 'session-row';
+      row.innerHTML = `
+        <input type="hidden" name="session_id[]" value="">
+        <input type="text" name="session_title[]" placeholder="Session Title">
+        <input type="date" name="session_date[]">
+        <input type="time" name="session_start[]">
+        <input type="time" name="session_end[]">
+        <button type="button" class="remove-session" onclick="this.parentElement.remove()">Remove</button>
+      `;
+      container.appendChild(row);
+    });
+
+    function showRejectDropdown(btn, enrollmentId) {
+  const actionsDiv = btn.parentElement;
+  if (actionsDiv.querySelector('.reject-reason')) return;
+
+  // Hide the original Reject button
+  btn.style.display = 'none';
+
+  // Create dropdown
+  const select = document.createElement('select');
+  select.className = 'reject-reason';
+  select.innerHTML = `
+    <option value="">Select reason</option>
+    <option value="Incomplete requirements">Incomplete requirements</option>
+    <option value="Not eligible">Not eligible</option>
+    <option value="Program full">Program full</option>
+    <option value="Other">Other</option>
   `;
-  container.appendChild(row);
-});
+
+  // Create confirm button
+  const confirmBtn = document.createElement('button');
+  confirmBtn.className = 'confirm-reject-btn';
+  confirmBtn.textContent = 'Confirm';
+  confirmBtn.onclick = function() {
+    if (!select.value) {
+      alert('Please select a reason for rejection.');
+      return;
+    }
+    updateEnrollmentStatus(enrollmentId, 'rejected', confirmBtn);
+  };
+
+  // Create cancel button
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'cancel-reject-btn';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.onclick = function() {
+    select.remove();
+    confirmBtn.remove();
+    cancelBtn.remove();
+    btn.style.display = ''; // Show the original Reject button again
+  };
+
+  actionsDiv.appendChild(select);
+  actionsDiv.appendChild(confirmBtn);
+  actionsDiv.appendChild(cancelBtn);
+}
   </script>
 </body>
 </html>
-
-
-
-

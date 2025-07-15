@@ -32,6 +32,9 @@ try {
         throw new Exception('Faculty record not found for this user');
     }
     
+    // Debug log
+    error_log("Creating program for faculty_id: $faculty_id, user_id: $user_id");
+    
     // Validate and sanitize input data
     $program_name = trim($_POST['program_name'] ?? '');
     $department = trim($_POST['department'] ?? '');
@@ -130,12 +133,17 @@ try {
         project_titles,
         sessions_data,
         sdg_goals,
+        program_type,
+        target_audience,
+        dept_approval,
+        priority,
+        budget,
         created_at,
         faculty_id,
         user_id,
         status,
         faculty_certificate_issued
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'department', 'extension', ?, ?, ?, NOW(), ?, ?, 'planning', 0)";
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'beginner', 'extension', ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, 'ongoing', 0)";
     
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -143,7 +151,7 @@ try {
     }
     
     $stmt->bind_param(
-        "ssssssiisssssii",
+        "ssssssiiissssssiii",
         $program_name,
         $department,
         $start_date,
@@ -157,6 +165,11 @@ try {
         $project_titles_json,
         $sessions_json,
         $sdg_goals_json,
+        $program_type,
+        $target_audience,
+        $dept_approval,
+        $priority,
+        $budget,
         $faculty_id,
         $user_id
     );

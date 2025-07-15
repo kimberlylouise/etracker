@@ -3,51 +3,51 @@ session_start();
 require_once 'db.php';
 header('Content-Type: application/json');
 
-$program_id = $_GET['id'] ?? null;
-if ($program_id && is_numeric($program_id)) {
-    $stmt = $conn->prepare("SELECT * FROM programs WHERE id = ?");
-    $stmt->bind_param("i", $program_id);
-    $stmt->execute();
-    $program = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    // Fetch sessions for this program
-    $sessions = [];
-    $session_stmt = $conn->prepare("SELECT id, session_date, session_start, session_end, session_title FROM program_sessions WHERE program_id = ?");
-    $session_stmt->bind_param("i", $program_id);
-    $session_stmt->execute();
-    $session_result = $session_stmt->get_result();
-    while ($row = $session_result->fetch_assoc()) {
-        $sessions[] = $row;
-    }
-    $session_stmt->close();
-
-    if ($program) {
-        $program['sessions'] = $sessions;
-        echo json_encode(['status' => 'success', 'data' => $program]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Program not found']);
-    }
-} else {
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid program ID']);
+    exit;
 }
 
-// Example: Fetch active programs for the logged-in faculty
-$faculty_id = $_SESSION['user_id'];
-$today = date('Y-m-d');
-$stmt = $conn->prepare("SELECT * FROM programs WHERE faculty_id = ? AND start_date <= ? AND end_date >= ?");
-$stmt->bind_param("iss", $faculty_id, $today, $today);
-$stmt->execute();
-$result = $stmt->get_result();
-$active_programs = [];
-while ($row = $result->fetch_assoc()) {
-    $active_programs[] = $row;
-}
-$stmt->close();
+$program_id = (int)$_GET['id'];
 
-if (empty($program['sessions'])) {
-    echo "<p>No sessions scheduled for this program.</p>";
-} else {
-    // display sessions table
+// Fetch program details
+$program_query = "SELECT id, program_name, department, start_date, end_date, location, max_students, description FROM programs WHERE id = ?";
+$program_stmt = $conn->prepare($program_query);
+if ($program_stmt === false) {
+    echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $conn->error]);
+    exit;
 }
+$program_stmt->bind_param('i', $program_id);
+$program_stmt->execute();
+$program_result = $program_stmt->get_result();
+$program = $program_result->fetch_assoc();
+$program_stmt->close();
+
+if (!$program) {
+    echo json_encode(['status' => 'error', 'message' => 'Program not found']);
+    exit;
+}
+
+// Fetch sessions for the program
+$sessions_query = "SELECT id, session_title, session_date, session_start, session_end FROM program_sessions WHERE program_id = ?";
+$sessions_stmt = $conn->prepare($sessions_query);
+if ($sessions_stmt === false) {
+    echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $conn->error]);
+    exit;
+}
+$sessions_stmt->bind_param('i', $program_id);
+$sessions_stmt->execute();
+$sessions_result = $sessions_stmt->get_result();
+$sessions = [];
+while ($row = $sessions_result->fetch_assoc()) {
+    $sessions[] = $row;
+}
+$sessions_stmt->close();
+
+$program['sessions'] = $sessions;
+
+echo json_encode([
+    'status' => 'success',
+    'data' => $program
+]);
 ?>

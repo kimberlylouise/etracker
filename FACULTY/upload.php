@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../register/login.php');
     exit();
 }
 
@@ -248,13 +248,13 @@ h2 {
         <span class="logo-text">eTRACKER</span>
       </div>      <nav>
         <ul>
-          <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
           <li><a href="Programs.php"><i class="fas fa-tasks"></i> Program</a></li>
                     <li><a href="Projects.php"><i class="fas fa-project-diagram"></i> Projects</a></li>
 
-          <li><a href="attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
-          <li><a href="evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
+          <li><a href="Attendance.php"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+          <li><a href="Evaluation.php"><i class="fas fa-star-half-alt"></i> Evaluation</a></li>
           <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificate</a></li>
         <li class="active"><a href="upload.php"><i class="fas fa-upload"></i> Documents </a></li>  
           <li><a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a></li>
